@@ -57,7 +57,7 @@ class Entity
     private $type;
 
     /**
-     * @var string The name of this Entity
+     * @var string The name of this Entity (must be slugable)
      *
      * @Gedmo\Versioned
      * @Assert\Length(
@@ -87,6 +87,21 @@ class Entity
      * @MaxDepth(1)
      */
     private Collection $attributes;
+
+    /**
+     *  @ORM\PrePersist
+     *  @ORM\PreUpdate
+     *
+     *  */
+    public function prePersist()
+    {
+        $string = $this->name;
+        $string = trim($string); //removes whitespace at begin and ending
+        $string = preg_replace('/\s+/', '_', $string); // replaces other whitespaces with _
+        $string = strtolower($string);
+
+        $this->name = $string;
+    }
 
     public function __construct()
     {
