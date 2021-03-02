@@ -4,15 +4,15 @@
 
 settings:
   registryBase: docker.io/conduction
-  projectName: ce
-  name: ce
+  projectName: eav
+  name: eav
   version: V1.0
   description: 'Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.'
-  repro: https://github.com/ConductionNL/commonground-example
-  demo: ce.zaakonline.nl
+  repro: https://github.com/ConductionNL/EAV-component
+  demo: eav.zaakonline.nl
   domain: conduction.nl
-  subdomain: ce
-  subpath: ce
+  subdomain: eav
+  subpath: eav
   subpathRouting: true
   env: dev
   web: false
