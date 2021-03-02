@@ -48,6 +48,13 @@ class ObjectEntity
 
     /**
      * @Groups({"read", "write"})
+     * @ORM\ManyToOne(targetEntity=Entity::class, inversedBy="objectEntities")
+     * @MaxDepth(1)
+     */
+    private ?Entity $entity;
+
+    /**
+     * @Groups({"read", "write"})
      * @ORM\OneToMany(targetEntity=Value::class, mappedBy="objectEntity", orphanRemoval=true)
      * @MaxDepth(1)
      */
@@ -66,6 +73,18 @@ class ObjectEntity
     public function setId(Uuid $id): self
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getEntity(): ?Entity
+    {
+        return $this->entity;
+    }
+
+    public function setEntity(?Entity $entity): self
+    {
+        $this->entity = $entity;
 
         return $this;
     }
