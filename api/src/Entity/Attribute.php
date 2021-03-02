@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     "get",
  *    "post"
  *  })
- * @ORM\Entity(repositoryClass=AttributeRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\AttributeRepository")
  * @Gedmo\Loggable(logEntryClass="Conduction\CommonGroundBundle\Entity\ChangeLog")
  */
 class Attribute
@@ -56,10 +56,10 @@ class Attribute
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\OneToMany(targetEntity=Entity::class, mappedBy="attributes")
+     * @ORM\ManyToOne(targetEntity=Entity::class, inversedBy="attributes")
      * @MaxDepth(1)
      */
-    private $entity;
+    private ?Entity $entity;
 
     public function __construct()
     {

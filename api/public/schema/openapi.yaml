@@ -2555,268 +2555,6 @@ paths:
             schema:
               $ref: '#/components/schemas/ChangeLog-write'
         description: 'The updated ChangeLog resource'
-  '/emails/{id}/audit_trail':
-    get:
-      tags:
-        - Entity
-      operationId: get_audit_trailEntityItem
-      summary: 'Retrieves a Entity resource.'
-      parameters:
-        -
-          name: id
-          in: path
-          required: true
-          schema:
-            type: string
-        -
-          name: Authorization
-          description: 'The JWT of the entity performing the request'
-          in: header
-        -
-          name: API-Version
-          description: 'The version of the API conform [Landelijke API-strategie.](https://geonovum.github.io/KP-APIs/#versioning)'
-          example: 1.0.1
-          in: header
-        -
-          name: X-NLX-Logrecord-ID
-          description: 'A  globally unique id of the request, which makes a request traceable throughout the network.'
-          in: header
-        -
-          name: X-NLX-Request-Process-Id
-          description: 'A process id for purpose registration (doelbinding)'
-          in: header
-        -
-          name: X-NLX-Request-Data-Elements
-          description: 'A list of requested data elements'
-          in: header
-        -
-          name: X-NLX-Request-Data-Subject
-          description: 'A key-value list of data subjects related to this request. e.g. `bsn=12345678, kenteken=ab-12-fg`'
-          in: header
-        -
-          name: X-NLX-Audit-Clarification
-          description: 'A clarification as to why a request has been made  (doelbinding)'
-          in: header
-        -
-          name: Link
-          description: 'A [websub](https://www.w3.org/TR/websub/#discovery) header like <https://hub.example.com/>; rel="hub"'
-          in: header
-        -
-          name: 'extend[]'
-          required: false
-          description: 'An array of nested objects to include in the return object'
-          in: query
-          schema:
-            type: array
-        -
-          name: 'fields[]'
-          required: false
-          description: 'An array of fields to return in output, wil return all fields is not supplied'
-          in: query
-          schema:
-            type: array
-        -
-          name: validOn
-          required: false
-          description: 'Returns object as valid on a given date time'
-          schema:
-            type: string
-            format: date-time
-          in: query
-        -
-          name: validFrom
-          required: false
-          description: 'Returns objects valid from a given date time'
-          schema:
-            type: string
-            format: date-time
-          in: query
-        -
-          name: validUntil
-          required: false
-          description: 'Returns objects valid until a given date time'
-          schema:
-            type: string
-            format: date-time
-          in: query
-      responses:
-        200:
-          description: 'Entity resource response'
-          content:
-            application/ld+json:
-              schema:
-                $ref: '#/components/schemas/Entity:jsonld-read'
-            application/json+ld:
-              schema:
-                $ref: '#/components/schemas/Entity:jsonld-read'
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/json+hal:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/json+vnd.api:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/health+json:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/json+health:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/x-yaml:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            text/csv:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            text/html:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-        404:
-          description: 'Resource not found'
-      produces:
-        - application/health+json
-  '/emails/{id}/change_log':
-    get:
-      tags:
-        - Entity
-      operationId: get_change_logsEntityItem
-      summary: 'Retrieves a Entity resource.'
-      parameters:
-        -
-          name: id
-          in: path
-          required: true
-          schema:
-            type: string
-        -
-          name: Authorization
-          description: 'The JWT of the entity performing the request'
-          in: header
-        -
-          name: API-Version
-          description: 'The version of the API conform [Landelijke API-strategie.](https://geonovum.github.io/KP-APIs/#versioning)'
-          example: 1.0.1
-          in: header
-        -
-          name: X-NLX-Logrecord-ID
-          description: 'A  globally unique id of the request, which makes a request traceable throughout the network.'
-          in: header
-        -
-          name: X-NLX-Request-Process-Id
-          description: 'A process id for purpose registration (doelbinding)'
-          in: header
-        -
-          name: X-NLX-Request-Data-Elements
-          description: 'A list of requested data elements'
-          in: header
-        -
-          name: X-NLX-Request-Data-Subject
-          description: 'A key-value list of data subjects related to this request. e.g. `bsn=12345678, kenteken=ab-12-fg`'
-          in: header
-        -
-          name: X-NLX-Audit-Clarification
-          description: 'A clarification as to why a request has been made  (doelbinding)'
-          in: header
-        -
-          name: Link
-          description: 'A [websub](https://www.w3.org/TR/websub/#discovery) header like <https://hub.example.com/>; rel="hub"'
-          in: header
-        -
-          name: 'extend[]'
-          required: false
-          description: 'An array of nested objects to include in the return object'
-          in: query
-          schema:
-            type: array
-        -
-          name: 'fields[]'
-          required: false
-          description: 'An array of fields to return in output, wil return all fields is not supplied'
-          in: query
-          schema:
-            type: array
-        -
-          name: validOn
-          required: false
-          description: 'Returns object as valid on a given date time'
-          schema:
-            type: string
-            format: date-time
-          in: query
-        -
-          name: validFrom
-          required: false
-          description: 'Returns objects valid from a given date time'
-          schema:
-            type: string
-            format: date-time
-          in: query
-        -
-          name: validUntil
-          required: false
-          description: 'Returns objects valid until a given date time'
-          schema:
-            type: string
-            format: date-time
-          in: query
-      responses:
-        200:
-          description: 'Entity resource response'
-          content:
-            application/ld+json:
-              schema:
-                $ref: '#/components/schemas/Entity:jsonld-read'
-            application/json+ld:
-              schema:
-                $ref: '#/components/schemas/Entity:jsonld-read'
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/json+hal:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/json+vnd.api:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/health+json:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/json+health:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            application/x-yaml:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            text/csv:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-            text/html:
-              schema:
-                $ref: '#/components/schemas/Entity-read'
-        404:
-          description: 'Resource not found'
-      produces:
-        - application/health+json
   /entities:
     get:
       tags:
@@ -4672,9 +4410,10 @@ components:
           items:
             $ref: '#/components/schemas/Value-read'
         entity:
-          type: array
-          items:
-            $ref: '#/components/schemas/Entity-read'
+          nullable: true
+          anyOf:
+            -
+              $ref: '#/components/schemas/Entity-read'
     Attribute-write:
       type: object
       description: Description
@@ -4684,9 +4423,10 @@ components:
           items:
             $ref: '#/components/schemas/Value-write'
         entity:
-          type: array
-          items:
-            $ref: '#/components/schemas/Entity-write'
+          nullable: true
+          anyOf:
+            -
+              $ref: '#/components/schemas/Entity-write'
     'Attribute:jsonld-read':
       type: object
       description: Description
@@ -4710,9 +4450,10 @@ components:
           items:
             $ref: '#/components/schemas/Value:jsonld-read'
         entity:
-          type: array
-          items:
-            $ref: '#/components/schemas/Entity:jsonld-read'
+          nullable: true
+          anyOf:
+            -
+              $ref: '#/components/schemas/Entity:jsonld-read'
     'Attribute:jsonld-write':
       type: object
       description: Description
@@ -4731,9 +4472,10 @@ components:
           items:
             $ref: '#/components/schemas/Value:jsonld-write'
         entity:
-          type: array
-          items:
-            $ref: '#/components/schemas/Entity:jsonld-write'
+          nullable: true
+          anyOf:
+            -
+              $ref: '#/components/schemas/Entity:jsonld-write'
     AuditTrail-read:
       type: object
       description: 'An resource representing a log line.'
@@ -5144,11 +4886,9 @@ components:
           type: string
           nullable: true
         attributes:
-          description: 'The attribute of this Entity'
-          nullable: true
-          anyOf:
-            -
-              $ref: '#/components/schemas/Attribute-read'
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute-read'
       required:
         - type
         - name
@@ -5170,11 +4910,9 @@ components:
           type: string
           nullable: true
         attributes:
-          description: 'The attribute of this Entity'
-          nullable: true
-          anyOf:
-            -
-              $ref: '#/components/schemas/Attribute-write'
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute-write'
     'Entity:jsonld-read':
       type: object
       description: ''
@@ -5204,11 +4942,9 @@ components:
           type: string
           nullable: true
         attributes:
-          description: 'The attribute of this Entity'
-          nullable: true
-          anyOf:
-            -
-              $ref: '#/components/schemas/Attribute:jsonld-read'
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute:jsonld-read'
       required:
         - type
         - name
@@ -5239,11 +4975,9 @@ components:
           type: string
           nullable: true
         attributes:
-          description: 'The attribute of this Entity'
-          nullable: true
-          anyOf:
-            -
-              $ref: '#/components/schemas/Attribute:jsonld-write'
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute:jsonld-write'
     ObjectEntity-read:
       type: object
       description: Description
@@ -5427,9 +5161,7 @@ definitions:
         description: 'The description of this Entity'
         type: string
         maxLength: 255
-      attributes:
-        description: 'The attribute of this Entity'
-        type: \Attribute
+      attributes: []
     required:
       - type
       - name
@@ -5447,9 +5179,7 @@ definitions:
         description: 'The description of this Entity'
         type: string
         maxLength: 255
-      attributes:
-        description: 'The attribute of this Entity'
-        type: \Attribute
+      attributes: []
     required:
       - type
       - name
@@ -5529,12 +5259,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-02 12:51:19'
+        example: '2021-03-02 13:24:18'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-02 12:51:19'
+        example: '2021-03-02 13:24:18'
     required: []
   ChangeLog-write:
     properties:
@@ -5648,12 +5378,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-02 12:51:19'
+        example: '2021-03-02 13:24:18'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-02 12:51:19'
+        example: '2021-03-02 13:24:18'
     required: []
   AuditTrail-write:
     properties:
