@@ -6175,6 +6175,46 @@ definitions:
     required:
       - type
       - name
+  ObjectEntity-read:
+    properties:
+      id:
+        description: 'UUID of this person'
+        type: \UuidInterface
+      entity: []
+      objectValues: []
+    required: []
+  ObjectEntity-write:
+    properties:
+      entity: []
+      objectValues: []
+    required: []
+  Value-read:
+    properties:
+      id:
+        description: 'UUID of this person'
+        type: \UuidInterface
+      uri:
+        description: 'An uri'
+        type: string
+        format: url
+      value:
+        description: 'The actual value'
+        type: string
+      attribute: []
+      objectEntity: []
+    required: []
+  Value-write:
+    properties:
+      uri:
+        description: 'An uri'
+        type: string
+        format: url
+      value:
+        description: 'The actual value'
+        type: string
+      attribute: []
+      objectEntity: []
+    required: []
   ChangeLog-read:
     properties:
       id:
@@ -6213,12 +6253,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-02 15:12:54'
+        example: '2021-03-02 15:09:30'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-02 15:12:54'
+        example: '2021-03-02 15:09:30'
     required: []
   ChangeLog-write:
     properties:
@@ -6332,12 +6372,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-02 15:12:54'
+        example: '2021-03-02 15:09:30'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-02 15:12:54'
+        example: '2021-03-02 15:09:30'
     required: []
   AuditTrail-write:
     properties:
