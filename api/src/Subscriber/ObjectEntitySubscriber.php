@@ -3,10 +3,17 @@
 
 namespace App\Subscriber;
 
-use App\Entity\Attribute;
+use ApiPlatform\Core\EventListener\EventPriorities;
+use App\Entity\Component;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
+use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Event\ViewEvent;
+use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\Serializer\SerializerInterface;
 
-class ObjectSubscriber
+class ObjectEntitySubscriber implements EventSubscriberInterface
 {
     private $params;
     private $commonGroundService;
@@ -17,7 +24,7 @@ class ObjectSubscriber
         $this->commonGroundService = $commonGroundService;
     }
 
-    public static function getObjectEntity()
+    public static function getSubscribedEvents()
     {
         return [
             KernelEvents::VIEW => ['objectEntity', EventPriorities::PRE_SERIALIZE],
