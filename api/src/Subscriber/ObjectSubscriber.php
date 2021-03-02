@@ -6,7 +6,7 @@ namespace App\Subscriber;
 use App\Entity\Attribute;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 
-class AttributeSubscriber
+class ObjectSubscriber
 {
     private $params;
     private $commonGroundService;
@@ -17,14 +17,14 @@ class AttributeSubscriber
         $this->commonGroundService = $commonGroundService;
     }
 
-    public static function getAttributes()
+    public static function getObjectEntity()
     {
         return [
-            KernelEvents::VIEW => ['attribute', EventPriorities::PRE_SERIALIZE],
+            KernelEvents::VIEW => ['objectEntity', EventPriorities::PRE_SERIALIZE],
         ];
     }
 
-    public function attribute(ViewEvent $event)
+    public function objectEntity(ViewEvent $event)
     {
         $method = $event->getRequest()->getMethod();
         $contentType = $event->getRequest()->headers->get('accept');
