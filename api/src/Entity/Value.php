@@ -47,6 +47,20 @@ class Value
     private $id;
 
     /**
+     * @var string The name of this Entity (must be slugable)
+     *
+     * @Gedmo\Versioned
+     * @Assert\Length(
+     *     max = 255
+     * )
+     * @Assert\NotNull
+     * @Groups({"read","write"})
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
+    // TODO:indexeren
+    /**
      * @var string An uri
      *
      * @Assert\Url
@@ -55,6 +69,7 @@ class Value
      */
     private $uri;
 
+    // TODO:indexeren
     /**
      * @var string The actual value
      *
@@ -87,6 +102,18 @@ class Value
     public function setId(Uuid $id): self
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
 
         return $this;
     }
