@@ -6,6 +6,7 @@ namespace App\Subscriber;
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Component;
 use App\Entity\ObjectEntity;
+use App\Service\ObjectEntityService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -18,11 +19,13 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
 {
     private $params;
     private $commonGroundService;
+    private $objectEntityService;
 
-    public function __construct(ParameterBagInterface $params, CommongroundService $commonGroundService)
+    public function __construct(ParameterBagInterface $params, CommongroundService $commonGroundService, ObjectEntityService $objectEntityService)
     {
         $this->params = $params;
         $this->commonGroundService = $commonGroundService;
+        $this->objectEntityService = $objectEntityService;
     }
 
     public static function getSubscribedEvents()
@@ -43,6 +46,7 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
 
         if ($resource instanceof ObjectEntity) {
 //            var_dump($resource->getEntity());
+//            $this->objectEntityService->handle($resource);
         }
     }
 }
