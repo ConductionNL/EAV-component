@@ -15,6 +15,9 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * Description
+ *
+ * @category Entity
  *
  * @ApiResource(
  *     normalizationContext={"groups"={"read"}, "enable_max_depth"=true},
@@ -22,23 +25,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     itemOperations={
  *          "get",
  *          "put",
- *          "delete",
- *          "get_change_logs"={
- *              "path"="/emails/{id}/change_log",
- *              "method"="get",
- *              "swagger_context" = {
- *                  "summary"="Changelogs",
- *                  "description"="Gets al the change logs for this resource"
- *              }
- *          },
- *          "get_audit_trail"={
- *              "path"="/emails/{id}/audit_trail",
- *              "method"="get",
- *              "swagger_context" = {
- *                  "summary"="Audittrail",
- *                  "description"="Gets the audit trail for this resource"
- *              }
- *          }
+ *          "delete"
  *     },
  *  collectionOperations={
  *     "get",
@@ -67,25 +54,28 @@ class Attribute
      */
     private $attributeValues;
 
-    public function __construct()
-    {
-        $this->attributeValues = new ArrayCollection();
-    }
-
-    public function getId(): ?int
     /**
+     * @Groups({"read", "write"})
      * @ORM\OneToMany(targetEntity=Entity::class, mappedBy="attributes")
+     * @MaxDepth(1)
      */
     private $entity;
 
     public function __construct()
     {
-        $this->entity = new ArrayCollection();
+        $this->attributeValues = new ArrayCollection();
     }
 
-    public function getId()
+    public function getId(): Uuid
     {
         return $this->id;
+    }
+
+    public function setId(Uuid $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     /**
@@ -118,32 +108,14 @@ class Attribute
         return $this;
     }
 
-    /**
-     * @return Collection|Entity[]
-     */
-    public function getEntity(): Collection
+    public function getEntity(): ?Entity
     {
         return $this->entity;
     }
 
-    public function addEntity(Entity $entity): self
+    public function setEntity(?Entity $entity): self
     {
-        if (!$this->entity->contains($entity)) {
-            $this->entity[] = $entity;
-            $entity->setAttributes($this);
-        }
-
-        return $this;
-    }
-
-    public function removeEntity(Entity $entity): self
-    {
-        if ($this->entity->removeElement($entity)) {
-            // set the owning side to null (unless already changed)
-            if ($entity->getAttributes() === $this) {
-                $entity->setAttributes(null);
-            }
-        }
+        $this->entity = $entity;
 
         return $this;
     }

@@ -29,7 +29,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  'hydra:member': { type: array, items: { $ref: '#/components/schemas/Attribute:jsonld' } }
+                  'hydra:member': { type: array, items: { $ref: '#/components/schemas/Attribute:jsonld-read' } }
                   'hydra:totalItems': { type: integer, minimum: 0 }
                   'hydra:view': { type: object, properties: { '@id': { type: string, format: iri-reference }, '@type': { type: string }, 'hydra:first': { type: string, format: iri-reference }, 'hydra:last': { type: string, format: iri-reference }, 'hydra:next': { type: string, format: iri-reference } } }
                   'hydra:search': { type: object, properties: { '@type': { type: string }, 'hydra:template': { type: string }, 'hydra:variableRepresentation': { type: string }, 'hydra:mapping': { type: array, items: { type: object, properties: { '@type': { type: string }, variable: { type: string }, property: { type: string, nullable: true }, required: { type: boolean } } } } } }
@@ -39,7 +39,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  'hydra:member': { type: array, items: { $ref: '#/components/schemas/Attribute:jsonld' } }
+                  'hydra:member': { type: array, items: { $ref: '#/components/schemas/Attribute:jsonld-read' } }
                   'hydra:totalItems': { type: integer, minimum: 0 }
                   'hydra:view': { type: object, properties: { '@id': { type: string, format: iri-reference }, '@type': { type: string }, 'hydra:first': { type: string, format: iri-reference }, 'hydra:last': { type: string, format: iri-reference }, 'hydra:next': { type: string, format: iri-reference } } }
                   'hydra:search': { type: object, properties: { '@type': { type: string }, 'hydra:template': { type: string }, 'hydra:variableRepresentation': { type: string }, 'hydra:mapping': { type: array, items: { type: object, properties: { '@type': { type: string }, variable: { type: string }, property: { type: string, nullable: true }, required: { type: boolean } } } } } }
@@ -49,57 +49,57 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Attribute'
+                  $ref: '#/components/schemas/Attribute-read'
             application/json+hal:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Attribute'
+                  $ref: '#/components/schemas/Attribute-read'
             application/vnd.api+json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Attribute'
+                  $ref: '#/components/schemas/Attribute-read'
             application/json+vnd.api:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Attribute'
+                  $ref: '#/components/schemas/Attribute-read'
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Attribute'
+                  $ref: '#/components/schemas/Attribute-read'
             application/health+json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Attribute'
+                  $ref: '#/components/schemas/Attribute-read'
             application/json+health:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Attribute'
+                  $ref: '#/components/schemas/Attribute-read'
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Attribute'
+                  $ref: '#/components/schemas/Attribute-read'
             application/x-yaml:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Attribute'
+                  $ref: '#/components/schemas/Attribute-read'
             text/csv:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Attribute'
+                  $ref: '#/components/schemas/Attribute-read'
             text/html:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Attribute'
+                  $ref: '#/components/schemas/Attribute-read'
       parameters:
         -
           name: page
@@ -202,43 +202,43 @@ paths:
           content:
             application/ld+json:
               schema:
-                $ref: '#/components/schemas/Attribute:jsonld'
+                $ref: '#/components/schemas/Attribute:jsonld-read'
             application/json+ld:
               schema:
-                $ref: '#/components/schemas/Attribute:jsonld'
+                $ref: '#/components/schemas/Attribute:jsonld-read'
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/json+hal:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/json+vnd.api:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/json:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/health+json:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/json+health:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/x-yaml:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             text/csv:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             text/html:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
           links:
             GetAttributeItem:
               parameters:
@@ -253,43 +253,43 @@ paths:
         content:
           application/ld+json:
             schema:
-              $ref: '#/components/schemas/Attribute:jsonld'
+              $ref: '#/components/schemas/Attribute:jsonld-write'
           application/json+ld:
             schema:
-              $ref: '#/components/schemas/Attribute:jsonld'
+              $ref: '#/components/schemas/Attribute:jsonld-write'
           application/hal+json:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/json+hal:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/json+vnd.api:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/json:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/health+json:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/json+health:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/xml:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/x-yaml:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           text/csv:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           text/html:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
         description: 'The new Attribute resource'
       parameters:
         -
@@ -411,93 +411,47 @@ paths:
           content:
             application/ld+json:
               schema:
-                $ref: '#/components/schemas/Attribute:jsonld'
+                $ref: '#/components/schemas/Attribute:jsonld-read'
             application/json+ld:
               schema:
-                $ref: '#/components/schemas/Attribute:jsonld'
+                $ref: '#/components/schemas/Attribute:jsonld-read'
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/json+hal:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/json+vnd.api:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/json:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/health+json:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/json+health:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/x-yaml:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             text/csv:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             text/html:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
         404:
           description: 'Resource not found'
       produces:
         - application/health+json
-    delete:
-      tags:
-        - Attribute
-      operationId: deleteAttributeItem
-      summary: 'Removes the Attribute resource.'
-      responses:
-        204:
-          description: 'Attribute resource deleted'
-        404:
-          description: 'Resource not found'
-      parameters:
-        -
-          name: id
-          in: path
-          required: true
-          schema:
-            type: string
-        -
-          name: Authorization
-          description: 'The JWT of the entity performing the request'
-          in: header
-        -
-          name: API-Version
-          description: 'The version of the API conform [Landelijke API-strategie.](https://geonovum.github.io/KP-APIs/#versioning)'
-          example: 1.0.1
-          in: header
-        -
-          name: X-NLX-Logrecord-ID
-          description: 'A  globally unique id of the request, which makes a request traceable throughout the network.'
-          in: header
-        -
-          name: X-NLX-Request-Process-Id
-          description: 'A process id for purpose registration (doelbinding)'
-          in: header
-        -
-          name: X-NLX-Request-Data-Elements
-          description: 'A list of requested data elements'
-          in: header
-        -
-          name: X-NLX-Request-Data-Subject
-          description: 'A key-value list of data subjects related to this request. e.g. `bsn=12345678, kenteken=ab-12-fg`'
-          in: header
-        -
-          name: X-NLX-Audit-Clarification
-          description: 'A clarification as to why a request has been made  (doelbinding)'
-          in: header
     put:
       tags:
         - Attribute
@@ -545,43 +499,43 @@ paths:
           content:
             application/ld+json:
               schema:
-                $ref: '#/components/schemas/Attribute:jsonld'
+                $ref: '#/components/schemas/Attribute:jsonld-read'
             application/json+ld:
               schema:
-                $ref: '#/components/schemas/Attribute:jsonld'
+                $ref: '#/components/schemas/Attribute:jsonld-read'
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/json+hal:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/json+vnd.api:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/json:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/health+json:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/json+health:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             application/x-yaml:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             text/csv:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
             text/html:
               schema:
-                $ref: '#/components/schemas/Attribute'
+                $ref: '#/components/schemas/Attribute-read'
         400:
           description: 'Invalid input'
         404:
@@ -590,49 +544,54 @@ paths:
         content:
           application/ld+json:
             schema:
-              $ref: '#/components/schemas/Attribute:jsonld'
+              $ref: '#/components/schemas/Attribute:jsonld-write'
           application/json+ld:
             schema:
-              $ref: '#/components/schemas/Attribute:jsonld'
+              $ref: '#/components/schemas/Attribute:jsonld-write'
           application/hal+json:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/json+hal:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/json+vnd.api:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/json:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/health+json:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/json+health:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/xml:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           application/x-yaml:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           text/csv:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
           text/html:
             schema:
-              $ref: '#/components/schemas/Attribute'
+              $ref: '#/components/schemas/Attribute-write'
         description: 'The updated Attribute resource'
-    patch:
+    delete:
       tags:
         - Attribute
-      operationId: patchAttributeItem
-      summary: 'Updates the Attribute resource.'
+      operationId: deleteAttributeItem
+      summary: 'Removes the Attribute resource.'
+      responses:
+        204:
+          description: 'Attribute resource deleted'
+        404:
+          description: 'Resource not found'
       parameters:
         -
           name: id
@@ -669,83 +628,6 @@ paths:
           name: X-NLX-Audit-Clarification
           description: 'A clarification as to why a request has been made  (doelbinding)'
           in: header
-      responses:
-        200:
-          description: 'Attribute resource updated'
-          content:
-            application/ld+json:
-              schema:
-                $ref: '#/components/schemas/Attribute:jsonld'
-            application/json+ld:
-              schema:
-                $ref: '#/components/schemas/Attribute:jsonld'
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/Attribute'
-            application/json+hal:
-              schema:
-                $ref: '#/components/schemas/Attribute'
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Attribute'
-            application/json+vnd.api:
-              schema:
-                $ref: '#/components/schemas/Attribute'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Attribute'
-            application/health+json:
-              schema:
-                $ref: '#/components/schemas/Attribute'
-            application/json+health:
-              schema:
-                $ref: '#/components/schemas/Attribute'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Attribute'
-            application/x-yaml:
-              schema:
-                $ref: '#/components/schemas/Attribute'
-            text/csv:
-              schema:
-                $ref: '#/components/schemas/Attribute'
-            text/html:
-              schema:
-                $ref: '#/components/schemas/Attribute'
-        400:
-          description: 'Invalid input'
-        404:
-          description: 'Resource not found'
-      requestBody:
-        content:
-          application/ld+json:
-            schema:
-              $ref: '#/components/schemas/Attribute:jsonld'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Attribute'
-          application/hal+json:
-            schema:
-              $ref: '#/components/schemas/Attribute'
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/Attribute'
-          application/merge-patch+json:
-            schema:
-              $ref: '#/components/schemas/Attribute'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Attribute'
-          applications/x-yaml:
-            schema:
-              $ref: '#/components/schemas/Attribute'
-          text/csv:
-            schema:
-              $ref: '#/components/schemas/Attribute'
-          text/html:
-            schema:
-              $ref: '#/components/schemas/Attribute'
-        description: 'The updated Attribute resource'
   /audit_trails:
     get:
       tags:
@@ -2673,6 +2555,268 @@ paths:
             schema:
               $ref: '#/components/schemas/ChangeLog-write'
         description: 'The updated ChangeLog resource'
+  '/emails/{id}/audit_trail':
+    get:
+      tags:
+        - Entity
+      operationId: get_audit_trailEntityItem
+      summary: 'Retrieves a Entity resource.'
+      parameters:
+        -
+          name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        -
+          name: Authorization
+          description: 'The JWT of the entity performing the request'
+          in: header
+        -
+          name: API-Version
+          description: 'The version of the API conform [Landelijke API-strategie.](https://geonovum.github.io/KP-APIs/#versioning)'
+          example: 1.0.1
+          in: header
+        -
+          name: X-NLX-Logrecord-ID
+          description: 'A  globally unique id of the request, which makes a request traceable throughout the network.'
+          in: header
+        -
+          name: X-NLX-Request-Process-Id
+          description: 'A process id for purpose registration (doelbinding)'
+          in: header
+        -
+          name: X-NLX-Request-Data-Elements
+          description: 'A list of requested data elements'
+          in: header
+        -
+          name: X-NLX-Request-Data-Subject
+          description: 'A key-value list of data subjects related to this request. e.g. `bsn=12345678, kenteken=ab-12-fg`'
+          in: header
+        -
+          name: X-NLX-Audit-Clarification
+          description: 'A clarification as to why a request has been made  (doelbinding)'
+          in: header
+        -
+          name: Link
+          description: 'A [websub](https://www.w3.org/TR/websub/#discovery) header like <https://hub.example.com/>; rel="hub"'
+          in: header
+        -
+          name: 'extend[]'
+          required: false
+          description: 'An array of nested objects to include in the return object'
+          in: query
+          schema:
+            type: array
+        -
+          name: 'fields[]'
+          required: false
+          description: 'An array of fields to return in output, wil return all fields is not supplied'
+          in: query
+          schema:
+            type: array
+        -
+          name: validOn
+          required: false
+          description: 'Returns object as valid on a given date time'
+          schema:
+            type: string
+            format: date-time
+          in: query
+        -
+          name: validFrom
+          required: false
+          description: 'Returns objects valid from a given date time'
+          schema:
+            type: string
+            format: date-time
+          in: query
+        -
+          name: validUntil
+          required: false
+          description: 'Returns objects valid until a given date time'
+          schema:
+            type: string
+            format: date-time
+          in: query
+      responses:
+        200:
+          description: 'Entity resource response'
+          content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/Entity:jsonld-read'
+            application/json+ld:
+              schema:
+                $ref: '#/components/schemas/Entity:jsonld-read'
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/json+hal:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/json+vnd.api:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/health+json:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/json+health:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/x-yaml:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            text/csv:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+        404:
+          description: 'Resource not found'
+      produces:
+        - application/health+json
+  '/emails/{id}/change_log':
+    get:
+      tags:
+        - Entity
+      operationId: get_change_logsEntityItem
+      summary: 'Retrieves a Entity resource.'
+      parameters:
+        -
+          name: id
+          in: path
+          required: true
+          schema:
+            type: string
+        -
+          name: Authorization
+          description: 'The JWT of the entity performing the request'
+          in: header
+        -
+          name: API-Version
+          description: 'The version of the API conform [Landelijke API-strategie.](https://geonovum.github.io/KP-APIs/#versioning)'
+          example: 1.0.1
+          in: header
+        -
+          name: X-NLX-Logrecord-ID
+          description: 'A  globally unique id of the request, which makes a request traceable throughout the network.'
+          in: header
+        -
+          name: X-NLX-Request-Process-Id
+          description: 'A process id for purpose registration (doelbinding)'
+          in: header
+        -
+          name: X-NLX-Request-Data-Elements
+          description: 'A list of requested data elements'
+          in: header
+        -
+          name: X-NLX-Request-Data-Subject
+          description: 'A key-value list of data subjects related to this request. e.g. `bsn=12345678, kenteken=ab-12-fg`'
+          in: header
+        -
+          name: X-NLX-Audit-Clarification
+          description: 'A clarification as to why a request has been made  (doelbinding)'
+          in: header
+        -
+          name: Link
+          description: 'A [websub](https://www.w3.org/TR/websub/#discovery) header like <https://hub.example.com/>; rel="hub"'
+          in: header
+        -
+          name: 'extend[]'
+          required: false
+          description: 'An array of nested objects to include in the return object'
+          in: query
+          schema:
+            type: array
+        -
+          name: 'fields[]'
+          required: false
+          description: 'An array of fields to return in output, wil return all fields is not supplied'
+          in: query
+          schema:
+            type: array
+        -
+          name: validOn
+          required: false
+          description: 'Returns object as valid on a given date time'
+          schema:
+            type: string
+            format: date-time
+          in: query
+        -
+          name: validFrom
+          required: false
+          description: 'Returns objects valid from a given date time'
+          schema:
+            type: string
+            format: date-time
+          in: query
+        -
+          name: validUntil
+          required: false
+          description: 'Returns objects valid until a given date time'
+          schema:
+            type: string
+            format: date-time
+          in: query
+      responses:
+        200:
+          description: 'Entity resource response'
+          content:
+            application/ld+json:
+              schema:
+                $ref: '#/components/schemas/Entity:jsonld-read'
+            application/json+ld:
+              schema:
+                $ref: '#/components/schemas/Entity:jsonld-read'
+            application/hal+json:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/json+hal:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/vnd.api+json:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/json+vnd.api:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/health+json:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/json+health:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/xml:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            application/x-yaml:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            text/csv:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+            text/html:
+              schema:
+                $ref: '#/components/schemas/Entity-read'
+        404:
+          description: 'Resource not found'
+      produces:
+        - application/health+json
   /entities:
     get:
       tags:
@@ -2687,7 +2831,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  'hydra:member': { type: array, items: { $ref: '#/components/schemas/Entity:jsonld' } }
+                  'hydra:member': { type: array, items: { $ref: '#/components/schemas/Entity:jsonld-read' } }
                   'hydra:totalItems': { type: integer, minimum: 0 }
                   'hydra:view': { type: object, properties: { '@id': { type: string, format: iri-reference }, '@type': { type: string }, 'hydra:first': { type: string, format: iri-reference }, 'hydra:last': { type: string, format: iri-reference }, 'hydra:next': { type: string, format: iri-reference } } }
                   'hydra:search': { type: object, properties: { '@type': { type: string }, 'hydra:template': { type: string }, 'hydra:variableRepresentation': { type: string }, 'hydra:mapping': { type: array, items: { type: object, properties: { '@type': { type: string }, variable: { type: string }, property: { type: string, nullable: true }, required: { type: boolean } } } } } }
@@ -2697,7 +2841,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  'hydra:member': { type: array, items: { $ref: '#/components/schemas/Entity:jsonld' } }
+                  'hydra:member': { type: array, items: { $ref: '#/components/schemas/Entity:jsonld-read' } }
                   'hydra:totalItems': { type: integer, minimum: 0 }
                   'hydra:view': { type: object, properties: { '@id': { type: string, format: iri-reference }, '@type': { type: string }, 'hydra:first': { type: string, format: iri-reference }, 'hydra:last': { type: string, format: iri-reference }, 'hydra:next': { type: string, format: iri-reference } } }
                   'hydra:search': { type: object, properties: { '@type': { type: string }, 'hydra:template': { type: string }, 'hydra:variableRepresentation': { type: string }, 'hydra:mapping': { type: array, items: { type: object, properties: { '@type': { type: string }, variable: { type: string }, property: { type: string, nullable: true }, required: { type: boolean } } } } } }
@@ -2707,57 +2851,57 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Entity'
+                  $ref: '#/components/schemas/Entity-read'
             application/json+hal:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Entity'
+                  $ref: '#/components/schemas/Entity-read'
             application/vnd.api+json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Entity'
+                  $ref: '#/components/schemas/Entity-read'
             application/json+vnd.api:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Entity'
+                  $ref: '#/components/schemas/Entity-read'
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Entity'
+                  $ref: '#/components/schemas/Entity-read'
             application/health+json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Entity'
+                  $ref: '#/components/schemas/Entity-read'
             application/json+health:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Entity'
+                  $ref: '#/components/schemas/Entity-read'
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Entity'
+                  $ref: '#/components/schemas/Entity-read'
             application/x-yaml:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Entity'
+                  $ref: '#/components/schemas/Entity-read'
             text/csv:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Entity'
+                  $ref: '#/components/schemas/Entity-read'
             text/html:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Entity'
+                  $ref: '#/components/schemas/Entity-read'
       parameters:
         -
           name: page
@@ -2860,43 +3004,43 @@ paths:
           content:
             application/ld+json:
               schema:
-                $ref: '#/components/schemas/Entity:jsonld'
+                $ref: '#/components/schemas/Entity:jsonld-read'
             application/json+ld:
               schema:
-                $ref: '#/components/schemas/Entity:jsonld'
+                $ref: '#/components/schemas/Entity:jsonld-read'
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/json+hal:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/json+vnd.api:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/json:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/health+json:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/json+health:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/x-yaml:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             text/csv:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             text/html:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
           links:
             GetEntityItem:
               parameters:
@@ -2911,43 +3055,43 @@ paths:
         content:
           application/ld+json:
             schema:
-              $ref: '#/components/schemas/Entity:jsonld'
+              $ref: '#/components/schemas/Entity:jsonld-write'
           application/json+ld:
             schema:
-              $ref: '#/components/schemas/Entity:jsonld'
+              $ref: '#/components/schemas/Entity:jsonld-write'
           application/hal+json:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/json+hal:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/json+vnd.api:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/json:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/health+json:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/json+health:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/xml:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/x-yaml:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           text/csv:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           text/html:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
         description: 'The new Entity resource'
       parameters:
         -
@@ -3069,93 +3213,47 @@ paths:
           content:
             application/ld+json:
               schema:
-                $ref: '#/components/schemas/Entity:jsonld'
+                $ref: '#/components/schemas/Entity:jsonld-read'
             application/json+ld:
               schema:
-                $ref: '#/components/schemas/Entity:jsonld'
+                $ref: '#/components/schemas/Entity:jsonld-read'
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/json+hal:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/json+vnd.api:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/json:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/health+json:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/json+health:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/x-yaml:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             text/csv:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             text/html:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
         404:
           description: 'Resource not found'
       produces:
         - application/health+json
-    delete:
-      tags:
-        - Entity
-      operationId: deleteEntityItem
-      summary: 'Removes the Entity resource.'
-      responses:
-        204:
-          description: 'Entity resource deleted'
-        404:
-          description: 'Resource not found'
-      parameters:
-        -
-          name: id
-          in: path
-          required: true
-          schema:
-            type: string
-        -
-          name: Authorization
-          description: 'The JWT of the entity performing the request'
-          in: header
-        -
-          name: API-Version
-          description: 'The version of the API conform [Landelijke API-strategie.](https://geonovum.github.io/KP-APIs/#versioning)'
-          example: 1.0.1
-          in: header
-        -
-          name: X-NLX-Logrecord-ID
-          description: 'A  globally unique id of the request, which makes a request traceable throughout the network.'
-          in: header
-        -
-          name: X-NLX-Request-Process-Id
-          description: 'A process id for purpose registration (doelbinding)'
-          in: header
-        -
-          name: X-NLX-Request-Data-Elements
-          description: 'A list of requested data elements'
-          in: header
-        -
-          name: X-NLX-Request-Data-Subject
-          description: 'A key-value list of data subjects related to this request. e.g. `bsn=12345678, kenteken=ab-12-fg`'
-          in: header
-        -
-          name: X-NLX-Audit-Clarification
-          description: 'A clarification as to why a request has been made  (doelbinding)'
-          in: header
     put:
       tags:
         - Entity
@@ -3203,43 +3301,43 @@ paths:
           content:
             application/ld+json:
               schema:
-                $ref: '#/components/schemas/Entity:jsonld'
+                $ref: '#/components/schemas/Entity:jsonld-read'
             application/json+ld:
               schema:
-                $ref: '#/components/schemas/Entity:jsonld'
+                $ref: '#/components/schemas/Entity:jsonld-read'
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/json+hal:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/json+vnd.api:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/json:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/health+json:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/json+health:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/xml:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             application/x-yaml:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             text/csv:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
             text/html:
               schema:
-                $ref: '#/components/schemas/Entity'
+                $ref: '#/components/schemas/Entity-read'
         400:
           description: 'Invalid input'
         404:
@@ -3248,49 +3346,54 @@ paths:
         content:
           application/ld+json:
             schema:
-              $ref: '#/components/schemas/Entity:jsonld'
+              $ref: '#/components/schemas/Entity:jsonld-write'
           application/json+ld:
             schema:
-              $ref: '#/components/schemas/Entity:jsonld'
+              $ref: '#/components/schemas/Entity:jsonld-write'
           application/hal+json:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/json+hal:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/json+vnd.api:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/json:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/health+json:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/json+health:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/xml:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           application/x-yaml:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           text/csv:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
           text/html:
             schema:
-              $ref: '#/components/schemas/Entity'
+              $ref: '#/components/schemas/Entity-write'
         description: 'The updated Entity resource'
-    patch:
+    delete:
       tags:
         - Entity
-      operationId: patchEntityItem
-      summary: 'Updates the Entity resource.'
+      operationId: deleteEntityItem
+      summary: 'Removes the Entity resource.'
+      responses:
+        204:
+          description: 'Entity resource deleted'
+        404:
+          description: 'Resource not found'
       parameters:
         -
           name: id
@@ -3327,83 +3430,6 @@ paths:
           name: X-NLX-Audit-Clarification
           description: 'A clarification as to why a request has been made  (doelbinding)'
           in: header
-      responses:
-        200:
-          description: 'Entity resource updated'
-          content:
-            application/ld+json:
-              schema:
-                $ref: '#/components/schemas/Entity:jsonld'
-            application/json+ld:
-              schema:
-                $ref: '#/components/schemas/Entity:jsonld'
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/Entity'
-            application/json+hal:
-              schema:
-                $ref: '#/components/schemas/Entity'
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/Entity'
-            application/json+vnd.api:
-              schema:
-                $ref: '#/components/schemas/Entity'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Entity'
-            application/health+json:
-              schema:
-                $ref: '#/components/schemas/Entity'
-            application/json+health:
-              schema:
-                $ref: '#/components/schemas/Entity'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/Entity'
-            application/x-yaml:
-              schema:
-                $ref: '#/components/schemas/Entity'
-            text/csv:
-              schema:
-                $ref: '#/components/schemas/Entity'
-            text/html:
-              schema:
-                $ref: '#/components/schemas/Entity'
-        400:
-          description: 'Invalid input'
-        404:
-          description: 'Resource not found'
-      requestBody:
-        content:
-          application/ld+json:
-            schema:
-              $ref: '#/components/schemas/Entity:jsonld'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Entity'
-          application/hal+json:
-            schema:
-              $ref: '#/components/schemas/Entity'
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/Entity'
-          application/merge-patch+json:
-            schema:
-              $ref: '#/components/schemas/Entity'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/Entity'
-          applications/x-yaml:
-            schema:
-              $ref: '#/components/schemas/Entity'
-          text/csv:
-            schema:
-              $ref: '#/components/schemas/Entity'
-          text/html:
-            schema:
-              $ref: '#/components/schemas/Entity'
-        description: 'The updated Entity resource'
   /object_entities:
     get:
       tags:
@@ -3418,7 +3444,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  'hydra:member': { type: array, items: { $ref: '#/components/schemas/ObjectEntity:jsonld' } }
+                  'hydra:member': { type: array, items: { $ref: '#/components/schemas/ObjectEntity:jsonld-read' } }
                   'hydra:totalItems': { type: integer, minimum: 0 }
                   'hydra:view': { type: object, properties: { '@id': { type: string, format: iri-reference }, '@type': { type: string }, 'hydra:first': { type: string, format: iri-reference }, 'hydra:last': { type: string, format: iri-reference }, 'hydra:next': { type: string, format: iri-reference } } }
                   'hydra:search': { type: object, properties: { '@type': { type: string }, 'hydra:template': { type: string }, 'hydra:variableRepresentation': { type: string }, 'hydra:mapping': { type: array, items: { type: object, properties: { '@type': { type: string }, variable: { type: string }, property: { type: string, nullable: true }, required: { type: boolean } } } } } }
@@ -3428,7 +3454,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  'hydra:member': { type: array, items: { $ref: '#/components/schemas/ObjectEntity:jsonld' } }
+                  'hydra:member': { type: array, items: { $ref: '#/components/schemas/ObjectEntity:jsonld-read' } }
                   'hydra:totalItems': { type: integer, minimum: 0 }
                   'hydra:view': { type: object, properties: { '@id': { type: string, format: iri-reference }, '@type': { type: string }, 'hydra:first': { type: string, format: iri-reference }, 'hydra:last': { type: string, format: iri-reference }, 'hydra:next': { type: string, format: iri-reference } } }
                   'hydra:search': { type: object, properties: { '@type': { type: string }, 'hydra:template': { type: string }, 'hydra:variableRepresentation': { type: string }, 'hydra:mapping': { type: array, items: { type: object, properties: { '@type': { type: string }, variable: { type: string }, property: { type: string, nullable: true }, required: { type: boolean } } } } } }
@@ -3438,57 +3464,57 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ObjectEntity'
+                  $ref: '#/components/schemas/ObjectEntity-read'
             application/json+hal:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ObjectEntity'
+                  $ref: '#/components/schemas/ObjectEntity-read'
             application/vnd.api+json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ObjectEntity'
+                  $ref: '#/components/schemas/ObjectEntity-read'
             application/json+vnd.api:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ObjectEntity'
+                  $ref: '#/components/schemas/ObjectEntity-read'
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ObjectEntity'
+                  $ref: '#/components/schemas/ObjectEntity-read'
             application/health+json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ObjectEntity'
+                  $ref: '#/components/schemas/ObjectEntity-read'
             application/json+health:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ObjectEntity'
+                  $ref: '#/components/schemas/ObjectEntity-read'
             application/xml:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ObjectEntity'
+                  $ref: '#/components/schemas/ObjectEntity-read'
             application/x-yaml:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ObjectEntity'
+                  $ref: '#/components/schemas/ObjectEntity-read'
             text/csv:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ObjectEntity'
+                  $ref: '#/components/schemas/ObjectEntity-read'
             text/html:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ObjectEntity'
+                  $ref: '#/components/schemas/ObjectEntity-read'
       parameters:
         -
           name: page
@@ -3591,43 +3617,43 @@ paths:
           content:
             application/ld+json:
               schema:
-                $ref: '#/components/schemas/ObjectEntity:jsonld'
+                $ref: '#/components/schemas/ObjectEntity:jsonld-read'
             application/json+ld:
               schema:
-                $ref: '#/components/schemas/ObjectEntity:jsonld'
+                $ref: '#/components/schemas/ObjectEntity:jsonld-read'
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/json+hal:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/json+vnd.api:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/json:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/health+json:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/json+health:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/xml:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/x-yaml:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             text/csv:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             text/html:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
           links:
             GetObjectEntityItem:
               parameters:
@@ -3642,43 +3668,43 @@ paths:
         content:
           application/ld+json:
             schema:
-              $ref: '#/components/schemas/ObjectEntity:jsonld'
+              $ref: '#/components/schemas/ObjectEntity:jsonld-write'
           application/json+ld:
             schema:
-              $ref: '#/components/schemas/ObjectEntity:jsonld'
+              $ref: '#/components/schemas/ObjectEntity:jsonld-write'
           application/hal+json:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/json+hal:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/json+vnd.api:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/json:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/health+json:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/json+health:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/xml:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/x-yaml:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           text/csv:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           text/html:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
         description: 'The new ObjectEntity resource'
       parameters:
         -
@@ -3800,93 +3826,47 @@ paths:
           content:
             application/ld+json:
               schema:
-                $ref: '#/components/schemas/ObjectEntity:jsonld'
+                $ref: '#/components/schemas/ObjectEntity:jsonld-read'
             application/json+ld:
               schema:
-                $ref: '#/components/schemas/ObjectEntity:jsonld'
+                $ref: '#/components/schemas/ObjectEntity:jsonld-read'
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/json+hal:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/json+vnd.api:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/json:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/health+json:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/json+health:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/xml:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/x-yaml:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             text/csv:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             text/html:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
         404:
           description: 'Resource not found'
       produces:
         - application/health+json
-    delete:
-      tags:
-        - ObjectEntity
-      operationId: deleteObjectEntityItem
-      summary: 'Removes the ObjectEntity resource.'
-      responses:
-        204:
-          description: 'ObjectEntity resource deleted'
-        404:
-          description: 'Resource not found'
-      parameters:
-        -
-          name: id
-          in: path
-          required: true
-          schema:
-            type: string
-        -
-          name: Authorization
-          description: 'The JWT of the entity performing the request'
-          in: header
-        -
-          name: API-Version
-          description: 'The version of the API conform [Landelijke API-strategie.](https://geonovum.github.io/KP-APIs/#versioning)'
-          example: 1.0.1
-          in: header
-        -
-          name: X-NLX-Logrecord-ID
-          description: 'A  globally unique id of the request, which makes a request traceable throughout the network.'
-          in: header
-        -
-          name: X-NLX-Request-Process-Id
-          description: 'A process id for purpose registration (doelbinding)'
-          in: header
-        -
-          name: X-NLX-Request-Data-Elements
-          description: 'A list of requested data elements'
-          in: header
-        -
-          name: X-NLX-Request-Data-Subject
-          description: 'A key-value list of data subjects related to this request. e.g. `bsn=12345678, kenteken=ab-12-fg`'
-          in: header
-        -
-          name: X-NLX-Audit-Clarification
-          description: 'A clarification as to why a request has been made  (doelbinding)'
-          in: header
     put:
       tags:
         - ObjectEntity
@@ -3934,43 +3914,43 @@ paths:
           content:
             application/ld+json:
               schema:
-                $ref: '#/components/schemas/ObjectEntity:jsonld'
+                $ref: '#/components/schemas/ObjectEntity:jsonld-read'
             application/json+ld:
               schema:
-                $ref: '#/components/schemas/ObjectEntity:jsonld'
+                $ref: '#/components/schemas/ObjectEntity:jsonld-read'
             application/hal+json:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/json+hal:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/vnd.api+json:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/json+vnd.api:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/json:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/health+json:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/json+health:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/xml:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             application/x-yaml:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             text/csv:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
             text/html:
               schema:
-                $ref: '#/components/schemas/ObjectEntity'
+                $ref: '#/components/schemas/ObjectEntity-read'
         400:
           description: 'Invalid input'
         404:
@@ -3979,49 +3959,54 @@ paths:
         content:
           application/ld+json:
             schema:
-              $ref: '#/components/schemas/ObjectEntity:jsonld'
+              $ref: '#/components/schemas/ObjectEntity:jsonld-write'
           application/json+ld:
             schema:
-              $ref: '#/components/schemas/ObjectEntity:jsonld'
+              $ref: '#/components/schemas/ObjectEntity:jsonld-write'
           application/hal+json:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/json+hal:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/vnd.api+json:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/json+vnd.api:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/json:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/health+json:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/json+health:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/xml:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           application/x-yaml:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           text/csv:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
           text/html:
             schema:
-              $ref: '#/components/schemas/ObjectEntity'
+              $ref: '#/components/schemas/ObjectEntity-write'
         description: 'The updated ObjectEntity resource'
-    patch:
+    delete:
       tags:
         - ObjectEntity
-      operationId: patchObjectEntityItem
-      summary: 'Updates the ObjectEntity resource.'
+      operationId: deleteObjectEntityItem
+      summary: 'Removes the ObjectEntity resource.'
+      responses:
+        204:
+          description: 'ObjectEntity resource deleted'
+        404:
+          description: 'Resource not found'
       parameters:
         -
           name: id
@@ -4058,83 +4043,6 @@ paths:
           name: X-NLX-Audit-Clarification
           description: 'A clarification as to why a request has been made  (doelbinding)'
           in: header
-      responses:
-        200:
-          description: 'ObjectEntity resource updated'
-          content:
-            application/ld+json:
-              schema:
-                $ref: '#/components/schemas/ObjectEntity:jsonld'
-            application/json+ld:
-              schema:
-                $ref: '#/components/schemas/ObjectEntity:jsonld'
-            application/hal+json:
-              schema:
-                $ref: '#/components/schemas/ObjectEntity'
-            application/json+hal:
-              schema:
-                $ref: '#/components/schemas/ObjectEntity'
-            application/vnd.api+json:
-              schema:
-                $ref: '#/components/schemas/ObjectEntity'
-            application/json+vnd.api:
-              schema:
-                $ref: '#/components/schemas/ObjectEntity'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ObjectEntity'
-            application/health+json:
-              schema:
-                $ref: '#/components/schemas/ObjectEntity'
-            application/json+health:
-              schema:
-                $ref: '#/components/schemas/ObjectEntity'
-            application/xml:
-              schema:
-                $ref: '#/components/schemas/ObjectEntity'
-            application/x-yaml:
-              schema:
-                $ref: '#/components/schemas/ObjectEntity'
-            text/csv:
-              schema:
-                $ref: '#/components/schemas/ObjectEntity'
-            text/html:
-              schema:
-                $ref: '#/components/schemas/ObjectEntity'
-        400:
-          description: 'Invalid input'
-        404:
-          description: 'Resource not found'
-      requestBody:
-        content:
-          application/ld+json:
-            schema:
-              $ref: '#/components/schemas/ObjectEntity:jsonld'
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ObjectEntity'
-          application/hal+json:
-            schema:
-              $ref: '#/components/schemas/ObjectEntity'
-          application/vnd.api+json:
-            schema:
-              $ref: '#/components/schemas/ObjectEntity'
-          application/merge-patch+json:
-            schema:
-              $ref: '#/components/schemas/ObjectEntity'
-          application/xml:
-            schema:
-              $ref: '#/components/schemas/ObjectEntity'
-          applications/x-yaml:
-            schema:
-              $ref: '#/components/schemas/ObjectEntity'
-          text/csv:
-            schema:
-              $ref: '#/components/schemas/ObjectEntity'
-          text/html:
-            schema:
-              $ref: '#/components/schemas/ObjectEntity'
-        description: 'The updated ObjectEntity resource'
   /values:
     get:
       tags:
@@ -4750,16 +4658,38 @@ paths:
           in: header
 components:
   schemas:
-    Attribute:
+    Attribute-read:
       type: object
-      description: ''
+      description: Description
       properties:
         id:
           readOnly: true
-          type: integer
-    'Attribute:jsonld':
+          description: 'The UUID identifier of this Attribute.'
+          type: string
+          format: uuid
+        attributeValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Value-read'
+        entity:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entity-read'
+    Attribute-write:
       type: object
-      description: ''
+      description: Description
+      properties:
+        attributeValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Value-write'
+        entity:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entity-write'
+    'Attribute:jsonld-read':
+      type: object
+      description: Description
       properties:
         '@context':
           readOnly: true
@@ -4772,7 +4702,38 @@ components:
           type: string
         id:
           readOnly: true
-          type: integer
+          description: 'The UUID identifier of this Attribute.'
+          type: string
+          format: uuid
+        attributeValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Value:jsonld-read'
+        entity:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entity:jsonld-read'
+    'Attribute:jsonld-write':
+      type: object
+      description: Description
+      properties:
+        '@context':
+          readOnly: true
+          type: string
+        '@id':
+          readOnly: true
+          type: string
+        '@type':
+          readOnly: true
+          type: string
+        attributeValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Value:jsonld-write'
+        entity:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entity:jsonld-write'
     AuditTrail-read:
       type: object
       description: 'An resource representing a log line.'
@@ -5163,14 +5124,58 @@ components:
         '@type':
           readOnly: true
           type: string
-    Entity:
+    Entity-read:
       type: object
       description: ''
       properties:
         id:
           readOnly: true
-          type: integer
-    'Entity:jsonld':
+          description: 'The UUID identifier of this Entity.'
+          type: string
+          format: uuid
+        type:
+          description: 'The type of this Entity'
+          type: string
+        name:
+          description: 'The name of this Entity'
+          type: string
+        description:
+          description: 'The description of this Entity'
+          type: string
+          nullable: true
+        attributes:
+          description: 'The attribute of this Entity'
+          nullable: true
+          anyOf:
+            -
+              $ref: '#/components/schemas/Attribute-read'
+      required:
+        - type
+        - name
+    Entity-write:
+      type: object
+      description: ''
+      required:
+        - type
+        - name
+      properties:
+        type:
+          description: 'The type of this Entity'
+          type: string
+        name:
+          description: 'The name of this Entity'
+          type: string
+        description:
+          description: 'The description of this Entity'
+          type: string
+          nullable: true
+        attributes:
+          description: 'The attribute of this Entity'
+          nullable: true
+          anyOf:
+            -
+              $ref: '#/components/schemas/Attribute-write'
+    'Entity:jsonld-read':
       type: object
       description: ''
       properties:
@@ -5185,17 +5190,84 @@ components:
           type: string
         id:
           readOnly: true
-          type: integer
-    ObjectEntity:
+          description: 'The UUID identifier of this Entity.'
+          type: string
+          format: uuid
+        type:
+          description: 'The type of this Entity'
+          type: string
+        name:
+          description: 'The name of this Entity'
+          type: string
+        description:
+          description: 'The description of this Entity'
+          type: string
+          nullable: true
+        attributes:
+          description: 'The attribute of this Entity'
+          nullable: true
+          anyOf:
+            -
+              $ref: '#/components/schemas/Attribute:jsonld-read'
+      required:
+        - type
+        - name
+    'Entity:jsonld-write':
       type: object
       description: ''
+      required:
+        - type
+        - name
+      properties:
+        '@context':
+          readOnly: true
+          type: string
+        '@id':
+          readOnly: true
+          type: string
+        '@type':
+          readOnly: true
+          type: string
+        type:
+          description: 'The type of this Entity'
+          type: string
+        name:
+          description: 'The name of this Entity'
+          type: string
+        description:
+          description: 'The description of this Entity'
+          type: string
+          nullable: true
+        attributes:
+          description: 'The attribute of this Entity'
+          nullable: true
+          anyOf:
+            -
+              $ref: '#/components/schemas/Attribute:jsonld-write'
+    ObjectEntity-read:
+      type: object
+      description: Description
       properties:
         id:
           readOnly: true
-          type: integer
-    'ObjectEntity:jsonld':
+          description: 'UUID of this person'
+          type: string
+          format: uuid
+        objectValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Value-read'
+    ObjectEntity-write:
       type: object
-      description: ''
+      description: Description
+      properties:
+        objectValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Value-write'
+    'ObjectEntity:jsonld-read':
+      type: object
+      description: Description
       properties:
         '@context':
           readOnly: true
@@ -5208,22 +5280,70 @@ components:
           type: string
         id:
           readOnly: true
-          type: integer
+          description: 'UUID of this person'
+          type: string
+          format: uuid
+        objectValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Value:jsonld-read'
+    'ObjectEntity:jsonld-write':
+      type: object
+      description: Description
+      properties:
+        '@context':
+          readOnly: true
+          type: string
+        '@id':
+          readOnly: true
+          type: string
+        '@type':
+          readOnly: true
+          type: string
+        objectValues:
+          type: array
+          items:
+            $ref: '#/components/schemas/Value:jsonld-write'
     Value-read:
       type: object
-      description: ''
+      description: Description.
       properties:
         id:
           readOnly: true
           description: 'UUID of this person'
           type: string
           format: uuid
+        uri:
+          description: 'An uri'
+          externalDocs:
+            url: 'http://schema.org/url'
+          type: string
+        value:
+          description: 'The actual value'
+          type: string
+        attribute:
+          $ref: '#/components/schemas/Attribute-read'
+        objectEntity:
+          $ref: '#/components/schemas/ObjectEntity-read'
     Value-write:
       type: object
-      description: ''
+      description: Description.
+      properties:
+        uri:
+          description: 'An uri'
+          externalDocs:
+            url: 'http://schema.org/url'
+          type: string
+        value:
+          description: 'The actual value'
+          type: string
+        attribute:
+          $ref: '#/components/schemas/Attribute-write'
+        objectEntity:
+          $ref: '#/components/schemas/ObjectEntity-write'
     'Value:jsonld-read':
       type: object
-      description: ''
+      description: Description.
       properties:
         '@context':
           readOnly: true
@@ -5239,9 +5359,21 @@ components:
           description: 'UUID of this person'
           type: string
           format: uuid
+        uri:
+          description: 'An uri'
+          externalDocs:
+            url: 'http://schema.org/url'
+          type: string
+        value:
+          description: 'The actual value'
+          type: string
+        attribute:
+          $ref: '#/components/schemas/Attribute:jsonld-read'
+        objectEntity:
+          $ref: '#/components/schemas/ObjectEntity:jsonld-read'
     'Value:jsonld-write':
       type: object
-      description: ''
+      description: Description.
       properties:
         '@context':
           readOnly: true
@@ -5252,12 +5384,112 @@ components:
         '@type':
           readOnly: true
           type: string
+        uri:
+          description: 'An uri'
+          externalDocs:
+            url: 'http://schema.org/url'
+          type: string
+        value:
+          description: 'The actual value'
+          type: string
+        attribute:
+          $ref: '#/components/schemas/Attribute:jsonld-write'
+        objectEntity:
+          $ref: '#/components/schemas/ObjectEntity:jsonld-write'
 definitions:
+  Attribute-read:
+    properties:
+      id:
+        description: 'The UUID identifier of this Attribute.'
+        type: \UuidInterface
+      attributeValues: []
+      entity: []
+    required: []
+  Attribute-write:
+    properties:
+      attributeValues: []
+      entity: []
+    required: []
+  Entity-read:
+    properties:
+      id:
+        description: 'The UUID identifier of this Entity.'
+        type: \UuidInterface
+      type:
+        description: 'The type of this Entity'
+        type: string
+        maxLength: 255
+      name:
+        description: 'The name of this Entity'
+        type: string
+        maxLength: 255
+      description:
+        description: 'The description of this Entity'
+        type: string
+        maxLength: 255
+      attributes:
+        description: 'The attribute of this Entity'
+        type: \Attribute
+    required:
+      - type
+      - name
+  Entity-write:
+    properties:
+      type:
+        description: 'The type of this Entity'
+        type: string
+        maxLength: 255
+      name:
+        description: 'The name of this Entity'
+        type: string
+        maxLength: 255
+      description:
+        description: 'The description of this Entity'
+        type: string
+        maxLength: 255
+      attributes:
+        description: 'The attribute of this Entity'
+        type: \Attribute
+    required:
+      - type
+      - name
+  ObjectEntity-read:
+    properties:
+      id:
+        description: 'UUID of this person'
+        type: \UuidInterface
+      objectValues: []
+    required: []
+  ObjectEntity-write:
+    properties:
+      objectValues: []
+    required: []
   Value-read:
     properties:
       id:
         description: 'UUID of this person'
         type: \UuidInterface
+      uri:
+        description: 'An uri'
+        type: string
+        format: url
+      value:
+        description: 'The actual value'
+        type: string
+      attribute: []
+      objectEntity: []
+    required: []
+  Value-write:
+    properties:
+      uri:
+        description: 'An uri'
+        type: string
+        format: url
+      value:
+        description: 'The actual value'
+        type: string
+      attribute: []
+      objectEntity: []
     required: []
   ChangeLog-read:
     properties:
@@ -5297,12 +5529,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-02 12:10:25'
+        example: '2021-03-02 12:51:19'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-02 12:10:25'
+        example: '2021-03-02 12:51:19'
     required: []
   ChangeLog-write:
     properties:
@@ -5416,12 +5648,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-02 12:10:25'
+        example: '2021-03-02 12:51:19'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-02 12:10:25'
+        example: '2021-03-02 12:51:19'
     required: []
   AuditTrail-write:
     properties:
@@ -5435,7 +5667,7 @@ tags:
   -
     name: Attribute
     description: |
-      
+      Description
       
       
   -
@@ -5447,13 +5679,13 @@ tags:
   -
     name: ObjectEntity
     description: |
-      
+      Description
       
       
   -
     name: Value
     description: |
-      
+      Description.
       
       
   -

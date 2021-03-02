@@ -108,6 +108,11 @@ class Entity
      */
     private Attribute $attributes;
 
+    public function __construct()
+    {
+        $this->attributes = new ArrayCollection();
+    }
+
     public function getId()
     {
         return $this->id;
@@ -149,14 +154,32 @@ class Entity
         return $this;
     }
 
-    public function getAttributes(): ?Attribute
+    /**
+     * @return Collection|Attribute[]
+     */
+    public function getEntity(): Collection
     {
-        return $this->attributes;
+        return $this->attribute;
     }
 
-    public function setAttributes(?Attribute $attributes): self
+    public function addAttribute(Attribute $attribute): self
     {
-        $this->attributes = $attributes;
+        if (!$this->attributes->contains($attribute)) {
+            $this->attributes[] = $attribute;
+            $attribute->setAttributes($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttribute(Attribute $attribute): self
+    {
+        if ($this->attributes->removeElement($attribute)) {
+            // set the owning side to null (unless already changed)
+            if ($attribute->getAttributes() === $this) {
+                $attribute->setAttributes(null);
+            }
+        }
 
         return $this;
     }

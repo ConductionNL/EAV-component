@@ -2,12 +2,7 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
-use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -19,12 +14,7 @@ use Symfony\Component\Serializer\Annotation\MaxDepth;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * All properties that the entity Person holds.
- *
- * Entity Person exists of an id, a givenName, a additionalName, a familyName, one or more telephones, one or more addresses, one or more emails, one or more organisations and one or more contactLists.
- *
- * @author Ruben van der Linde <ruben@conduction.nl>
- * @license EUPL <https://github.com/ConductionNL/contactcatalogus/blob/master/LICENSE.md>
+ * Description.
  *
  * @category Entity
  *
@@ -34,23 +24,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     itemOperations={
  *          "get",
  *          "put",
- *          "delete",
- *          "get_change_logs"={
- *              "path"="/persons/{id}/change_log",
- *              "method"="get",
- *              "swagger_context" = {
- *                  "summary"="Changelogs",
- *                  "description"="Gets al the change logs for this resource"
- *              }
- *          },
- *          "get_audit_trail"={
- *              "path"="/persons/{id}/audit_trail",
- *              "method"="get",
- *              "swagger_context" = {
- *                  "summary"="Audittrail",
- *                  "description"="Gets the audit trail for this resource"
- *              }
- *          }
+ *          "delete"
  *     },
  *  collectionOperations={
  *  	"get",
@@ -58,11 +32,6 @@ use Symfony\Component\Validator\Constraints as Assert;
  *  })
  * @ORM\Entity(repositoryClass="App\Repository\ValueRepository")
  * @Gedmo\Loggable(logEntryClass="Conduction\CommonGroundBundle\Entity\ChangeLog")
- *
- * @ApiFilter(BooleanFilter::class)
- * @ApiFilter(OrderFilter::class)
- * @ApiFilter(DateFilter::class, strategy=DateFilter::EXCLUDE_NULL)
- * @ApiFilter(SearchFilter::class)
  */
 class Value
 {
@@ -101,6 +70,14 @@ class Value
      * @MaxDepth(1)
      */
     private $attribute;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\ManyToOne(targetEntity=ObjectEntity::class, inversedBy="objectValues")
+     * @ORM\JoinColumn(nullable=false)
+     * @MaxDepth(1)
+     */
+    private $objectEntity;
 
     public function getId(): Uuid
     {
@@ -146,6 +123,18 @@ class Value
     public function setAttribute(?Attribute $attribute): self
     {
         $this->attribute = $attribute;
+
+        return $this;
+    }
+
+    public function getObjectEntity(): ?ObjectEntity
+    {
+        return $this->objectEntity;
+    }
+
+    public function setObjectEntity(?ObjectEntity $objectEntity): self
+    {
+        $this->objectEntity = $objectEntity;
 
         return $this;
     }
