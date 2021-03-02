@@ -102,6 +102,8 @@ class Entity
      *  */
     public function prePersist()
     {
+        // TODO: This doesn't work as we hoped it does :(
+        // TODO: make the name slugable
         $string = $this->name;
         $string = trim($string); //removes whitespace at begin and ending
         $string = preg_replace('/\s+/', '_', $string); // replaces other whitespaces with _
