@@ -10,6 +10,9 @@ use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use Symfony\Component\Serializer\Annotation\Groups;
+use Symfony\Component\Serializer\Annotation\MaxDepth;
+use Symfony\Component\Validator\Constraints as Assert;
 
 
 /**
@@ -41,15 +44,14 @@ use Ramsey\Uuid\UuidInterface;
  *     "get",
  *    "post"
  *  })
- * @ORM\Entity(repositoryClass=EntityRepository)
+ * @ORM\Entity(repositoryClass=EntityRepository::class)
  * @Gedmo\Loggable(logEntryClass="Conduction\CommonGroundBundle\Entity\ChangeLog")
  */
 class Entity
 {
     /**
-     * @var UuidInterface The UUID identifier of this Attribute.
+     * @var UuidInterface The UUID identifier of this Entity.
      *
-     * @Assert\Uuid
      * @Groups({"read"})
      * @ORM\Id
      * @ORM\Column(type="uuid", unique=true)
@@ -58,8 +60,104 @@ class Entity
      */
     private $id;
 
+    /**
+     * @var string The type of this Entity
+     *
+     * @Gedmo\Versioned
+     * @Assert\Length(
+     *     max = 255
+     * )
+     * @Assert\NotNull
+     * @Groups({"read","write"})
+     * @ORM\Column(type="string", length=255)
+     */
+    private $type;
+
+    /**
+     * @var string The name of this Entity
+     *
+     * @Gedmo\Versioned
+     * @Assert\Length(
+     *     max = 255
+     * )
+     * @Assert\NotNull
+     * @Groups({"read","write"})
+     * @ORM\Column(type="string", length=255)
+     */
+    private $name;
+
+    /**
+     * @var string The description of this Entity
+     *
+     * @Gedmo\Versioned
+     * @Assert\Length(
+     *     max = 255
+     * )
+     * @Groups({"read","write"})
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $description;
+
+    /**
+     * @var Attribute The attribute of this Entity
+     *
+     * @Gedmo\Versioned
+     * @Groups({"read","write"})
+     * @ORM\ManyToOne(targetEntity=Attribute::class, inversedBy="entity")
+     * @MaxDepth(1)
+     */
+    private Attribute $attributes;
+
     public function getId()
     {
         return $this->id;
+    }
+
+    public function getType(): ?string
+    {
+        return $this->type;
+    }
+
+    public function setType(string $type): self
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(?string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getAttributes(): ?Attribute
+    {
+        return $this->attributes;
+    }
+
+    public function setAttributes(?Attribute $attributes): self
+    {
+        $this->attributes = $attributes;
+
+        return $this;
     }
 }
