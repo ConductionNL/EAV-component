@@ -4402,7 +4402,9 @@ components:
       properties:
         id:
           readOnly: true
-          description: 'The UUID identifier of this Attribute.'
+          description: 'The UUID identifier of this object'
+          externalDocs:
+            url: 'http://schema.org/identifier'
           type: string
           format: uuid
         attributeValues:
@@ -4414,6 +4416,163 @@ components:
           anyOf:
             -
               $ref: '#/components/schemas/Entity-read'
+        title:
+          description: 'The title of this property'
+          type: string
+        name:
+          description: 'The name of the property as used in api calls, extracted from title on snake_case basis'
+          type: string
+          nullable: true
+        type:
+          description: 'The type of this property'
+          type: string
+          nullable: true
+        format:
+          description: 'The swagger type of the property as used in api calls'
+          type: string
+          nullable: true
+        iri:
+          description: 'The iri type of the property used to standarize datas'
+          type: string
+          nullable: true
+        query:
+          description: 'An array of aditional query values that need to be applied to the iri, for example anly accept products from a specific catagory'
+          type: array
+          items:
+            type: string
+          nullable: true
+        multipleOf:
+          description: '*Can only be used in combination with type integer* Specifies a number where the value should be a multiple of, e.g. a multiple of 2 would validate 2,4 and 6 but would prevent 5'
+          type: integer
+          nullable: true
+        maximum:
+          description: '*Can only be used in combination with type integer* The maximum allowed value'
+          type: integer
+          nullable: true
+        exclusiveMaximum:
+          description: '*Can only be used in combination with type integer* Defines if the maximum is exclusive, e.g. a exclusive maximum of 5 would invalidate 5 but validate 4'
+          type: boolean
+          nullable: true
+        minimum:
+          description: '*Can only be used in combination with type integer* The minimum allowed value'
+          type: integer
+          nullable: true
+        exclusiveMinimum:
+          description: '*Can only be used in combination with type integer* Defines if the minimum is exclusive, e.g. a exclusive minimum of 5 would invalidate 5 but validate 6'
+          type: boolean
+          nullable: true
+        maxLength:
+          description: 'The maximum amount of characters in the value'
+          type: integer
+          nullable: true
+        minLength:
+          description: 'The minimal amount of characters in the value'
+          type: integer
+          nullable: true
+        pattern:
+          description: 'A [regular expression](https://en.wikipedia.org/wiki/Regular_expression) that the value should comply to'
+          type: string
+          nullable: true
+        maxItems:
+          description: '*Can only be used in combination with type array* The maximum array length'
+          type: integer
+          nullable: true
+        minItems:
+          description: '*Can only be used in combination with type array* The minimum allowed value'
+          type: integer
+          nullable: true
+        uniqueItems:
+          description: '*Can only be used in combination with type array* Define whether or not values in an array should be unique'
+          type: boolean
+          nullable: true
+        maxProperties:
+          description: '*Can only be used in combination with type integer* The maximum amount of properties an object should contain'
+          type: integer
+          nullable: true
+        minProperties:
+          description: '*Can only be used in combination with type object* The minimum amount of properties an object should contain'
+          type: integer
+          nullable: true
+        required:
+          description: 'Only whether or not this property is required'
+          type: boolean
+          nullable: true
+        enum:
+          description: 'An array of possible values, input is limited to this array]'
+          type: array
+          items:
+            type: string
+          nullable: true
+        description:
+          description: 'An description of the value asked, supports markdown syntax as described by [CommonMark 0.27.](https://spec.commonmark.org/0.27/)'
+          type: string
+          nullable: true
+        defaultValue:
+          description: 'An default value for this value that will be used if a user doesn''t supply a value'
+          type: string
+          nullable: true
+        nullable:
+          description: 'Whether or not this property can be left empty'
+          type: boolean
+          nullable: true
+        discriminator:
+          description: 'To help API consumers detect the object type, you can add the discriminator/propertyName keyword to model definitions. This keyword points to the property that specifies the data type name'
+          type: string
+          nullable: true
+        readOnly:
+          description: 'Whether or not this property is read only'
+          type: boolean
+          nullable: true
+        writeOnly:
+          description: 'Whether or not this property is write only'
+          type: boolean
+          nullable: true
+        xml:
+          description: 'An XML representation of the swagger docs'
+          type: string
+          nullable: true
+        externalDoc:
+          description: 'An link to any external documentation for the value'
+          type: string
+          nullable: true
+        example:
+          description: 'An example of the value that should be supplied'
+          type: string
+          nullable: true
+        deprecated:
+          description: 'Whether or not this property has been deprecated and wil be removed in the future'
+          type: boolean
+          nullable: true
+        minDate:
+          description: 'The minimal date for value, either a date, datetime or duration (ISO_8601)'
+          type: string
+          nullable: true
+        maxDate:
+          description: 'The maximum date for value, either a date, datetime or duration (ISO_8601)'
+          type: string
+          nullable: true
+        icon:
+          description: 'The icon of this property'
+          type: string
+          nullable: true
+        slug:
+          description: 'The slug of this property'
+          type: string
+          nullable: true
+        dateCreated:
+          description: 'The moment this request was created'
+          type: string
+          format: date-time
+          nullable: true
+        dateModified:
+          description: 'The moment this request last Modified'
+          type: string
+          format: date-time
+          nullable: true
+      required:
+        - title
+        - type
+        - format
     Attribute-write:
       type: object
       description: Description
@@ -4427,6 +4586,149 @@ components:
           anyOf:
             -
               $ref: '#/components/schemas/Entity-write'
+        title:
+          description: 'The title of this property'
+          type: string
+        type:
+          description: 'The type of this property'
+          type: string
+          nullable: true
+        format:
+          description: 'The swagger type of the property as used in api calls'
+          type: string
+          nullable: true
+        iri:
+          description: 'The iri type of the property used to standarize datas'
+          type: string
+          nullable: true
+        query:
+          description: 'An array of aditional query values that need to be applied to the iri, for example anly accept products from a specific catagory'
+          type: array
+          items:
+            type: string
+          nullable: true
+        multipleOf:
+          description: '*Can only be used in combination with type integer* Specifies a number where the value should be a multiple of, e.g. a multiple of 2 would validate 2,4 and 6 but would prevent 5'
+          type: integer
+          nullable: true
+        maximum:
+          description: '*Can only be used in combination with type integer* The maximum allowed value'
+          type: integer
+          nullable: true
+        exclusiveMaximum:
+          description: '*Can only be used in combination with type integer* Defines if the maximum is exclusive, e.g. a exclusive maximum of 5 would invalidate 5 but validate 4'
+          type: boolean
+          nullable: true
+        minimum:
+          description: '*Can only be used in combination with type integer* The minimum allowed value'
+          type: integer
+          nullable: true
+        exclusiveMinimum:
+          description: '*Can only be used in combination with type integer* Defines if the minimum is exclusive, e.g. a exclusive minimum of 5 would invalidate 5 but validate 6'
+          type: boolean
+          nullable: true
+        maxLength:
+          description: 'The maximum amount of characters in the value'
+          type: integer
+          nullable: true
+        minLength:
+          description: 'The minimal amount of characters in the value'
+          type: integer
+          nullable: true
+        pattern:
+          description: 'A [regular expression](https://en.wikipedia.org/wiki/Regular_expression) that the value should comply to'
+          type: string
+          nullable: true
+        maxItems:
+          description: '*Can only be used in combination with type array* The maximum array length'
+          type: integer
+          nullable: true
+        minItems:
+          description: '*Can only be used in combination with type array* The minimum allowed value'
+          type: integer
+          nullable: true
+        uniqueItems:
+          description: '*Can only be used in combination with type array* Define whether or not values in an array should be unique'
+          type: boolean
+          nullable: true
+        maxProperties:
+          description: '*Can only be used in combination with type integer* The maximum amount of properties an object should contain'
+          type: integer
+          nullable: true
+        minProperties:
+          description: '*Can only be used in combination with type object* The minimum amount of properties an object should contain'
+          type: integer
+          nullable: true
+        required:
+          description: 'Only whether or not this property is required'
+          type: boolean
+          nullable: true
+        enum:
+          description: 'An array of possible values, input is limited to this array]'
+          type: array
+          items:
+            type: string
+          nullable: true
+        description:
+          description: 'An description of the value asked, supports markdown syntax as described by [CommonMark 0.27.](https://spec.commonmark.org/0.27/)'
+          type: string
+          nullable: true
+        defaultValue:
+          description: 'An default value for this value that will be used if a user doesn''t supply a value'
+          type: string
+          nullable: true
+        nullable:
+          description: 'Whether or not this property can be left empty'
+          type: boolean
+          nullable: true
+        discriminator:
+          description: 'To help API consumers detect the object type, you can add the discriminator/propertyName keyword to model definitions. This keyword points to the property that specifies the data type name'
+          type: string
+          nullable: true
+        readOnly:
+          description: 'Whether or not this property is read only'
+          type: boolean
+          nullable: true
+        writeOnly:
+          description: 'Whether or not this property is write only'
+          type: boolean
+          nullable: true
+        xml:
+          description: 'An XML representation of the swagger docs'
+          type: string
+          nullable: true
+        externalDoc:
+          description: 'An link to any external documentation for the value'
+          type: string
+          nullable: true
+        example:
+          description: 'An example of the value that should be supplied'
+          type: string
+          nullable: true
+        deprecated:
+          description: 'Whether or not this property has been deprecated and wil be removed in the future'
+          type: boolean
+          nullable: true
+        minDate:
+          description: 'The minimal date for value, either a date, datetime or duration (ISO_8601)'
+          type: string
+          nullable: true
+        maxDate:
+          description: 'The maximum date for value, either a date, datetime or duration (ISO_8601)'
+          type: string
+          nullable: true
+        icon:
+          description: 'The icon of this property'
+          type: string
+          nullable: true
+        slug:
+          description: 'The slug of this property'
+          type: string
+          nullable: true
+      required:
+        - title
+        - type
+        - format
     'Attribute:jsonld-read':
       type: object
       description: Description
@@ -4442,7 +4744,9 @@ components:
           type: string
         id:
           readOnly: true
-          description: 'The UUID identifier of this Attribute.'
+          description: 'The UUID identifier of this object'
+          externalDocs:
+            url: 'http://schema.org/identifier'
           type: string
           format: uuid
         attributeValues:
@@ -4454,6 +4758,163 @@ components:
           anyOf:
             -
               $ref: '#/components/schemas/Entity:jsonld-read'
+        title:
+          description: 'The title of this property'
+          type: string
+        name:
+          description: 'The name of the property as used in api calls, extracted from title on snake_case basis'
+          type: string
+          nullable: true
+        type:
+          description: 'The type of this property'
+          type: string
+          nullable: true
+        format:
+          description: 'The swagger type of the property as used in api calls'
+          type: string
+          nullable: true
+        iri:
+          description: 'The iri type of the property used to standarize datas'
+          type: string
+          nullable: true
+        query:
+          description: 'An array of aditional query values that need to be applied to the iri, for example anly accept products from a specific catagory'
+          type: array
+          items:
+            type: string
+          nullable: true
+        multipleOf:
+          description: '*Can only be used in combination with type integer* Specifies a number where the value should be a multiple of, e.g. a multiple of 2 would validate 2,4 and 6 but would prevent 5'
+          type: integer
+          nullable: true
+        maximum:
+          description: '*Can only be used in combination with type integer* The maximum allowed value'
+          type: integer
+          nullable: true
+        exclusiveMaximum:
+          description: '*Can only be used in combination with type integer* Defines if the maximum is exclusive, e.g. a exclusive maximum of 5 would invalidate 5 but validate 4'
+          type: boolean
+          nullable: true
+        minimum:
+          description: '*Can only be used in combination with type integer* The minimum allowed value'
+          type: integer
+          nullable: true
+        exclusiveMinimum:
+          description: '*Can only be used in combination with type integer* Defines if the minimum is exclusive, e.g. a exclusive minimum of 5 would invalidate 5 but validate 6'
+          type: boolean
+          nullable: true
+        maxLength:
+          description: 'The maximum amount of characters in the value'
+          type: integer
+          nullable: true
+        minLength:
+          description: 'The minimal amount of characters in the value'
+          type: integer
+          nullable: true
+        pattern:
+          description: 'A [regular expression](https://en.wikipedia.org/wiki/Regular_expression) that the value should comply to'
+          type: string
+          nullable: true
+        maxItems:
+          description: '*Can only be used in combination with type array* The maximum array length'
+          type: integer
+          nullable: true
+        minItems:
+          description: '*Can only be used in combination with type array* The minimum allowed value'
+          type: integer
+          nullable: true
+        uniqueItems:
+          description: '*Can only be used in combination with type array* Define whether or not values in an array should be unique'
+          type: boolean
+          nullable: true
+        maxProperties:
+          description: '*Can only be used in combination with type integer* The maximum amount of properties an object should contain'
+          type: integer
+          nullable: true
+        minProperties:
+          description: '*Can only be used in combination with type object* The minimum amount of properties an object should contain'
+          type: integer
+          nullable: true
+        required:
+          description: 'Only whether or not this property is required'
+          type: boolean
+          nullable: true
+        enum:
+          description: 'An array of possible values, input is limited to this array]'
+          type: array
+          items:
+            type: string
+          nullable: true
+        description:
+          description: 'An description of the value asked, supports markdown syntax as described by [CommonMark 0.27.](https://spec.commonmark.org/0.27/)'
+          type: string
+          nullable: true
+        defaultValue:
+          description: 'An default value for this value that will be used if a user doesn''t supply a value'
+          type: string
+          nullable: true
+        nullable:
+          description: 'Whether or not this property can be left empty'
+          type: boolean
+          nullable: true
+        discriminator:
+          description: 'To help API consumers detect the object type, you can add the discriminator/propertyName keyword to model definitions. This keyword points to the property that specifies the data type name'
+          type: string
+          nullable: true
+        readOnly:
+          description: 'Whether or not this property is read only'
+          type: boolean
+          nullable: true
+        writeOnly:
+          description: 'Whether or not this property is write only'
+          type: boolean
+          nullable: true
+        xml:
+          description: 'An XML representation of the swagger docs'
+          type: string
+          nullable: true
+        externalDoc:
+          description: 'An link to any external documentation for the value'
+          type: string
+          nullable: true
+        example:
+          description: 'An example of the value that should be supplied'
+          type: string
+          nullable: true
+        deprecated:
+          description: 'Whether or not this property has been deprecated and wil be removed in the future'
+          type: boolean
+          nullable: true
+        minDate:
+          description: 'The minimal date for value, either a date, datetime or duration (ISO_8601)'
+          type: string
+          nullable: true
+        maxDate:
+          description: 'The maximum date for value, either a date, datetime or duration (ISO_8601)'
+          type: string
+          nullable: true
+        icon:
+          description: 'The icon of this property'
+          type: string
+          nullable: true
+        slug:
+          description: 'The slug of this property'
+          type: string
+          nullable: true
+        dateCreated:
+          description: 'The moment this request was created'
+          type: string
+          format: date-time
+          nullable: true
+        dateModified:
+          description: 'The moment this request last Modified'
+          type: string
+          format: date-time
+          nullable: true
+      required:
+        - title
+        - type
+        - format
     'Attribute:jsonld-write':
       type: object
       description: Description
@@ -4476,6 +4937,149 @@ components:
           anyOf:
             -
               $ref: '#/components/schemas/Entity:jsonld-write'
+        title:
+          description: 'The title of this property'
+          type: string
+        type:
+          description: 'The type of this property'
+          type: string
+          nullable: true
+        format:
+          description: 'The swagger type of the property as used in api calls'
+          type: string
+          nullable: true
+        iri:
+          description: 'The iri type of the property used to standarize datas'
+          type: string
+          nullable: true
+        query:
+          description: 'An array of aditional query values that need to be applied to the iri, for example anly accept products from a specific catagory'
+          type: array
+          items:
+            type: string
+          nullable: true
+        multipleOf:
+          description: '*Can only be used in combination with type integer* Specifies a number where the value should be a multiple of, e.g. a multiple of 2 would validate 2,4 and 6 but would prevent 5'
+          type: integer
+          nullable: true
+        maximum:
+          description: '*Can only be used in combination with type integer* The maximum allowed value'
+          type: integer
+          nullable: true
+        exclusiveMaximum:
+          description: '*Can only be used in combination with type integer* Defines if the maximum is exclusive, e.g. a exclusive maximum of 5 would invalidate 5 but validate 4'
+          type: boolean
+          nullable: true
+        minimum:
+          description: '*Can only be used in combination with type integer* The minimum allowed value'
+          type: integer
+          nullable: true
+        exclusiveMinimum:
+          description: '*Can only be used in combination with type integer* Defines if the minimum is exclusive, e.g. a exclusive minimum of 5 would invalidate 5 but validate 6'
+          type: boolean
+          nullable: true
+        maxLength:
+          description: 'The maximum amount of characters in the value'
+          type: integer
+          nullable: true
+        minLength:
+          description: 'The minimal amount of characters in the value'
+          type: integer
+          nullable: true
+        pattern:
+          description: 'A [regular expression](https://en.wikipedia.org/wiki/Regular_expression) that the value should comply to'
+          type: string
+          nullable: true
+        maxItems:
+          description: '*Can only be used in combination with type array* The maximum array length'
+          type: integer
+          nullable: true
+        minItems:
+          description: '*Can only be used in combination with type array* The minimum allowed value'
+          type: integer
+          nullable: true
+        uniqueItems:
+          description: '*Can only be used in combination with type array* Define whether or not values in an array should be unique'
+          type: boolean
+          nullable: true
+        maxProperties:
+          description: '*Can only be used in combination with type integer* The maximum amount of properties an object should contain'
+          type: integer
+          nullable: true
+        minProperties:
+          description: '*Can only be used in combination with type object* The minimum amount of properties an object should contain'
+          type: integer
+          nullable: true
+        required:
+          description: 'Only whether or not this property is required'
+          type: boolean
+          nullable: true
+        enum:
+          description: 'An array of possible values, input is limited to this array]'
+          type: array
+          items:
+            type: string
+          nullable: true
+        description:
+          description: 'An description of the value asked, supports markdown syntax as described by [CommonMark 0.27.](https://spec.commonmark.org/0.27/)'
+          type: string
+          nullable: true
+        defaultValue:
+          description: 'An default value for this value that will be used if a user doesn''t supply a value'
+          type: string
+          nullable: true
+        nullable:
+          description: 'Whether or not this property can be left empty'
+          type: boolean
+          nullable: true
+        discriminator:
+          description: 'To help API consumers detect the object type, you can add the discriminator/propertyName keyword to model definitions. This keyword points to the property that specifies the data type name'
+          type: string
+          nullable: true
+        readOnly:
+          description: 'Whether or not this property is read only'
+          type: boolean
+          nullable: true
+        writeOnly:
+          description: 'Whether or not this property is write only'
+          type: boolean
+          nullable: true
+        xml:
+          description: 'An XML representation of the swagger docs'
+          type: string
+          nullable: true
+        externalDoc:
+          description: 'An link to any external documentation for the value'
+          type: string
+          nullable: true
+        example:
+          description: 'An example of the value that should be supplied'
+          type: string
+          nullable: true
+        deprecated:
+          description: 'Whether or not this property has been deprecated and wil be removed in the future'
+          type: boolean
+          nullable: true
+        minDate:
+          description: 'The minimal date for value, either a date, datetime or duration (ISO_8601)'
+          type: string
+          nullable: true
+        maxDate:
+          description: 'The maximum date for value, either a date, datetime or duration (ISO_8601)'
+          type: string
+          nullable: true
+        icon:
+          description: 'The icon of this property'
+          type: string
+          nullable: true
+        slug:
+          description: 'The slug of this property'
+          type: string
+          nullable: true
+      required:
+        - title
+        - type
+        - format
     AuditTrail-read:
       type: object
       description: 'An resource representing a log line.'
@@ -4879,7 +5483,7 @@ components:
           description: 'The type of this Entity'
           type: string
         name:
-          description: 'The name of this Entity'
+          description: 'The name of this Entity (must be slugable)'
           type: string
         description:
           description: 'The description of this Entity'
@@ -4903,7 +5507,7 @@ components:
           description: 'The type of this Entity'
           type: string
         name:
-          description: 'The name of this Entity'
+          description: 'The name of this Entity (must be slugable)'
           type: string
         description:
           description: 'The description of this Entity'
@@ -4935,7 +5539,7 @@ components:
           description: 'The type of this Entity'
           type: string
         name:
-          description: 'The name of this Entity'
+          description: 'The name of this Entity (must be slugable)'
           type: string
         description:
           description: 'The description of this Entity'
@@ -4968,7 +5572,7 @@ components:
           description: 'The type of this Entity'
           type: string
         name:
-          description: 'The name of this Entity'
+          description: 'The name of this Entity (must be slugable)'
           type: string
         description:
           description: 'The description of this Entity'
@@ -5134,13 +5738,323 @@ definitions:
   Attribute-read:
     properties:
       id:
-        description: 'The UUID identifier of this Attribute.'
-        type: \UuidInterface
+        description: 'The UUID identifier of this object'
+        type: string
+        example: e2984465-190a-4562-829e-a8cca81aa35d
+        format: uuid
+      title:
+        description: 'The title of this property'
+        type: string
+        example: 'My Property'
+        maxLength: 255
+        minLength: 3
+      name:
+        description: 'The name of the property as used in api calls, extracted from title on snake_case basis'
+        type: string
+        example: my_property
+        maxLength: 255
+        minLength: 15
+      type:
+        description: 'The type of this property'
+        type: string
+        example: string
+        maxLength: 255
+      format:
+        description: 'The swagger type of the property as used in api calls'
+        type: string
+        example: string
+        maxLength: 255
+      iri:
+        description: 'The iri type of the property used to standarize datas'
+        type: string
+        example: 'https://schema.org/name'
+        maxLength: 255
+      query:
+        description: 'An array of aditional query values that need to be applied to the iri, for example anly accept products from a specific catagory'
+        type: array
+      multipleOf:
+        description: '*Can only be used in combination with type integer* Specifies a number where the value should be a multiple of, e.g. a multiple of 2 would validate 2,4 and 6 but would prevent 5'
+        type: string
+        example: '2'
+      maximum:
+        description: '*Can only be used in combination with type integer* The maximum allowed value'
+        type: string
+        example: '2'
+      exclusiveMaximum:
+        description: '*Can only be used in combination with type integer* Defines if the maximum is exclusive, e.g. a exclusive maximum of 5 would invalidate 5 but validate 4'
+        type: string
+        example: 'true'
+      minimum:
+        description: '*Can only be used in combination with type integer* The minimum allowed value'
+        type: string
+        example: '2'
+      exclusiveMinimum:
+        description: '*Can only be used in combination with type integer* Defines if the minimum is exclusive, e.g. a exclusive minimum of 5 would invalidate 5 but validate 6'
+        type: string
+        example: 'true'
+      maxLength:
+        description: 'The maximum amount of characters in the value'
+        type: string
+        example: '2'
+      minLength:
+        description: 'The minimal amount of characters in the value'
+        type: int
+        example: '2'
+      pattern:
+        description: 'A [regular expression](https://en.wikipedia.org/wiki/Regular_expression) that the value should comply to'
+        type: string
+        example: regex
+        maxLength: 255
+      maxItems:
+        description: '*Can only be used in combination with type array* The maximum array length'
+        type: string
+        example: '2'
+      minItems:
+        description: '*Can only be used in combination with type array* The minimum allowed value'
+        type: string
+        example: '2'
+      uniqueItems:
+        description: '*Can only be used in combination with type array* Define whether or not values in an array should be unique'
+        type: bool
+        example: 'false'
+      maxProperties:
+        description: '*Can only be used in combination with type integer* The maximum amount of properties an object should contain'
+        type: string
+        example: '2'
+      minProperties:
+        description: '*Can only be used in combination with type object* The minimum amount of properties an object should contain'
+        type: int
+        example: '2'
+      required:
+        description: 'Only whether or not this property is required'
+        type: bool
+        example: 'false'
+      enum:
+        description: 'An array of possible values, input is limited to this array]'
+        type: array
+      description:
+        description: 'An description of the value asked, supports markdown syntax as described by [CommonMark 0.27.](https://spec.commonmark.org/0.27/)'
+        type: string
+        example: 'My value'
+      defaultValue:
+        description: 'An default value for this value that will be used if a user doesn''t supply a value'
+        type: string
+        example: 'My value'
+        maxLength: 255
+      nullable:
+        description: 'Whether or not this property can be left empty'
+        type: bool
+        example: 'false'
+      discriminator:
+        description: 'To help API consumers detect the object type, you can add the discriminator/propertyName keyword to model definitions. This keyword points to the property that specifies the data type name'
+        type: string
+        example: name
+        maxLength: 255
+      readOnly:
+        description: 'Whether or not this property is read only'
+        type: bool
+        example: 'false'
+      writeOnly:
+        description: 'Whether or not this property is write only'
+        type: bool
+        example: 'false'
+      xml:
+        description: 'An XML representation of the swagger docs'
+        type: string
+        example: '''<xml></xml>'''
+      externalDoc:
+        description: 'An link to any external documentation for the value'
+        type: string
+        example: 'https://www.w3.org/TR/NOTE-datetime'
+        maxLength: 255
+      example:
+        description: 'An example of the value that should be supplied'
+        type: string
+        example: 'My value'
+        maxLength: 255
+      deprecated:
+        description: 'Whether or not this property has been deprecated and wil be removed in the future'
+        type: bool
+        example: 'false'
+      minDate:
+        description: 'The minimal date for value, either a date, datetime or duration (ISO_8601)'
+        type: string
+        example: '2019-09-16T14:26:51+00:00'
+      maxDate:
+        description: 'The maximum date for value, either a date, datetime or duration (ISO_8601)'
+        type: string
+        example: '2019-09-16T14:26:51+00:00'
+      icon:
+        description: 'The icon of this property'
+        type: string
+        example: 'My Property'
+        maxLength: 255
+        minLength: 3
+      slug:
+        description: 'The slug of this property'
+        type: string
+        example: my-slug
+        maxLength: 255
+        minLength: 3
+      dateCreated:
+        description: 'The moment this request was created'
+        type: \Datetime
+      dateModified:
+        description: 'The moment this request last Modified'
+        type: \Datetime
       attributeValues: []
       entity: []
     required: []
   Attribute-write:
     properties:
+      title:
+        description: 'The title of this property'
+        type: string
+        example: 'My Property'
+        maxLength: 255
+        minLength: 3
+      type:
+        description: 'The type of this property'
+        type: string
+        example: string
+        maxLength: 255
+      format:
+        description: 'The swagger type of the property as used in api calls'
+        type: string
+        example: string
+        maxLength: 255
+      iri:
+        description: 'The iri type of the property used to standarize datas'
+        type: string
+        example: 'https://schema.org/name'
+        maxLength: 255
+      query:
+        description: 'An array of aditional query values that need to be applied to the iri, for example anly accept products from a specific catagory'
+        type: array
+      multipleOf:
+        description: '*Can only be used in combination with type integer* Specifies a number where the value should be a multiple of, e.g. a multiple of 2 would validate 2,4 and 6 but would prevent 5'
+        type: string
+        example: '2'
+      maximum:
+        description: '*Can only be used in combination with type integer* The maximum allowed value'
+        type: string
+        example: '2'
+      exclusiveMaximum:
+        description: '*Can only be used in combination with type integer* Defines if the maximum is exclusive, e.g. a exclusive maximum of 5 would invalidate 5 but validate 4'
+        type: string
+        example: 'true'
+      minimum:
+        description: '*Can only be used in combination with type integer* The minimum allowed value'
+        type: string
+        example: '2'
+      exclusiveMinimum:
+        description: '*Can only be used in combination with type integer* Defines if the minimum is exclusive, e.g. a exclusive minimum of 5 would invalidate 5 but validate 6'
+        type: string
+        example: 'true'
+      maxLength:
+        description: 'The maximum amount of characters in the value'
+        type: string
+        example: '2'
+      minLength:
+        description: 'The minimal amount of characters in the value'
+        type: int
+        example: '2'
+      pattern:
+        description: 'A [regular expression](https://en.wikipedia.org/wiki/Regular_expression) that the value should comply to'
+        type: string
+        example: regex
+        maxLength: 255
+      maxItems:
+        description: '*Can only be used in combination with type array* The maximum array length'
+        type: string
+        example: '2'
+      minItems:
+        description: '*Can only be used in combination with type array* The minimum allowed value'
+        type: string
+        example: '2'
+      uniqueItems:
+        description: '*Can only be used in combination with type array* Define whether or not values in an array should be unique'
+        type: bool
+        example: 'false'
+      maxProperties:
+        description: '*Can only be used in combination with type integer* The maximum amount of properties an object should contain'
+        type: string
+        example: '2'
+      minProperties:
+        description: '*Can only be used in combination with type object* The minimum amount of properties an object should contain'
+        type: int
+        example: '2'
+      required:
+        description: 'Only whether or not this property is required'
+        type: bool
+        example: 'false'
+      enum:
+        description: 'An array of possible values, input is limited to this array]'
+        type: array
+      description:
+        description: 'An description of the value asked, supports markdown syntax as described by [CommonMark 0.27.](https://spec.commonmark.org/0.27/)'
+        type: string
+        example: 'My value'
+      defaultValue:
+        description: 'An default value for this value that will be used if a user doesn''t supply a value'
+        type: string
+        example: 'My value'
+        maxLength: 255
+      nullable:
+        description: 'Whether or not this property can be left empty'
+        type: bool
+        example: 'false'
+      discriminator:
+        description: 'To help API consumers detect the object type, you can add the discriminator/propertyName keyword to model definitions. This keyword points to the property that specifies the data type name'
+        type: string
+        example: name
+        maxLength: 255
+      readOnly:
+        description: 'Whether or not this property is read only'
+        type: bool
+        example: 'false'
+      writeOnly:
+        description: 'Whether or not this property is write only'
+        type: bool
+        example: 'false'
+      xml:
+        description: 'An XML representation of the swagger docs'
+        type: string
+        example: '''<xml></xml>'''
+      externalDoc:
+        description: 'An link to any external documentation for the value'
+        type: string
+        example: 'https://www.w3.org/TR/NOTE-datetime'
+        maxLength: 255
+      example:
+        description: 'An example of the value that should be supplied'
+        type: string
+        example: 'My value'
+        maxLength: 255
+      deprecated:
+        description: 'Whether or not this property has been deprecated and wil be removed in the future'
+        type: bool
+        example: 'false'
+      minDate:
+        description: 'The minimal date for value, either a date, datetime or duration (ISO_8601)'
+        type: string
+        example: '2019-09-16T14:26:51+00:00'
+      maxDate:
+        description: 'The maximum date for value, either a date, datetime or duration (ISO_8601)'
+        type: string
+        example: '2019-09-16T14:26:51+00:00'
+      icon:
+        description: 'The icon of this property'
+        type: string
+        example: 'My Property'
+        maxLength: 255
+        minLength: 3
+      slug:
+        description: 'The slug of this property'
+        type: string
+        example: my-slug
+        maxLength: 255
+        minLength: 3
       attributeValues: []
       entity: []
     required: []
@@ -5154,7 +6068,7 @@ definitions:
         type: string
         maxLength: 255
       name:
-        description: 'The name of this Entity'
+        description: 'The name of this Entity (must be slugable)'
         type: string
         maxLength: 255
       description:
@@ -5172,7 +6086,7 @@ definitions:
         type: string
         maxLength: 255
       name:
-        description: 'The name of this Entity'
+        description: 'The name of this Entity (must be slugable)'
         type: string
         maxLength: 255
       description:
@@ -5259,12 +6173,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-02 13:24:18'
+        example: '2021-03-02 13:55:56'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-02 13:24:18'
+        example: '2021-03-02 13:55:56'
     required: []
   ChangeLog-write:
     properties:
@@ -5378,12 +6292,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-02 13:24:18'
+        example: '2021-03-02 13:55:56'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-02 13:24:18'
+        example: '2021-03-02 13:55:56'
     required: []
   AuditTrail-write:
     properties:

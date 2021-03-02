@@ -63,27 +63,11 @@ class Attribute
     private $attributeValues;
 
     /**
-     * @var string The title of this property
-     *
-     * @example My Property
-     * @Assert\NotBlank
-     * @Assert\Length(min = 3, max = 255)
      * @Groups({"read", "write"})
      * @ORM\ManyToOne(targetEntity=Entity::class, inversedBy="attributes")
      * @MaxDepth(1)
      */
     private ?Entity $entity;
-
-    /**
-     * @var object The requestType that this property belongs to
-     *
-     * @Assert\NotBlank
-     * @MaxDepth(1)
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity="App\Entity\RequestType", inversedBy="properties",cascade={"persist"})
-     * @ORM\JoinColumn(nullable=false, name="request_type")
-     */
-    private $requestType;
 
     /**
      * @var string The title of this property
@@ -102,20 +86,9 @@ class Attribute
      * @example my_property
      * @Assert\Length(min = 15, max = 255)
      * @Groups({"read"})
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $name;
-
-    /**
-     * @var int The order in wichs this propertie is desplayed
-     *
-     * @example 1
-     *
-     * @Assert\Type("integer")
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="integer", nullable=true, name="p_order")
-     */
-    private $order;
 
     /**
      * @var string The type of this property
@@ -224,7 +197,6 @@ class Attribute
      *
      * @example 2
      *
-     *
      * @Assert\Type("integer")
      * @Groups({"read", "write"})
      * @ORM\Column(type="integer", nullable=true)
@@ -247,7 +219,6 @@ class Attribute
      *
      * @example regex
      *
-     *
      * @Assert\Length(max = 255)
      * @Groups({"read", "write"})
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -255,26 +226,9 @@ class Attribute
     private $pattern;
 
     /**
-     * Not yet supported by business logic.
-     *
-     * @ORM\ManyToMany(targetEntity="App\Entity\Property")
-     */
-    private $items;
-
-    /**
-     * @var bool Not yet supported by business logic
-     *
-     * @Assert\Type("bool")
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $additionalItems;
-
-    /**
      * @var string *Can only be used in combination with type array* The maximum array length
      *
      * @example 2
-     *
      *
      * @Assert\Type("integer")
      * @Groups({"read", "write"})
@@ -286,7 +240,6 @@ class Attribute
      * @var string *Can only be used in combination with type array* The minimum allowed value
      *
      * @example 2
-     *
      *
      * @Assert\Type("integer")
      * @Groups({"read", "write"})
@@ -309,7 +262,6 @@ class Attribute
      * @var string *Can only be used in combination with type integer* The maximum amount of properties an object should contain
      *
      * @example 2
-     *
      *
      * @Assert\Type("integer")
      * @Groups({"read", "write"})
@@ -340,32 +292,7 @@ class Attribute
     private $required;
 
     /**
-     * @var Property[]|ArrayCollection Not yet supported by business logic
-     *
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="object", nullable=true)
-     */
-    private $properties;
-
-    /**
-     * @var Property[]|ArrayCollection Not yet supported by business logic
-     *
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="object", nullable=true)
-     */
-    private $additionalProperties;
-
-    /**
-     * @var object Not yet supported by business logic
-     *
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="object", nullable=true)
-     */
-    private $object;
-
-    /**
      * @var array An array of possible values, input is limited to this array]
-     *
      *
      * @Groups({"read", "write"})
      * @ORM\Column(type="array", nullable=true)
@@ -374,7 +301,6 @@ class Attribute
 
     /**
      * @var array *mutually exclusive with using type* An array of possible types that an property should confirm to]
-     *
      *
      * @ORM\Column(type="array", nullable=true)
      */
@@ -395,13 +321,6 @@ class Attribute
      * @ORM\Column(type="array", nullable=true)
      */
     private $oneOf = [];
-
-    /**
-     * Not yet supported by business logic.
-     *
-     * @ORM\Column(type="object", nullable=true)
-     */
-    private $definitions;
 
     /**
      * @var string An description of the value asked, supports markdown syntax as described by [CommonMark 0.27.](https://spec.commonmark.org/0.27/)
@@ -512,28 +431,6 @@ class Attribute
     private $deprecated;
 
     /**
-     * @var string The moment from which this value is available
-     *
-     * @example 2019-09-16T14:26:51+00:00
-     *
-     * @Groups({"read", "write"})
-     * @Assert\DateTime
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $availableFrom;
-
-    /**
-     * @var string *should be used in combination with deprecated* The moment where until this value is available
-     *
-     * @example 2019-09-16T14:26:51+00:00
-     *
-     * @Groups({"read", "write"})
-     * @Assert\DateTime
-     * @ORM\Column(type="datetime", nullable=true)
-     */
-    private $availableUntil;
-
-    /**
      * @var string The minimal date for value, either a date, datetime or duration (ISO_8601)
      *
      * @example 2019-09-16T14:26:51+00:00
@@ -552,20 +449,6 @@ class Attribute
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $maxDate;
-
-    /**
-     * @var Property The next property of the request type
-     *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Property", inversedBy="previous", cascade={"persist"})
-     */
-    private $next;
-
-    /**
-     * @var Property The previous property of the request type
-     *
-     * @ORM\OneToMany(targetEntity="App\Entity\Property", mappedBy="next", cascade={"persist"})
-     */
-    private $previous;
 
     /**
      * @var string The icon of this property
@@ -588,16 +471,6 @@ class Attribute
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $slug;
-
-    /**
-     * @var string Whether or not this proerty is the starting oint of a process
-     *
-     * @example true
-     *
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="boolean", nullable=true)
-     */
-    private $start = false;
 
     /**
      * @var Datetime The moment this request was created
@@ -696,18 +569,6 @@ class Attribute
         return $this;
     }
 
-    public function getRequestType(): ?RequestType
-    {
-        return $this->requestType;
-    }
-
-    public function setRequestType(?RequestType $requestType): self
-    {
-        $this->requestType = $requestType;
-
-        return $this;
-    }
-
     public function getTitle(): ?string
     {
         return $this->title;
@@ -739,18 +600,6 @@ class Attribute
         $string = strtolower($string);
 
         return $string;
-    }
-
-    public function getOrder(): ?int
-    {
-        return $this->order;
-    }
-
-    public function setOrder(?int $order): self
-    {
-        $this->order = $order;
-
-        return $this;
     }
 
     public function getMultipleOf(): ?int
@@ -849,44 +698,6 @@ class Attribute
         return $this;
     }
 
-    /**
-     * @return Collection|self[]
-     */
-    public function getItems(): Collection
-    {
-        return $this->items;
-    }
-
-    public function addItem(self $item): self
-    {
-        if (!$this->items->contains($item)) {
-            $this->items[] = $item;
-        }
-
-        return $this;
-    }
-
-    public function removeItem(self $item): self
-    {
-        if ($this->items->contains($item)) {
-            $this->items->removeElement($item);
-        }
-
-        return $this;
-    }
-
-    public function getAdditionalItems(): ?bool
-    {
-        return $this->additionalItems;
-    }
-
-    public function setAdditionalItems(?bool $additionalItems): self
-    {
-        $this->additionalItems = $additionalItems;
-
-        return $this;
-    }
-
     public function getMaxItems(): ?int
     {
         return $this->maxItems;
@@ -959,42 +770,6 @@ class Attribute
         return $this;
     }
 
-    public function getProperties()
-    {
-        return $this->properties;
-    }
-
-    public function setProperties($properties): self
-    {
-        $this->properties = $properties;
-
-        return $this;
-    }
-
-    public function getAdditionalProperties()
-    {
-        return $this->additionalProperties;
-    }
-
-    public function setAdditionalProperties($additionalProperties): self
-    {
-        $this->additionalProperties = $additionalProperties;
-
-        return $this;
-    }
-
-    public function getObject()
-    {
-        return $this->object;
-    }
-
-    public function setObject($object): self
-    {
-        $this->object = $object;
-
-        return $this;
-    }
-
     public function getEnum(): ?array
     {
         return $this->enum;
@@ -1051,18 +826,6 @@ class Attribute
     public function setOneOf(?array $oneOf): self
     {
         $this->oneOf = $oneOf;
-
-        return $this;
-    }
-
-    public function getDefinitions()
-    {
-        return $this->definitions;
-    }
-
-    public function setDefinitions($definitions): self
-    {
-        $this->definitions = $definitions;
 
         return $this;
     }
@@ -1223,30 +986,6 @@ class Attribute
         return $this;
     }
 
-    public function getAvailableFrom(): ?\DateTimeInterface
-    {
-        return $this->availableFrom;
-    }
-
-    public function setAvailableFrom(\DateTimeInterface $availableFrom): self
-    {
-        $this->availableFrom = $availableFrom;
-
-        return $this;
-    }
-
-    public function getAvailableUntil(): ?\DateTimeInterface
-    {
-        return $this->availableUntil;
-    }
-
-    public function setAvailableUntil(?\DateTimeInterface $availableUntil): self
-    {
-        $this->availableUntil = $availableUntil;
-
-        return $this;
-    }
-
     public function getMinDate(): ?string
     {
         return $this->minDate;
@@ -1271,49 +1010,6 @@ class Attribute
         return $this;
     }
 
-    public function getNext(): ?self
-    {
-        return $this->next;
-    }
-
-    public function setNext(?self $next): self
-    {
-        $this->next = $next;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|self[]
-     */
-    public function getPrevious(): Collection
-    {
-        return $this->previous;
-    }
-
-    public function addPrevious(self $previous): self
-    {
-        if (!$this->previous->contains($previous)) {
-            $this->previous[] = $previous;
-            $previous->setNext($this);
-        }
-
-        return $this;
-    }
-
-    public function removePrevious(self $previous): self
-    {
-        if ($this->previous->contains($previous)) {
-            $this->previous->removeElement($previous);
-            // set the owning side to null (unless already changed)
-            if ($previous->getNext() === $this) {
-                $previous->setNext(null);
-            }
-        }
-
-        return $this;
-    }
-
     public function getIcon(): ?string
     {
         return $this->icon;
@@ -1334,18 +1030,6 @@ class Attribute
     public function setSlug(?string $slug): self
     {
         $this->slug = $slug;
-
-        return $this;
-    }
-
-    public function getStart(): ?bool
-    {
-        return $this->start;
-    }
-
-    public function setStart(bool $start): self
-    {
-        $this->start = $start;
 
         return $this;
     }
