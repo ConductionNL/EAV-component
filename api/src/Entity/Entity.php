@@ -3,7 +3,6 @@
 namespace App\Entity;
 
 use ApiPlatform\Core\Annotation\ApiResource;
-use App\Repository\AttributeRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -22,29 +21,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     itemOperations={
  *          "get",
  *          "put",
- *          "delete",
- *          "get_change_logs"={
- *              "path"="/emails/{id}/change_log",
- *              "method"="get",
- *              "swagger_context" = {
- *                  "summary"="Changelogs",
- *                  "description"="Gets al the change logs for this resource"
- *              }
- *          },
- *          "get_audit_trail"={
- *              "path"="/emails/{id}/audit_trail",
- *              "method"="get",
- *              "swagger_context" = {
- *                  "summary"="Audittrail",
- *                  "description"="Gets the audit trail for this resource"
- *              }
- *          }
+ *          "delete"
  *     },
  *  collectionOperations={
  *     "get",
  *    "post"
  *  })
- * @ORM\Entity(repositoryClass=EntityRepository::class)
+ * @ORM\Entity(repositoryClass="App\Repository\EntityRepository")
  * @Gedmo\Loggable(logEntryClass="Conduction\CommonGroundBundle\Entity\ChangeLog")
  */
 class Entity
@@ -99,14 +82,11 @@ class Entity
     private $description;
 
     /**
-     * @var Attribute The attribute of this Entity
-     *
-     * @Gedmo\Versioned
      * @Groups({"read","write"})
-     * @ORM\ManyToOne(targetEntity=Attribute::class, inversedBy="entity")
+     * @ORM\OneToMany(targetEntity=Attribute::class, mappedBy="entity")
      * @MaxDepth(1)
      */
-    private Attribute $attributes;
+    private Collection $attributes;
 
     public function __construct()
     {
@@ -157,9 +137,9 @@ class Entity
     /**
      * @return Collection|Attribute[]
      */
-    public function getEntity(): Collection
+    public function getAttributes(): Collection
     {
-        return $this->attribute;
+        return $this->attributes;
     }
 
     public function addAttribute(Attribute $attribute): self

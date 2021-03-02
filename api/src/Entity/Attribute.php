@@ -30,40 +30,14 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     itemOperations={
  *          "get",
  *          "put",
- *          "delete",
- *          "get_change_logs"={
- *              "path"="/properties/{id}/change_log",
- *              "method"="get",
- *              "swagger_context" = {
- *                  "summary"="Changelogs",
- *                  "description"="Gets al the change logs for this resource"
- *              }
- *          },
- *          "get_audit_trail"={
- *              "path"="/properties/{id}/audit_trail",
- *              "method"="get",
- *              "swagger_context" = {
- *                  "summary"="Audittrail",
- *                  "description"="Gets the audit trail for this resource"
- *              }
- *          }
+ *          "delete"
  *     },
- * )
- *
- *  @ORM\Table(
- *    uniqueConstraints={
- *        @ORM\UniqueConstraint(name="property_unique_name",
- *            columns={"request_type", "name"})
- *    }
- * )
- * @ORM\Entity(repositoryClass=AttributeRepository::class)
+ *  collectionOperations={
+ *     "get",
+ *    "post"
+ *  })
+ * @ORM\Entity(repositoryClass="App\Repository\AttributeRepository")
  * @Gedmo\Loggable(logEntryClass="Conduction\CommonGroundBundle\Entity\ChangeLog")
- * @ORM\HasLifecycleCallbacks
- *
- * @ApiFilter(BooleanFilter::class)
- * @ApiFilter(OrderFilter::class)
- * @ApiFilter(DateFilter::class, strategy=DateFilter::EXCLUDE_NULL)
- * @ApiFilter(SearchFilter::class)
  */
 class Attribute
 {
@@ -80,6 +54,25 @@ class Attribute
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     private $id;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="attribute", orphanRemoval=true)
+     * @MaxDepth(1)
+     */
+    private $attributeValues;
+
+    /**
+     * @var string The title of this property
+     *
+     * @example My Property
+     * @Assert\NotBlank
+     * @Assert\Length(min = 3, max = 255)
+     * @Groups({"read", "write"})
+     * @ORM\ManyToOne(targetEntity=Entity::class, inversedBy="attributes")
+     * @MaxDepth(1)
+     */
+    private ?Entity $entity;
 
     /**
      * @var object The requestType that this property belongs to
@@ -644,6 +637,7 @@ class Attribute
 
     public function __construct()
     {
+        $this->attributeValues = new ArrayCollection();
         $this->items = new ArrayCollection();
         $this->previous = new ArrayCollection();
     }
@@ -656,6 +650,48 @@ class Attribute
     public function setId(string $id): self
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Value[]
+     */
+    public function getAttributeValues(): Collection
+    {
+        return $this->attributeValues;
+    }
+
+    public function addAttributeValue(Value $attributeValue): self
+    {
+        if (!$this->attributeValues->contains($attributeValue)) {
+            $this->attributeValues[] = $attributeValue;
+            $attributeValue->setAttribute($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAttributeValue(Value $attributeValue): self
+    {
+        if ($this->attributeValues->removeElement($attributeValue)) {
+            // set the owning side to null (unless already changed)
+            if ($attributeValue->getAttribute() === $this) {
+                $attributeValue->setAttribute(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getEntity(): ?Entity
+    {
+        return $this->entity;
+    }
+
+    public function setEntity(?Entity $entity): self
+    {
+        $this->entity = $entity;
 
         return $this;
     }

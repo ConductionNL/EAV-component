@@ -3,7 +3,7 @@ entries:
   ce:
   - apiVersion: v1
     appVersion: V1.0
-    created: "2021-03-02T12:50:34.6832402Z"
+    created: "2021-03-02T13:23:28.5667287Z"
     description: Naast deze JSON rest API is er ook een [graphql](/graphql) interface
       beschikbaar.
     digest: 5c87a88b6e21eaedfb0e038dabc7970f61f5bae17e6ea9fe349673f91d061841
@@ -29,7 +29,7 @@ entries:
   pc:
   - apiVersion: v1
     appVersion: V1.0
-    created: "2021-03-02T12:50:35.3031073Z"
+    created: "2021-03-02T13:23:28.7523424Z"
     description: Naast deze JSON rest API is er ook een [graphql](/graphql) interface
       beschikbaar.
     digest: c7147901327e4770036ade713906209f66fcc6c971f97db6ea945d8398123077
@@ -44,7 +44,7 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 11.10.0
-    created: "2021-03-02T12:50:35.3167757Z"
+    created: "2021-03-02T13:23:28.7656769Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -73,4 +73,4 @@ entries:
     urls:
     - charts/postgresql-10.1.1.tgz
     version: 10.1.1
-generated: "2021-03-02T12:50:34.5861896Z"
+generated: "2021-03-02T13:23:28.4697462Z"
