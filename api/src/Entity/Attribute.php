@@ -61,11 +61,18 @@ class Attribute
     private $id;
 
     /**
-     * @ORM\OneToMany(targetEntity=Entity::class, mappedBy="attributes")
+     * @Groups({"read", "write"})
+     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="attribute", orphanRemoval=true)
+     * @MaxDepth(1)
      */
-    private $entity;
+    private $attributeValues;
 
     public function __construct()
+    {
+        $this->attributeValues = new ArrayCollection();
+    }
+
+    public function getId(): ?int
     {
         $this->entity = new ArrayCollection();
     }
@@ -76,29 +83,29 @@ class Attribute
     }
 
     /**
-     * @return Collection|Entity[]
+     * @return Collection|Value[]
      */
-    public function getEntity(): Collection
+    public function getAttributeValues(): Collection
     {
-        return $this->entity;
+        return $this->attributeValues;
     }
 
-    public function addEntity(Entity $entity): self
+    public function addAttributeValue(Value $attributeValue): self
     {
-        if (!$this->entity->contains($entity)) {
-            $this->entity[] = $entity;
-            $entity->setAttributes($this);
+        if (!$this->attributeValues->contains($attributeValue)) {
+            $this->attributeValues[] = $attributeValue;
+            $attributeValue->setAttribute($this);
         }
 
         return $this;
     }
 
-    public function removeEntity(Entity $entity): self
+    public function removeAttributeValue(Value $attributeValue): self
     {
-        if ($this->entity->removeElement($entity)) {
+        if ($this->attributeValues->removeElement($attributeValue)) {
             // set the owning side to null (unless already changed)
-            if ($entity->getAttributes() === $this) {
-                $entity->setAttributes(null);
+            if ($attributeValue->getAttribute() === $this) {
+                $attributeValue->setAttribute(null);
             }
         }
 
