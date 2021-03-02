@@ -89,6 +89,13 @@ class Entity
     private Collection $attributes;
 
     /**
+     * @Groups({"read","write"})
+     * @ORM\OneToMany(targetEntity=Attribute::class, mappedBy="entity")
+     * @MaxDepth(1)
+     */
+    private Collection $objectEntities;
+
+    /**
      *  @ORM\PrePersist
      *  @ORM\PreUpdate
      *
@@ -161,7 +168,7 @@ class Entity
     {
         if (!$this->attributes->contains($attribute)) {
             $this->attributes[] = $attribute;
-            $attribute->setAttributes($this);
+            $attribute->setEntity($this);
         }
 
         return $this;
@@ -171,8 +178,38 @@ class Entity
     {
         if ($this->attributes->removeElement($attribute)) {
             // set the owning side to null (unless already changed)
-            if ($attribute->getAttributes() === $this) {
-                $attribute->setAttributes(null);
+            if ($attribute->getEntity() === $this) {
+                $attribute->setEntity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ObjectEntity[]
+     */
+    public function getObjectEntities(): Collection
+    {
+        return $this->attributes;
+    }
+
+    public function addObjectEntity(ObjectEntity $objectEntity): self
+    {
+        if (!$this->objectEntities->contains($objectEntity)) {
+            $this->objectEntities[] = $objectEntity;
+            $objectEntity->setEntity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeObjectEntity(ObjectEntity $objectEntity): self
+    {
+        if ($this->objectEntities->removeElement($objectEntity)) {
+            // set the owning side to null (unless already changed)
+            if ($objectEntity->getEntity() === $this) {
+                $objectEntity->setEntity(null);
             }
         }
 
