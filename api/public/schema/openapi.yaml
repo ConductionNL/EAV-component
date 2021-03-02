@@ -5493,6 +5493,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Attribute-read'
+        objectEntities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute-read'
       required:
         - type
         - name
@@ -5514,6 +5518,10 @@ components:
           type: string
           nullable: true
         attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute-write'
+        objectEntities:
           type: array
           items:
             $ref: '#/components/schemas/Attribute-write'
@@ -5546,6 +5554,10 @@ components:
           type: string
           nullable: true
         attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute:jsonld-read'
+        objectEntities:
           type: array
           items:
             $ref: '#/components/schemas/Attribute:jsonld-read'
@@ -5582,6 +5594,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Attribute:jsonld-write'
+        objectEntities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Attribute:jsonld-write'
     ObjectEntity-read:
       type: object
       description: Description
@@ -5591,6 +5607,11 @@ components:
           description: 'UUID of this person'
           type: string
           format: uuid
+        entity:
+          nullable: true
+          anyOf:
+            -
+              $ref: '#/components/schemas/Entity-read'
         objectValues:
           type: array
           items:
@@ -5599,6 +5620,11 @@ components:
       type: object
       description: Description
       properties:
+        entity:
+          nullable: true
+          anyOf:
+            -
+              $ref: '#/components/schemas/Entity-write'
         objectValues:
           type: array
           items:
@@ -5621,6 +5647,11 @@ components:
           description: 'UUID of this person'
           type: string
           format: uuid
+        entity:
+          nullable: true
+          anyOf:
+            -
+              $ref: '#/components/schemas/Entity:jsonld-read'
         objectValues:
           type: array
           items:
@@ -5638,6 +5669,11 @@ components:
         '@type':
           readOnly: true
           type: string
+        entity:
+          nullable: true
+          anyOf:
+            -
+              $ref: '#/components/schemas/Entity:jsonld-write'
         objectValues:
           type: array
           items:
@@ -6058,56 +6094,6 @@ definitions:
       attributeValues: []
       entity: []
     required: []
-  Entity-read:
-    properties:
-      id:
-        description: 'The UUID identifier of this Entity.'
-        type: \UuidInterface
-      type:
-        description: 'The type of this Entity'
-        type: string
-        maxLength: 255
-      name:
-        description: 'The name of this Entity (must be slugable)'
-        type: string
-        maxLength: 255
-      description:
-        description: 'The description of this Entity'
-        type: string
-        maxLength: 255
-      attributes: []
-    required:
-      - type
-      - name
-  Entity-write:
-    properties:
-      type:
-        description: 'The type of this Entity'
-        type: string
-        maxLength: 255
-      name:
-        description: 'The name of this Entity (must be slugable)'
-        type: string
-        maxLength: 255
-      description:
-        description: 'The description of this Entity'
-        type: string
-        maxLength: 255
-      attributes: []
-    required:
-      - type
-      - name
-  ObjectEntity-read:
-    properties:
-      id:
-        description: 'UUID of this person'
-        type: \UuidInterface
-      objectValues: []
-    required: []
-  ObjectEntity-write:
-    properties:
-      objectValues: []
-    required: []
   Value-read:
     properties:
       id:
@@ -6135,6 +6121,60 @@ definitions:
       attribute: []
       objectEntity: []
     required: []
+  ObjectEntity-read:
+    properties:
+      id:
+        description: 'UUID of this person'
+        type: \UuidInterface
+      entity: []
+      objectValues: []
+    required: []
+  ObjectEntity-write:
+    properties:
+      entity: []
+      objectValues: []
+    required: []
+  Entity-read:
+    properties:
+      id:
+        description: 'The UUID identifier of this Entity.'
+        type: \UuidInterface
+      type:
+        description: 'The type of this Entity'
+        type: string
+        maxLength: 255
+      name:
+        description: 'The name of this Entity (must be slugable)'
+        type: string
+        maxLength: 255
+      description:
+        description: 'The description of this Entity'
+        type: string
+        maxLength: 255
+      attributes: []
+      objectEntities: []
+    required:
+      - type
+      - name
+  Entity-write:
+    properties:
+      type:
+        description: 'The type of this Entity'
+        type: string
+        maxLength: 255
+      name:
+        description: 'The name of this Entity (must be slugable)'
+        type: string
+        maxLength: 255
+      description:
+        description: 'The description of this Entity'
+        type: string
+        maxLength: 255
+      attributes: []
+      objectEntities: []
+    required:
+      - type
+      - name
   ChangeLog-read:
     properties:
       id:
@@ -6173,12 +6213,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-02 13:55:56'
+        example: '2021-03-02 15:12:54'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-02 13:55:56'
+        example: '2021-03-02 15:12:54'
     required: []
   ChangeLog-write:
     properties:
@@ -6292,12 +6332,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-02 13:55:56'
+        example: '2021-03-02 15:12:54'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-02 13:55:56'
+        example: '2021-03-02 15:12:54'
     required: []
   AuditTrail-write:
     properties:
@@ -6315,9 +6355,9 @@ tags:
       
       
   -
-    name: Entity
+    name: Value
     description: |
-      
+      Description.
       
       
   -
@@ -6327,9 +6367,9 @@ tags:
       
       
   -
-    name: Value
+    name: Entity
     description: |
-      Description.
+      
       
       
   -
