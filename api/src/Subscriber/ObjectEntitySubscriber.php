@@ -5,6 +5,7 @@ namespace App\Subscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Component;
+use App\Entity\ObjectEntity;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -38,6 +39,10 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
         $route = $event->getRequest()->attributes->get('_route');
         $resource = $event->getControllerResult();
 
-        var_dump($method);
+//        var_dump($route);
+
+        if ($resource instanceof ObjectEntity) {
+//            var_dump($resource->getEntity());
+        }
     }
 }

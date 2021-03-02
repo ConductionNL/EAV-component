@@ -6094,46 +6094,6 @@ definitions:
       attributeValues: []
       entity: []
     required: []
-  Value-read:
-    properties:
-      id:
-        description: 'UUID of this person'
-        type: \UuidInterface
-      uri:
-        description: 'An uri'
-        type: string
-        format: url
-      value:
-        description: 'The actual value'
-        type: string
-      attribute: []
-      objectEntity: []
-    required: []
-  Value-write:
-    properties:
-      uri:
-        description: 'An uri'
-        type: string
-        format: url
-      value:
-        description: 'The actual value'
-        type: string
-      attribute: []
-      objectEntity: []
-    required: []
-  ObjectEntity-read:
-    properties:
-      id:
-        description: 'UUID of this person'
-        type: \UuidInterface
-      entity: []
-      objectValues: []
-    required: []
-  ObjectEntity-write:
-    properties:
-      entity: []
-      objectValues: []
-    required: []
   Entity-read:
     properties:
       id:
@@ -6175,6 +6135,46 @@ definitions:
     required:
       - type
       - name
+  ObjectEntity-read:
+    properties:
+      id:
+        description: 'UUID of this person'
+        type: \UuidInterface
+      entity: []
+      objectValues: []
+    required: []
+  ObjectEntity-write:
+    properties:
+      entity: []
+      objectValues: []
+    required: []
+  Value-read:
+    properties:
+      id:
+        description: 'UUID of this person'
+        type: \UuidInterface
+      uri:
+        description: 'An uri'
+        type: string
+        format: url
+      value:
+        description: 'The actual value'
+        type: string
+      attribute: []
+      objectEntity: []
+    required: []
+  Value-write:
+    properties:
+      uri:
+        description: 'An uri'
+        type: string
+        format: url
+      value:
+        description: 'The actual value'
+        type: string
+      attribute: []
+      objectEntity: []
+    required: []
   ChangeLog-read:
     properties:
       id:
@@ -6213,12 +6213,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-02 15:12:54'
+        example: '2021-03-02 15:31:39'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-02 15:12:54'
+        example: '2021-03-02 15:31:39'
     required: []
   ChangeLog-write:
     properties:
@@ -6332,12 +6332,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-02 15:12:54'
+        example: '2021-03-02 15:31:39'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-02 15:12:54'
+        example: '2021-03-02 15:31:39'
     required: []
   AuditTrail-write:
     properties:
@@ -6355,9 +6355,9 @@ tags:
       
       
   -
-    name: Value
+    name: Entity
     description: |
-      Description.
+      
       
       
   -
@@ -6367,9 +6367,9 @@ tags:
       
       
   -
-    name: Entity
+    name: Value
     description: |
-      
+      Description.
       
       
   -
