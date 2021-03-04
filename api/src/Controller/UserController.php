@@ -23,7 +23,6 @@ class UserController extends AbstractController
      */
     public function login(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        var_dump("test login");
         return [];
     }
 
