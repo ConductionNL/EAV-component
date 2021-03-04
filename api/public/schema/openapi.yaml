@@ -5993,9 +5993,6 @@ components:
           description: 'UUID of this person'
           type: string
           format: uuid
-        name:
-          description: 'The name of this Entity (must be slugable)'
-          type: string
         uri:
           description: 'An uri'
           externalDocs:
@@ -6008,17 +6005,10 @@ components:
           $ref: '#/components/schemas/Attribute-read'
         objectEntity:
           $ref: '#/components/schemas/ObjectEntity-read'
-      required:
-        - name
     Value-write:
       type: object
       description: Description.
-      required:
-        - name
       properties:
-        name:
-          description: 'The name of this Entity (must be slugable)'
-          type: string
         uri:
           description: 'An uri'
           externalDocs:
@@ -6049,9 +6039,6 @@ components:
           description: 'UUID of this person'
           type: string
           format: uuid
-        name:
-          description: 'The name of this Entity (must be slugable)'
-          type: string
         uri:
           description: 'An uri'
           externalDocs:
@@ -6064,13 +6051,9 @@ components:
           $ref: '#/components/schemas/Attribute:jsonld-read'
         objectEntity:
           $ref: '#/components/schemas/ObjectEntity:jsonld-read'
-      required:
-        - name
     'Value:jsonld-write':
       type: object
       description: Description.
-      required:
-        - name
       properties:
         '@context':
           readOnly: true
@@ -6080,9 +6063,6 @@ components:
           type: string
         '@type':
           readOnly: true
-          type: string
-        name:
-          description: 'The name of this Entity (must be slugable)'
           type: string
         uri:
           description: 'An uri'
@@ -6479,10 +6459,6 @@ definitions:
       id:
         description: 'UUID of this person'
         type: \UuidInterface
-      name:
-        description: 'The name of this Entity (must be slugable)'
-        type: string
-        maxLength: 255
       uri:
         description: 'An uri'
         type: string
@@ -6492,14 +6468,9 @@ definitions:
         type: string
       attribute: []
       objectEntity: []
-    required:
-      - name
+    required: []
   Value-write:
     properties:
-      name:
-        description: 'The name of this Entity (must be slugable)'
-        type: string
-        maxLength: 255
       uri:
         description: 'An uri'
         type: string
@@ -6509,8 +6480,7 @@ definitions:
         type: string
       attribute: []
       objectEntity: []
-    required:
-      - name
+    required: []
   ChangeLog-read:
     properties:
       id:
@@ -6549,12 +6519,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-04 14:38:19'
+        example: '2021-03-04 15:57:24'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-04 14:38:19'
+        example: '2021-03-04 15:57:24'
     required: []
   ChangeLog-write:
     properties:
@@ -6668,12 +6638,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-04 14:38:19'
+        example: '2021-03-04 15:57:24'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-04 14:38:19'
+        example: '2021-03-04 15:57:24'
     required: []
   AuditTrail-write:
     properties:
