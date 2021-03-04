@@ -28,7 +28,23 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  *  collectionOperations={
  *  	"get",
- *  	"post"
+ *      "get_objectentity"={
+ *          "method"="GET",
+ *          "path"="/object_entities/{component}/{entity}/{uuid}",
+ *          "swagger_context" = {
+ *               "summary"="Get object",
+ *               "description"="Returns the object"
+ *          }
+ *      },
+ *  	"post",
+ *      "post_objectentity"={
+ *          "method"="POST",
+ *          "path"="/object_entities/{component}/{entity}/{uuid}",
+ *          "swagger_context" = {
+ *              "summary"="Post object",
+ *              "description"="Returns the created object"
+ *          }
+ *      },
  *  })
  * @ORM\Entity(repositoryClass="App\Repository\ObjectEntityRepository")
  * @Gedmo\Loggable(logEntryClass="Conduction\CommonGroundBundle\Entity\ChangeLog")
