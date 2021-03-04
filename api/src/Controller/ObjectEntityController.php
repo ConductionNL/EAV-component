@@ -13,26 +13,27 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class UserController.
+ * Class ObjectEntityController.
  */
-class UserController extends AbstractController
+class ObjectEntityController extends AbstractController
 {
     /**
-     * @Route("/login", methods={"GET"})
+     * @Route("/test", methods={"POST"})
      * @Template
      */
     public function login(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
-        var_dump("test login");
+        var_dump("test post");
         return [];
     }
 
     /**
-     * @Route("/logout", methods={"GET"})
+     * @Route("/test", methods={"GET"})
      * @Template
      */
     public function logout(Request $request, CommonGroundService $commonGroundService, ParameterBagInterface $params, EventDispatcherInterface $dispatcher)
     {
+        var_dump("test get");
         return [];
     }
 }
