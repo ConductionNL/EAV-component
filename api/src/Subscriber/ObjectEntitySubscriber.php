@@ -54,4 +54,5 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
             }
         }
     }
+    
 }
