@@ -18,7 +18,6 @@
         "symfony/mercure-bundle": "*",
         "symfony/property-access": "5.1.*",
         "symfony/translation": "5.1.*",
-        "symfony/uid": "5.1.*",
         "symfony/yaml": "5.1.*",
         "tbbc/money-bundle": "^4.0",
         "webonyx/graphql-php": "^0.13.8"
