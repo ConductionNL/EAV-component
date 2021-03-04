@@ -5802,7 +5802,7 @@ components:
         objectEntities:
           type: array
           items:
-            $ref: '#/components/schemas/Attribute-read'
+            $ref: '#/components/schemas/ObjectEntity-read'
       required:
         - type
         - name
@@ -5830,7 +5830,7 @@ components:
         objectEntities:
           type: array
           items:
-            $ref: '#/components/schemas/Attribute-write'
+            $ref: '#/components/schemas/ObjectEntity-write'
     'Entity:jsonld-read':
       type: object
       description: ''
@@ -5866,7 +5866,7 @@ components:
         objectEntities:
           type: array
           items:
-            $ref: '#/components/schemas/Attribute:jsonld-read'
+            $ref: '#/components/schemas/ObjectEntity:jsonld-read'
       required:
         - type
         - name
@@ -5903,7 +5903,7 @@ components:
         objectEntities:
           type: array
           items:
-            $ref: '#/components/schemas/Attribute:jsonld-write'
+            $ref: '#/components/schemas/ObjectEntity:jsonld-write'
     ObjectEntity-read:
       type: object
       description: Description
@@ -5913,9 +5913,6 @@ components:
           description: 'UUID of this person'
           type: string
           format: uuid
-        name:
-          description: 'The name of this Entity (must be slugable)'
-          type: string
         entity:
           nullable: true
           anyOf:
@@ -5925,17 +5922,10 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Value-read'
-      required:
-        - name
     ObjectEntity-write:
       type: object
       description: Description
-      required:
-        - name
       properties:
-        name:
-          description: 'The name of this Entity (must be slugable)'
-          type: string
         entity:
           nullable: true
           anyOf:
@@ -5963,9 +5953,6 @@ components:
           description: 'UUID of this person'
           type: string
           format: uuid
-        name:
-          description: 'The name of this Entity (must be slugable)'
-          type: string
         entity:
           nullable: true
           anyOf:
@@ -5975,13 +5962,9 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Value:jsonld-read'
-      required:
-        - name
     'ObjectEntity:jsonld-write':
       type: object
       description: Description
-      required:
-        - name
       properties:
         '@context':
           readOnly: true
@@ -5991,9 +5974,6 @@ components:
           type: string
         '@type':
           readOnly: true
-          type: string
-        name:
-          description: 'The name of this Entity (must be slugable)'
           type: string
         entity:
           nullable: true
@@ -6486,24 +6466,14 @@ definitions:
       id:
         description: 'UUID of this person'
         type: \UuidInterface
-      name:
-        description: 'The name of this Entity (must be slugable)'
-        type: string
-        maxLength: 255
       entity: []
       objectValues: []
-    required:
-      - name
+    required: []
   ObjectEntity-write:
     properties:
-      name:
-        description: 'The name of this Entity (must be slugable)'
-        type: string
-        maxLength: 255
       entity: []
       objectValues: []
-    required:
-      - name
+    required: []
   Value-read:
     properties:
       id:
@@ -6579,12 +6549,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-04 10:25:53'
+        example: '2021-03-04 14:38:19'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-04 10:25:53'
+        example: '2021-03-04 14:38:19'
     required: []
   ChangeLog-write:
     properties:
@@ -6698,12 +6668,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-04 10:25:53'
+        example: '2021-03-04 14:38:19'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-04 10:25:53'
+        example: '2021-03-04 14:38:19'
     required: []
   AuditTrail-write:
     properties:

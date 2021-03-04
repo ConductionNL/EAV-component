@@ -46,8 +46,9 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
             $componentCode = $event->getRequest()->attributes->get("component");
             $entityName = $event->getRequest()->attributes->get("entity");
             $uuid = $event->getRequest()->attributes->get("uuid");
+            $body = json_decode($event->getRequest()->getContent(), true);
 
-            $this->objectEntityService->setEventVariables($componentCode, $entityName, $uuid);
+            $this->objectEntityService->setEventVariables($componentCode, $entityName, $uuid, $body);
 
             if ($route == 'api_object_entities_post_objectentity_collection') {
                 $this->objectEntityService->handlePost($resource);

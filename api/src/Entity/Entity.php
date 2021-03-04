@@ -90,7 +90,7 @@ class Entity
 
     /**
      * @Groups({"read","write"})
-     * @ORM\OneToMany(targetEntity=Attribute::class, mappedBy="entity")
+     * @ORM\OneToMany(targetEntity=ObjectEntity::class, mappedBy="entity")
      * @MaxDepth(1)
      */
     private Collection $objectEntities;
