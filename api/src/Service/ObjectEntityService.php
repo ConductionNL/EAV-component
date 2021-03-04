@@ -61,6 +61,9 @@ class ObjectEntityService
                 $id = \Ramsey\Uuid\Uuid::uuid4()->toString();
             }
 
+            //TODO:set id of this $objectEntity to the $id?
+//            $objectEntity->setId($id);
+
             // Check if entity exists
             $entity = $this->em->getRepository("App\Entity\Entity")->findOneBy(['name' => $this->entityName]);
             if(!empty($entity)) {
@@ -74,7 +77,12 @@ class ObjectEntityService
             $attributes = $this->em->getRepository("App\Entity\Attribute")->findBy(['entity' => $entity]);
             if (!empty($attributes)) {
                 // Create the uri for the values
-                $uri = 'localhost/eav/'.$this->entityName.'/'.$id; // TODO:should be domain/api/v1/eav/ , get host function
+                if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+                    $uri = "https://";
+                } else {
+                    $uri = "http://";
+                }
+                $uri .= $_SERVER['HTTP_HOST'] . '/eav/' . $this->entityName . '/' . $id;
 
                 foreach ($this->body as $key => $bodyValue) {
                     if ($key == '@type' || $key == '@self') {
