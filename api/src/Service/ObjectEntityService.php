@@ -20,7 +20,12 @@ class ObjectEntityService
         $this->params = $params;
     }
 
-    public function handle(ObjectEntity $objectEntity)
+    public function handlePost(ObjectEntity $objectEntity)
+    {
+        return $objectEntity;
+    }
+
+    public function handleGet(ObjectEntity $objectEntity)
     {
         return $objectEntity;
     }
