@@ -63,19 +63,6 @@ class ObjectEntity
     private $id;
 
     /**
-     * @var string The name of this Entity (must be slugable)
-     *
-     * @Gedmo\Versioned
-     * @Assert\Length(
-     *     max = 255
-     * )
-     * @Assert\NotNull
-     * @Groups({"read","write"})
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
-
-    /**
      * @Groups({"read", "write"})
      * @ORM\ManyToOne(targetEntity=Entity::class, inversedBy="objectEntities")
      * @MaxDepth(1)
@@ -102,18 +89,6 @@ class ObjectEntity
     public function setId(Uuid $id): self
     {
         $this->id = $id;
-
-        return $this;
-    }
-
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
 
         return $this;
     }

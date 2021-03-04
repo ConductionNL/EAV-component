@@ -32,7 +32,9 @@ class ObjectEntityService
 
     public function handlePost(ObjectEntity $objectEntity)
     {
-        var_dump($this->componentCode);
+        if ($this->componentCode == 'eav') {
+
+        }
 
         return $objectEntity;
     }
