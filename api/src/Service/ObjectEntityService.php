@@ -12,6 +12,9 @@ class ObjectEntityService
     private $em;
     private $commonGroundService;
     private $params;
+    private $componentCode;
+    private $entityName;
+    private $uuid;
 
     public function __construct(EntityManagerInterface $em, CommonGroundService $commonGroundService, ParameterBagInterface $params)
     {
@@ -20,13 +23,17 @@ class ObjectEntityService
         $this->params = $params;
     }
 
-    public function handlePost(ObjectEntity $objectEntity)
+    public function setEventVariables($componentCode, $entityName, $uuid)
     {
-        return $objectEntity;
+        $this->componentCode = $componentCode;
+        $this->entityName = $entityName;
+        $this->uuid = $uuid;
     }
 
-    public function handleGet(ObjectEntity $objectEntity)
+    public function handlePost(ObjectEntity $objectEntity)
     {
+        var_dump($this->componentCode);
+
         return $objectEntity;
     }
 }
