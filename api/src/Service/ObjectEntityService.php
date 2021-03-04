@@ -36,4 +36,11 @@ class ObjectEntityService
 
         return $objectEntity;
     }
+
+    public function handleGet(ObjectEntity $objectEntity)
+    {
+        var_dump($this->componentCode);
+
+        return $objectEntity;
+    }
 }
