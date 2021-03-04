@@ -42,13 +42,13 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
         $route = $event->getRequest()->attributes->get('_route');
         $resource = $event->getControllerResult();
 
-        $testAttribute = $event->getRequest()->attributes->get("test");
-        $testQuery = $event->getRequest()->query->get("test");
+//        $testAttribute = $event->getRequest()->attributes->get("test");
+//        $testQuery = $event->getRequest()->query->get("test");
 
-        var_dump("TEST-ATTRIBUTE");
-        var_dump($testAttribute);
-        var_dump("TEST-QUERY");
-        var_dump($testQuery);
+//        var_dump("TEST-ATTRIBUTE");
+//        var_dump($testAttribute);
+//        var_dump("TEST-QUERY");
+//        var_dump($testQuery);
 
 //        var_dump($route);
 
