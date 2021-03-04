@@ -42,7 +42,7 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
         $route = $event->getRequest()->attributes->get('_route');
         $resource = $event->getControllerResult();
 
-//        var_dump($route);
+//        var_dump($route); 
 
         if ($resource instanceof ObjectEntity) {
 //            var_dump($resource->getEntity());
