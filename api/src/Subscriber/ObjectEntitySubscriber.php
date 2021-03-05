@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ObjectEntitySubscriber implements EventSubscriberInterface
@@ -50,12 +51,19 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
             $body = json_decode($event->getRequest()->getContent(), true);
 
             $this->objectEntityService->setEventVariables($componentCode, $entityName, $uuid, $body);
-        }
 
-        if ($route == 'api_object_entities_post_objectentity_collection' && $resource instanceof ObjectEntity) {
-            $this->objectEntityService->handlePost($resource);
-        } elseif ($route == 'api_object_entities_get_objectentity_collection') {
-            $this->objectEntityService->handleGet($resource);
+            if ($route == 'api_object_entities_post_objectentity_collection' && $resource instanceof ObjectEntity) {
+                $result = $this->objectEntityService->handlePost($resource);
+            } elseif ($route == 'api_object_entities_get_objectentity_collection') {
+                $result = $this->objectEntityService->handleGet($resource);
+            }
+
+            $response = new Response(
+                json_encode($result),
+                Response::HTTP_OK,
+                ['content-type' => 'application/json']
+            );
+            $event->setResponse($response);
         }
     }
 }
