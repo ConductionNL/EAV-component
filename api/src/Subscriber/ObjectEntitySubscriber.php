@@ -13,6 +13,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 
 class ObjectEntitySubscriber implements EventSubscriberInterface
@@ -42,7 +43,10 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
         $route = $event->getRequest()->attributes->get('_route');
         $resource = $event->getControllerResult();
 
-        if ($resource instanceof ObjectEntity) {
+        if ($route == 'api_object_entities_post_objectentity_collection'
+            || $route == 'api_object_entities_post_putobjectentity_collection'
+            || $route == 'api_object_entities_get_objectentity_collection')
+        {
             $componentCode = $event->getRequest()->attributes->get("component");
             $entityName = $event->getRequest()->attributes->get("entity");
             $uuid = $event->getRequest()->attributes->get("uuid");
@@ -50,11 +54,22 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
 
             $this->objectEntityService->setEventVariables($componentCode, $entityName, $uuid, $body);
 
-            if ($route == 'api_object_entities_post_objectentity_collection') {
-                $this->objectEntityService->handlePost($resource);
+            //TODO: post_objectentity and post_putobjectentity should use the same 'handlePost' function
+            //TODO: when doing a post_objectentity a ObjectEntity is always created, even if an error is thrown
+            if ($route == 'api_object_entities_post_objectentity_collection' && $resource instanceof ObjectEntity) {
+                $result = $this->objectEntityService->handlePost($resource);
+            } elseif ($route == 'api_object_entities_post_putobjectentity_collection' && $resource instanceof ObjectEntity) {
+                $result = $this->objectEntityService->handlePut($resource);
             } elseif ($route == 'api_object_entities_get_objectentity_collection') {
-                $this->objectEntityService->handleGet($resource);
+                $result = $this->objectEntityService->handleGet();
             }
+
+            $response = new Response(
+                json_encode($result),
+                Response::HTTP_OK,
+                ['content-type' => 'application/json']
+            );
+            $event->setResponse($response);
         }
     }
 }

@@ -57,7 +57,7 @@ class Entity
     private $type;
 
     /**
-     * @var string The name of this Entity (must be slugable)
+     * @var string The name of this Entity
      *
      * @Gedmo\Versioned
      * @Assert\Length(
@@ -83,7 +83,7 @@ class Entity
 
     /**
      * @Groups({"read","write"})
-     * @ORM\OneToMany(targetEntity=Attribute::class, mappedBy="entity")
+     * @ORM\OneToMany(targetEntity=Attribute::class, mappedBy="entity", cascade={"persist"})
      * @MaxDepth(1)
      */
     private Collection $attributes;
@@ -95,26 +95,10 @@ class Entity
      */
     private Collection $objectEntities;
 
-    /**
-     *  @ORM\PrePersist
-     *  @ORM\PreUpdate
-     *
-     *  */
-    public function prePersist()
-    {
-        // TODO: This doesn't work as we hoped it does :(
-        // TODO: make the name slugable
-        $string = $this->name;
-        $string = trim($string); //removes whitespace at begin and ending
-        $string = preg_replace('/\s+/', '_', $string); // replaces other whitespaces with _
-        $string = strtolower($string);
-
-        $this->name = $string;
-    }
-
     public function __construct()
     {
         $this->attributes = new ArrayCollection();
+        $this->objectEntities = new ArrayCollection();
     }
 
     public function getId()
@@ -141,6 +125,11 @@ class Entity
 
     public function setName(string $name): self
     {
+        // lets make sure this name is slugable
+        $name = trim($name); //removes whitespace at begin and ending
+        $name = preg_replace('/\s+/', '_', $name); // replaces other whitespaces with _
+        $name = strtolower($name);
+
         $this->name = $name;
 
         return $this;
@@ -193,7 +182,7 @@ class Entity
      */
     public function getObjectEntities(): Collection
     {
-        return $this->attributes;
+        return $this->objectEntities;
     }
 
     public function addObjectEntity(ObjectEntity $objectEntity): self
