@@ -4,20 +4,23 @@
 
 settings:
   registryBase: docker.io/conduction
-  projectName: eav
-  name: eav
+  projectName: proto-component-commonground
+  name: proto-component-commonground
   version: V1.0
+  majorVersion: v1
   description: 'Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.'
-  repro: https://github.com/ConductionNL/EAV-component
-  demo: eav.zaakonline.nl
-  domain: taalhuizen-bisc.commonground.nu
-  subdomain: eav
-  subpath: eav
+  repro: https://github.com/ConductionNL/Proto-component-commonground
+  demo: pc.zaakonline.nl
+  domain: conduction.nl
+  subdomain: proto-component-commonground
+  subpath: proto-component-commonground
   subpathRouting: true
   env: dev
   web: false
   debug: 1
   cache: false
+  type: component
+  id: 
   replicaCount: 1
   corsAllowOrigin: ['*']
   trustedHosts: '^.+$'
@@ -37,7 +40,7 @@ settings:
   archiveEnabled: false
 
 security:
-  applicationKey: "b820b925-b4c3-4d48-8035-248ccc628ea7"
+  applicationKey: "45c1a4b6-59d3-4a6e-86bf-88a872f35845"
 
 
 php:
@@ -48,6 +51,19 @@ php:
   env: prod
   secret: ""
   replicaCount: 2
+
+redis:
+  cluster:
+    enabled: false
+  enabled: false
+  redisPort: 6379
+  usePassword: false
+
+commonground:
+  eherkenning:
+    location: https://conduction.nl/eherkenning
+  digispoof:
+    location: https://conduction.nl/digispoof
 
 nginx:
   repository: docker.io/conduction/protocomponent-nginx

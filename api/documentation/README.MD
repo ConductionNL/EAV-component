@@ -1,4 +1,4 @@
-# pc
+# proto-component-commonground
 
 Description
 ----
