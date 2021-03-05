@@ -39,10 +39,18 @@ use Symfony\Component\Validator\Constraints as Assert;
  *  	"post",
  *      "post_objectentity"={
  *          "method"="POST",
- *          "path"="/object_entities/{component}/{entity}/{uuid}",
+ *          "path"="/object_entities/{component}/{entity}",
  *          "swagger_context" = {
  *              "summary"="Post object",
  *              "description"="Returns the created object"
+ *          }
+ *      },
+ *      "post_putobjectentity"={
+ *          "method"="POST",
+ *          "path"="/object_entities/{component}/{entity}/{uuid}",
+ *          "swagger_context" = {
+ *              "summary"="Put object",
+ *              "description"="Returns the updated object"
  *          }
  *      },
  *  })
@@ -61,6 +69,15 @@ class ObjectEntity
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     private $id;
+
+    /**
+     * @var string An uri
+     *
+     * @Assert\Url
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $uri;
 
     /**
      * @Groups({"read", "write"})
@@ -89,6 +106,18 @@ class ObjectEntity
     public function setId(Uuid $id): self
     {
         $this->id = $id;
+
+        return $this;
+    }
+
+    public function getUri(): ?string
+    {
+        return $this->uri;
+    }
+
+    public function setUri(string $uri): self
+    {
+        $this->uri = $uri;
 
         return $this;
     }

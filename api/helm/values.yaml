@@ -10,7 +10,7 @@ settings:
   description: 'Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.'
   repro: https://github.com/ConductionNL/EAV-component
   demo: eav.zaakonline.nl
-  domain: conduction.nl
+  domain: taalhuizen-bisc.commonground.nu
   subdomain: eav
   subpath: eav
   subpathRouting: true
@@ -37,7 +37,7 @@ settings:
   archiveEnabled: false
 
 security:
-  applicationKey: "45c1a4b6-59d3-4a6e-86bf-88a872f35845"
+  applicationKey: "b820b925-b4c3-4d48-8035-248ccc628ea7"
 
 
 php:

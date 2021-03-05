@@ -98,6 +98,7 @@ class Entity
     public function __construct()
     {
         $this->attributes = new ArrayCollection();
+        $this->objectEntities = new ArrayCollection();
     }
 
     public function getId()
@@ -181,7 +182,7 @@ class Entity
      */
     public function getObjectEntities(): Collection
     {
-        return $this->attributes;
+        return $this->objectEntities;
     }
 
     public function addObjectEntity(ObjectEntity $objectEntity): self

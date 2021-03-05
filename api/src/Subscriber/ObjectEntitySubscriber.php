@@ -44,7 +44,9 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
         $resource = $event->getControllerResult();
 
         if ($route == 'api_object_entities_post_objectentity_collection'
-            || $route == 'api_object_entities_get_objectentity_collection'){
+            || $route == 'api_object_entities_post_putobjectentity_collection'
+            || $route == 'api_object_entities_get_objectentity_collection')
+        {
             $componentCode = $event->getRequest()->attributes->get("component");
             $entityName = $event->getRequest()->attributes->get("entity");
             $uuid = $event->getRequest()->attributes->get("uuid");
@@ -52,10 +54,14 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
 
             $this->objectEntityService->setEventVariables($componentCode, $entityName, $uuid, $body);
 
+            //TODO: post_objectentity and post_putobjectentity should use the same 'handlePost' function
+            //TODO: when doing a post_objectentity a ObjectEntity is always created, even if an error is thrown
             if ($route == 'api_object_entities_post_objectentity_collection' && $resource instanceof ObjectEntity) {
                 $result = $this->objectEntityService->handlePost($resource);
+            } elseif ($route == 'api_object_entities_post_putobjectentity_collection' && $resource instanceof ObjectEntity) {
+                $result = $this->objectEntityService->handlePut($resource);
             } elseif ($route == 'api_object_entities_get_objectentity_collection') {
-                $result = $this->objectEntityService->handleGet($resource);
+                $result = $this->objectEntityService->handleGet();
             }
 
             $response = new Response(
