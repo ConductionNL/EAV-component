@@ -61,9 +61,41 @@ class Value
      * @var string The actual value
      *
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $value;
+
+    /**
+     * @var integer Integer if the value is type integer
+     *
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $integerValue;
+
+    /**
+     * @var boolean Boolean if the value is type boolean
+     *
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $booleanValue;
+
+    /**
+     * @var array Array if the value is type array
+     *
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $arrayValue;
+
+    /**
+     * @var DateTime DateTime if the value is type DateTime
+     *
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateTimeValue;
 
     /**
      * @Groups({"read", "write"})
@@ -110,9 +142,57 @@ class Value
         return $this->value;
     }
 
-    public function setValue(string $value): self
+    public function setValue(?string $value): self
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    public function getIntegerValue(): ?int
+    {
+        return $this->integerValue;
+    }
+
+    public function setIntegerValue(?int $integerValue): self
+    {
+        $this->integerValue = $integerValue;
+
+        return $this;
+    }
+
+    public function getBooleanValue(): ?bool
+    {
+        return $this->booleanValue;
+    }
+
+    public function setBooleanValue(?bool $booleanValue): self
+    {
+        $this->booleanValue = $booleanValue;
+
+        return $this;
+    }
+
+    public function getArrayValue(): ?array
+    {
+        return $this->arrayValue;
+    }
+
+    public function setArrayValue(?array $arrayValue): self
+    {
+        $this->arrayValue = $arrayValue;
+
+        return $this;
+    }
+
+    public function getDateTimeValue(): ?\DateTimeInterface
+    {
+        return $this->dateTimeValue;
+    }
+
+    public function setDateTimeValue(\DateTimeInterface $dateTimeValue): self
+    {
+        $this->dateTimeValue = $dateTimeValue;
 
         return $this;
     }
