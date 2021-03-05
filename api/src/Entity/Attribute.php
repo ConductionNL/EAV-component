@@ -56,20 +56,6 @@ class Attribute
     private $id;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="attribute", orphanRemoval=true)
-     * @MaxDepth(1)
-     */
-    private $attributeValues;
-
-    /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity=Entity::class, inversedBy="attributes")
-     * @MaxDepth(1)
-     */
-    private ?Entity $entity;
-
-    /**
      * @var string The title of this property
      *
      * @example My Property
@@ -89,6 +75,20 @@ class Attribute
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $name;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="attribute", orphanRemoval=true)
+     * @MaxDepth(1)
+     */
+    private $attributeValues;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\ManyToOne(targetEntity=Entity::class, inversedBy="attributes")
+     * @MaxDepth(1)
+     */
+    private ?Entity $entity;
 
     /**
      * @var string The type of this property
@@ -511,8 +511,6 @@ class Attribute
     public function __construct()
     {
         $this->attributeValues = new ArrayCollection();
-        $this->items = new ArrayCollection();
-        $this->previous = new ArrayCollection();
     }
 
     public function getId()
@@ -525,6 +523,39 @@ class Attribute
         $this->id = $id;
 
         return $this;
+    }
+
+    public function getTitle(): ?string
+    {
+        return $this->title;
+    }
+
+    public function setTitle(string $title): self
+    {
+        $this->title = $title;
+
+        return $this;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getName(): ?string
+    {
+        if ($this->name) {
+            return $this->name;
+        }
+        // titles wil be used as strings so lets convert the to camelcase
+        $string = $this->title;
+        $string = trim($string); //removes whitespace at begin and ending
+        $string = preg_replace('/\s+/', '_', $string); // replaces other whitespaces with _
+        $string = strtolower($string);
+
+        return $string;
     }
 
     /**
@@ -567,39 +598,6 @@ class Attribute
         $this->entity = $entity;
 
         return $this;
-    }
-
-    public function getTitle(): ?string
-    {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
-    public function getName(): ?string
-    {
-        if ($this->name) {
-            return $this->name;
-        }
-        // titles wil be used as strings so lets convert the to camelcase
-        $string = $this->title;
-        $string = trim($string); //removes whitespace at begin and ending
-        $string = preg_replace('/\s+/', '_', $string); // replaces other whitespaces with _
-        $string = strtolower($string);
-
-        return $string;
     }
 
     public function getMultipleOf(): ?int

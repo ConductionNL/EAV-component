@@ -42,19 +42,20 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
         $route = $event->getRequest()->attributes->get('_route');
         $resource = $event->getControllerResult();
 
-        if ($resource instanceof ObjectEntity) {
+        if ($route == 'api_object_entities_post_objectentity_collection'
+            || $route == 'api_object_entities_get_objectentity_collection'){
             $componentCode = $event->getRequest()->attributes->get("component");
             $entityName = $event->getRequest()->attributes->get("entity");
             $uuid = $event->getRequest()->attributes->get("uuid");
             $body = json_decode($event->getRequest()->getContent(), true);
 
             $this->objectEntityService->setEventVariables($componentCode, $entityName, $uuid, $body);
+        }
 
-            if ($route == 'api_object_entities_post_objectentity_collection') {
-                $this->objectEntityService->handlePost($resource);
-            } elseif ($route == 'api_object_entities_get_objectentity_collection') {
-                $this->objectEntityService->handleGet($resource);
-            }
+        if ($route == 'api_object_entities_post_objectentity_collection' && $resource instanceof ObjectEntity) {
+            $this->objectEntityService->handlePost($resource);
+        } elseif ($route == 'api_object_entities_get_objectentity_collection') {
+            $this->objectEntityService->handleGet($resource);
         }
     }
 }

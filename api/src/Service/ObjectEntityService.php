@@ -4,11 +4,15 @@ namespace App\Service;
 
 use App\Entity\ObjectEntity;
 use App\Entity\Value;
+use App\Repository\ValueRepository;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
+use SensioLabs\Security\Exception\HttpException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Paginator;
+use Doctrine\Common\Collections\Collection;
 
 class ObjectEntityService
 {
@@ -61,67 +65,112 @@ class ObjectEntityService
                 $id = \Ramsey\Uuid\Uuid::uuid4()->toString();
             }
 
-            //TODO:set id of this $objectEntity to the $id?
+            //TODO:set id of this $objectEntity to the $id? (If it doesnt exist already, then get and update that one?)
 //            $objectEntity->setId($id);
 
             // Check if entity exists
             $entity = $this->em->getRepository("App\Entity\Entity")->findOneBy(['name' => $this->entityName]);
-            if(!empty($entity)) {
-                $objectEntity->setEntity($entity);
-            } else {
-                //TODO:error handling
-                var_dump('This entity '.$this->entityName.' does not exist');
+            if(empty($entity)) {
+                throw new HttpException('This entity '.$this->entityName.' does not exist!', 400);
+            }
+            $objectEntity->setEntity($entity);
+
+            // First get the attributes of this Entity
+            $attributes = $this->em->getRepository("App\Entity\Attribute")->findBy(['entity' => $entity]);
+            if (empty($attributes)) {
+                throw new HttpException('This entity '.$this->entityName.' has no attributes!', 400);
             }
 
-            // Compare Post ($this->)body to the Attributes of this Entity^ :
-            $attributes = $this->em->getRepository("App\Entity\Attribute")->findBy(['entity' => $entity]);
-            if (!empty($attributes)) {
-                // Create the uri for the values
-                if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
-                    $uri = "https://";
-                } else {
-                    $uri = "http://";
-                }
-                $uri .= $_SERVER['HTTP_HOST'] . '/eav/' . $this->entityName . '/' . $id;
-
-                foreach ($this->body as $key => $bodyValue) {
-                    if ($key == '@type' || $key == '@self') {
-                        continue;
-                    }
-                    foreach ($attributes as $attribute) {
-                        if ($attribute->getName() == $key) {
-                            // Create the value
-                            $value = new Value();
-                            $value->setUri($uri);
-                            $value->setValue($bodyValue);
-                            $value->setAttribute($attribute);
-                            $value->setObjectEntity($objectEntity);
-                            $this->em->persist($value);
-                            $this->em->flush();
-                        }
-                    }
-                }
+            // Create the uri for the values
+            if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+                $uri = "https://";
             } else {
-                //TODO:error handling
-                var_dump('This entity '.$this->entityName.' has no attributes');
+                $uri = "http://";
+            }
+            $uri .= $_SERVER['HTTP_HOST'];
+            // if not localhost add /api/v1 ?
+            if ($_SERVER['HTTP_HOST'] != 'localhost') {
+                $uri .= '/api/v1';
+            }
+            $uri .= '/eav/' . $this->entityName . '/' . $id;
+
+            // Compare Post ($this->)body to the Attributes :
+            foreach ($this->body as $key => $bodyValue) {
+                if ($key == '@type' || $key == '@self') {
+                    continue;
+                }
+                foreach ($attributes as $attribute) {
+                    if ($attribute->getName() == $key) {
+                        // Create the value
+                        $value = new Value();
+                        $value->setUri($uri);
+                        $value->setValue($bodyValue);
+                        $value->setAttribute($attribute);
+                        $value->setObjectEntity($objectEntity);
+                        $this->em->persist($value);
+                        $this->em->flush();
+                    }
+                }
             }
         }
 
         return $objectEntity;
     }
 
-    public function handleGet(ObjectEntity $objectEntity)
+    public function handleGet($paginator)
     {
         // Check component code
         if ($this->componentCode == 'eav') {
+            // Check if there is a uuid set
+            if (isset($this->uuid) && $this->isValidUuid($this->uuid)) {
+                $id = $this->uuid;
+            } elseif (isset($this->body['id']) && $this->isValidUuid($this->body['id'])) {
+                $id = $this->body['id'];
+            } else {
+                throw new HttpException('No valid uuid found!', 400);
+            }
 
+            // Get entity using the entity name
+            $entity = $this->em->getRepository("App\Entity\Entity")->findOneBy(['name' => $this->entityName]);
+            if(empty($entity)) {
+                throw new HttpException('This entity '.$this->entityName.' does not exist!', 400);
+            }
+
+            // Get attributes
+            $attributes = $this->em->getRepository("App\Entity\Attribute")->findBy(['entity' => $entity]);
+            if (empty($attributes)) {
+                throw new HttpException('This entity '.$this->entityName.' has no attributes!', 400);
+            }
+
+            // Now create the uri
+            if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+                $uri = "https://";
+            } else {
+                $uri = "http://";
+            }
+            $uri .= $_SERVER['HTTP_HOST'];
+            // if not localhost add /api/v1 ?
+            if ($_SERVER['HTTP_HOST'] != 'localhost') {
+                $uri .= '/api/v1';
+            }
+            $uri .= '/eav/' . $this->entityName . '/' . $id;
+
+            // Find the correct values
+            foreach ($attributes as $attribute) {
+                foreach ($attribute->getAttributeValues() as $value) {
+                    if ($value->getUri() == $uri) {
+                        $values[$attribute->getName()] = $value->getValue();
+                    }
+                }
+            }
+
+            if (!isset($values) || empty($values)) {
+                throw new HttpException('No values found with this uuid '.$id, 400);
+            }
+            var_dump($values);
         }
 
-        // Get entity using the entity name
-//        $this->entityName;
-
-        // Get attributes
-
-        return $objectEntity;
+        // ApiPlatform\Core\Bridge\Doctrine\Orm\Paginator
+        return $paginator;
     }
 }
