@@ -21,9 +21,10 @@ class AppFixtures extends Fixture
     public function load(ObjectManager $manager)
     {
         // Lets make sure we only run these fixtures on larping enviroment
-        if (strpos($this->params->get('app_domain'), 'localhost') == false) {
+        if (strpos($this->params->get('app_domain'), 'conduction.nl') == false) {
             return false;
         }
 
+        $manager->flush();
     }
 }

@@ -29,7 +29,7 @@
         "version": "1.2.6"
     },
     "composer/package-versions-deprecated": {
-        "version": "1.11.99.1"
+        "version": "1.11.99"
     },
     "composer/semver": {
         "version": "1.5.0"
@@ -623,9 +623,6 @@
     },
     "symfony/string": {
         "version": "v5.1.7"
-    },
-    "symfony/test-pack": {
-        "version": "v1.0.7"
     },
     "symfony/translation": {
         "version": "3.3",
