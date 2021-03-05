@@ -113,6 +113,8 @@ class ObjectEntityService
         }
 
         $objectEntity->setUri($response['@id']);
+        $this->em->persist($objectEntity);
+        $this->em->flush();
 
         $response = array_merge($response, $values);
 
@@ -206,7 +208,7 @@ class ObjectEntityService
 
         // Check component code and if it is not EAV also create/update the normal object.
         if ($this->componentCode != 'eav') {
-            $response = $this->commonGroundService->saveResource($object, $objectEntity->getUri());
+            $response = $this->commonGroundService->updateResource($object, $objectEntity->getUri());
             $response['ObjectID'] = $id;
         } else {
             $response['@context'] = '/contexts/' . ucfirst($this->entityName);
