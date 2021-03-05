@@ -55,39 +55,19 @@ class Attribute
     private $id;
 
     /**
-     * @var string The title of this property
-     *
-     * @example My Property
-     * @Assert\NotBlank
-     * @Assert\Length(min = 3, max = 255)
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="string", length=255)
-     */
-    private $title;
-
-    /**
-     * @var string The name of the property as used in api calls, extracted from title on snake_case basis
+     * @var string The name of the property as used in api calls
      *
      * @example my_property
-     * @Assert\Length(min = 15, max = 255)
-     * @Groups({"read"})
+     *
+     * @Gedmo\Versioned
+     * @Assert\Length(
+     *     max = 255
+     * )
+     * @Assert\NotNull
+     * @Groups({"read", "write"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $name;
-
-    /**
-     * @Groups({"read", "write"})
-     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="attribute", orphanRemoval=true)
-     * @MaxDepth(1)
-     */
-    private $attributeValues;
-
-    /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity=Entity::class, inversedBy="attributes")
-     * @MaxDepth(1)
-     */
-    private ?Entity $entity;
 
     /**
      * @var string The type of this property
@@ -115,24 +95,18 @@ class Attribute
     private $format;
 
     /**
-     * @var string The iri type of the property used to standarize datas
-     *
-     * @example https://schema.org/name
-     *
-     * @Assert\Length(max = 255)
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\ManyToOne(targetEntity=Entity::class, inversedBy="attributes")
+     * @MaxDepth(1)
      */
-    private $iri;
+    private ?Entity $entity;
 
     /**
-     * @var array An array of aditional query values that need to be applied to the iri, for example anly accept products from a specific catagory
-     *
-     *
      * @Groups({"read", "write"})
-     * @ORM\Column(type="array", nullable=true)
+     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="attribute", orphanRemoval=true)
+     * @MaxDepth(1)
      */
-    private $query = [];
+    private $attributeValues;
 
     /**
      * @var string *Can only be used in combination with type integer* Specifies a number where the value should be a multiple of, e.g. a multiple of 2 would validate 2,4 and 6 but would prevent 5
@@ -149,7 +123,6 @@ class Attribute
      * @var string *Can only be used in combination with type integer* The maximum allowed value
      *
      * @example 2
-     *
      *
      * @Assert\Type("integer")
      * @Groups({"read", "write"})
@@ -214,17 +187,6 @@ class Attribute
     private $minLength;
 
     /**
-     * @var string A [regular expression](https://en.wikipedia.org/wiki/Regular_expression) that the value should comply to
-     *
-     * @example regex
-     *
-     * @Assert\Length(max = 255)
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $pattern;
-
-    /**
      * @var string *Can only be used in combination with type array* The maximum array length
      *
      * @example 2
@@ -258,7 +220,7 @@ class Attribute
     private $uniqueItems;
 
     /**
-     * @var string *Can only be used in combination with type integer* The maximum amount of properties an object should contain
+     * @var string *Can only be used in combination with type object* The maximum amount of properties an object should contain
      *
      * @example 2
      *
@@ -354,17 +316,6 @@ class Attribute
     private $nullable;
 
     /**
-     * @var string To help API consumers detect the object type, you can add the discriminator/propertyName keyword to model definitions. This keyword points to the property that specifies the data type name
-     *
-     * @example name
-     *
-     * @Assert\Length(max = 255)
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $discriminator;
-
-    /**
      * @var bool Whether or not this property is read only
      *
      * @example false
@@ -385,27 +336,6 @@ class Attribute
      * @ORM\Column(type="boolean", nullable=true)
      */
     private $writeOnly;
-
-    /**
-     * @var string An XML representation of the swagger docs
-     *
-     * @example '<xml></xml>'
-     *
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="text", nullable=true)
-     */
-    private $xml;
-
-    /**
-     * @var string An link to any external documentation for the value
-     *
-     * @example https://www.w3.org/TR/NOTE-datetime
-     *
-     * @Assert\Length(max = 255)
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $externalDoc;
 
     /**
      * @var string An example of the value that should be supplied
@@ -450,28 +380,6 @@ class Attribute
     private $maxDate;
 
     /**
-     * @var string The icon of this property
-     *
-     * @example My Property
-     *
-     * @Assert\Length(min = 3, max = 255)
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $icon;
-
-    /**
-     * @var string The slug of this property
-     *
-     * @example my-slug
-     *
-     * @Assert\Length(min = 3, max = 255)
-     * @Groups({"read", "write"})
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $slug;
-
-    /**
      * @var Datetime The moment this request was created
      *
      * @Groups({"read"})
@@ -488,24 +396,6 @@ class Attribute
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $dateModified;
-
-    /**
-     *  @ORM\PrePersist
-     *  @ORM\PreUpdate
-     *
-     *  */
-    public function prePersist()
-    {
-        if (!$this->name) {
-            // titles wil be used as strings so lets convert the to camelcase
-            $string = $this->title;
-            $string = trim($string); //removes whitespace at begin and ending
-            $string = preg_replace('/\s+/', '_', $string); // replaces other whitespaces with _
-            $string = strtolower($string);
-
-            $this->name = $string;
-        }
-    }
 
     public function __construct()
     {
@@ -524,37 +414,21 @@ class Attribute
         return $this;
     }
 
-    public function getTitle(): ?string
+    public function getName(): ?string
     {
-        return $this->title;
-    }
-
-    public function setTitle(string $title): self
-    {
-        $this->title = $title;
-
-        return $this;
+        return $this->name;
     }
 
     public function setName(string $name): self
     {
+        // lets make sure this name is slugable
+        $name = trim($name); //removes whitespace at begin and ending
+        $name = preg_replace('/\s+/', '_', $name); // replaces other whitespaces with _
+        $name = strtolower($name);
+
         $this->name = $name;
 
         return $this;
-    }
-
-    public function getName(): ?string
-    {
-        if ($this->name) {
-            return $this->name;
-        }
-        // titles wil be used as strings so lets convert the to camelcase
-        $string = $this->title;
-        $string = trim($string); //removes whitespace at begin and ending
-        $string = preg_replace('/\s+/', '_', $string); // replaces other whitespaces with _
-        $string = strtolower($string);
-
-        return $string;
     }
 
     /**
@@ -679,18 +553,6 @@ class Attribute
     public function setMinLength(?int $minLength): self
     {
         $this->minLength = $minLength;
-
-        return $this;
-    }
-
-    public function getPattern(): ?string
-    {
-        return $this->pattern;
-    }
-
-    public function setPattern(?string $pattern): self
-    {
-        $this->pattern = $pattern;
 
         return $this;
     }
@@ -863,30 +725,6 @@ class Attribute
         return $this;
     }
 
-    public function getIri(): ?string
-    {
-        return $this->iri;
-    }
-
-    public function setIri(?string $iri): self
-    {
-        $this->iri = $iri;
-
-        return $this;
-    }
-
-    public function getQuery(): ?array
-    {
-        return $this->query;
-    }
-
-    public function setQuery(?array $query): self
-    {
-        $this->query = $query;
-
-        return $this;
-    }
-
     public function getNullable(): ?bool
     {
         return $this->nullable;
@@ -895,18 +733,6 @@ class Attribute
     public function setNullable(bool $nullable): self
     {
         $this->nullable = $nullable;
-
-        return $this;
-    }
-
-    public function getDiscriminator()
-    {
-        return $this->discriminator;
-    }
-
-    public function setDiscriminator($discriminator): self
-    {
-        $this->discriminator = $discriminator;
 
         return $this;
     }
@@ -931,30 +757,6 @@ class Attribute
     public function setWriteOnly(?bool $writeOnly): self
     {
         $this->writeOnly = $writeOnly;
-
-        return $this;
-    }
-
-    public function getXml()
-    {
-        return $this->xml;
-    }
-
-    public function setXml($xml): self
-    {
-        $this->xml = $xml;
-
-        return $this;
-    }
-
-    public function getExternalDoc()
-    {
-        return $this->externalDoc;
-    }
-
-    public function setExternalDoc($externalDoc): self
-    {
-        $this->externalDoc = $externalDoc;
 
         return $this;
     }
@@ -1003,30 +805,6 @@ class Attribute
     public function setMaxDate(?string $maxDate): self
     {
         $this->maxDate = $maxDate;
-
-        return $this;
-    }
-
-    public function getIcon(): ?string
-    {
-        return $this->icon;
-    }
-
-    public function setIcon(?string $icon): self
-    {
-        $this->icon = $icon;
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(?string $slug): self
-    {
-        $this->slug = $slug;
 
         return $this;
     }
