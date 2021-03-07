@@ -4844,22 +4844,10 @@ components:
             url: 'http://schema.org/identifier'
           type: string
           format: uuid
-        title:
-          description: 'The title of this property'
-          type: string
         name:
-          description: 'The name of the property as used in api calls, extracted from title on snake_case basis'
+          description: 'The name of the property as used in api calls'
           type: string
           nullable: true
-        attributeValues:
-          type: array
-          items:
-            $ref: '#/components/schemas/Value-read'
-        entity:
-          nullable: true
-          anyOf:
-            -
-              $ref: '#/components/schemas/Entity-read'
         type:
           description: 'The type of this property'
           type: string
@@ -4868,16 +4856,15 @@ components:
           description: 'The swagger type of the property as used in api calls'
           type: string
           nullable: true
-        iri:
-          description: 'The iri type of the property used to standarize datas'
-          type: string
+        entity:
           nullable: true
-        query:
-          description: 'An array of aditional query values that need to be applied to the iri, for example anly accept products from a specific catagory'
+          anyOf:
+            -
+              $ref: '#/components/schemas/Entity-read'
+        attributeValues:
           type: array
           items:
-            type: string
-          nullable: true
+            $ref: '#/components/schemas/Value-read'
         multipleOf:
           description: '*Can only be used in combination with type integer* Specifies a number where the value should be a multiple of, e.g. a multiple of 2 would validate 2,4 and 6 but would prevent 5'
           type: integer
@@ -4906,10 +4893,6 @@ components:
           description: 'The minimal amount of characters in the value'
           type: integer
           nullable: true
-        pattern:
-          description: 'A [regular expression](https://en.wikipedia.org/wiki/Regular_expression) that the value should comply to'
-          type: string
-          nullable: true
         maxItems:
           description: '*Can only be used in combination with type array* The maximum array length'
           type: integer
@@ -4923,7 +4906,7 @@ components:
           type: boolean
           nullable: true
         maxProperties:
-          description: '*Can only be used in combination with type integer* The maximum amount of properties an object should contain'
+          description: '*Can only be used in combination with type object* The maximum amount of properties an object should contain'
           type: integer
           nullable: true
         minProperties:
@@ -4952,10 +4935,6 @@ components:
           description: 'Whether or not this property can be left empty'
           type: boolean
           nullable: true
-        discriminator:
-          description: 'To help API consumers detect the object type, you can add the discriminator/propertyName keyword to model definitions. This keyword points to the property that specifies the data type name'
-          type: string
-          nullable: true
         readOnly:
           description: 'Whether or not this property is read only'
           type: boolean
@@ -4963,14 +4942,6 @@ components:
         writeOnly:
           description: 'Whether or not this property is write only'
           type: boolean
-          nullable: true
-        xml:
-          description: 'An XML representation of the swagger docs'
-          type: string
-          nullable: true
-        externalDoc:
-          description: 'An link to any external documentation for the value'
-          type: string
           nullable: true
         example:
           description: 'An example of the value that should be supplied'
@@ -4986,14 +4957,6 @@ components:
           nullable: true
         maxDate:
           description: 'The maximum date for value, either a date, datetime or duration (ISO_8601)'
-          type: string
-          nullable: true
-        icon:
-          description: 'The icon of this property'
-          type: string
-          nullable: true
-        slug:
-          description: 'The slug of this property'
           type: string
           nullable: true
         dateCreated:
@@ -5007,29 +4970,21 @@ components:
           format: date-time
           nullable: true
       required:
-        - title
+        - name
         - type
         - format
     Attribute-write:
       type: object
       description: Description
       required:
-        - title
+        - name
         - type
         - format
       properties:
-        title:
-          description: 'The title of this property'
+        name:
+          description: 'The name of the property as used in api calls'
           type: string
-        attributeValues:
-          type: array
-          items:
-            $ref: '#/components/schemas/Value-write'
-        entity:
           nullable: true
-          anyOf:
-            -
-              $ref: '#/components/schemas/Entity-write'
         type:
           description: 'The type of this property'
           type: string
@@ -5038,16 +4993,15 @@ components:
           description: 'The swagger type of the property as used in api calls'
           type: string
           nullable: true
-        iri:
-          description: 'The iri type of the property used to standarize datas'
-          type: string
+        entity:
           nullable: true
-        query:
-          description: 'An array of aditional query values that need to be applied to the iri, for example anly accept products from a specific catagory'
+          anyOf:
+            -
+              $ref: '#/components/schemas/Entity-write'
+        attributeValues:
           type: array
           items:
-            type: string
-          nullable: true
+            $ref: '#/components/schemas/Value-write'
         multipleOf:
           description: '*Can only be used in combination with type integer* Specifies a number where the value should be a multiple of, e.g. a multiple of 2 would validate 2,4 and 6 but would prevent 5'
           type: integer
@@ -5076,10 +5030,6 @@ components:
           description: 'The minimal amount of characters in the value'
           type: integer
           nullable: true
-        pattern:
-          description: 'A [regular expression](https://en.wikipedia.org/wiki/Regular_expression) that the value should comply to'
-          type: string
-          nullable: true
         maxItems:
           description: '*Can only be used in combination with type array* The maximum array length'
           type: integer
@@ -5093,7 +5043,7 @@ components:
           type: boolean
           nullable: true
         maxProperties:
-          description: '*Can only be used in combination with type integer* The maximum amount of properties an object should contain'
+          description: '*Can only be used in combination with type object* The maximum amount of properties an object should contain'
           type: integer
           nullable: true
         minProperties:
@@ -5122,10 +5072,6 @@ components:
           description: 'Whether or not this property can be left empty'
           type: boolean
           nullable: true
-        discriminator:
-          description: 'To help API consumers detect the object type, you can add the discriminator/propertyName keyword to model definitions. This keyword points to the property that specifies the data type name'
-          type: string
-          nullable: true
         readOnly:
           description: 'Whether or not this property is read only'
           type: boolean
@@ -5133,14 +5079,6 @@ components:
         writeOnly:
           description: 'Whether or not this property is write only'
           type: boolean
-          nullable: true
-        xml:
-          description: 'An XML representation of the swagger docs'
-          type: string
-          nullable: true
-        externalDoc:
-          description: 'An link to any external documentation for the value'
-          type: string
           nullable: true
         example:
           description: 'An example of the value that should be supplied'
@@ -5156,14 +5094,6 @@ components:
           nullable: true
         maxDate:
           description: 'The maximum date for value, either a date, datetime or duration (ISO_8601)'
-          type: string
-          nullable: true
-        icon:
-          description: 'The icon of this property'
-          type: string
-          nullable: true
-        slug:
-          description: 'The slug of this property'
           type: string
           nullable: true
     'Attribute:jsonld-read':
@@ -5186,22 +5116,10 @@ components:
             url: 'http://schema.org/identifier'
           type: string
           format: uuid
-        title:
-          description: 'The title of this property'
-          type: string
         name:
-          description: 'The name of the property as used in api calls, extracted from title on snake_case basis'
+          description: 'The name of the property as used in api calls'
           type: string
           nullable: true
-        attributeValues:
-          type: array
-          items:
-            $ref: '#/components/schemas/Value:jsonld-read'
-        entity:
-          nullable: true
-          anyOf:
-            -
-              $ref: '#/components/schemas/Entity:jsonld-read'
         type:
           description: 'The type of this property'
           type: string
@@ -5210,16 +5128,15 @@ components:
           description: 'The swagger type of the property as used in api calls'
           type: string
           nullable: true
-        iri:
-          description: 'The iri type of the property used to standarize datas'
-          type: string
+        entity:
           nullable: true
-        query:
-          description: 'An array of aditional query values that need to be applied to the iri, for example anly accept products from a specific catagory'
+          anyOf:
+            -
+              $ref: '#/components/schemas/Entity:jsonld-read'
+        attributeValues:
           type: array
           items:
-            type: string
-          nullable: true
+            $ref: '#/components/schemas/Value:jsonld-read'
         multipleOf:
           description: '*Can only be used in combination with type integer* Specifies a number where the value should be a multiple of, e.g. a multiple of 2 would validate 2,4 and 6 but would prevent 5'
           type: integer
@@ -5248,10 +5165,6 @@ components:
           description: 'The minimal amount of characters in the value'
           type: integer
           nullable: true
-        pattern:
-          description: 'A [regular expression](https://en.wikipedia.org/wiki/Regular_expression) that the value should comply to'
-          type: string
-          nullable: true
         maxItems:
           description: '*Can only be used in combination with type array* The maximum array length'
           type: integer
@@ -5265,7 +5178,7 @@ components:
           type: boolean
           nullable: true
         maxProperties:
-          description: '*Can only be used in combination with type integer* The maximum amount of properties an object should contain'
+          description: '*Can only be used in combination with type object* The maximum amount of properties an object should contain'
           type: integer
           nullable: true
         minProperties:
@@ -5294,10 +5207,6 @@ components:
           description: 'Whether or not this property can be left empty'
           type: boolean
           nullable: true
-        discriminator:
-          description: 'To help API consumers detect the object type, you can add the discriminator/propertyName keyword to model definitions. This keyword points to the property that specifies the data type name'
-          type: string
-          nullable: true
         readOnly:
           description: 'Whether or not this property is read only'
           type: boolean
@@ -5305,14 +5214,6 @@ components:
         writeOnly:
           description: 'Whether or not this property is write only'
           type: boolean
-          nullable: true
-        xml:
-          description: 'An XML representation of the swagger docs'
-          type: string
-          nullable: true
-        externalDoc:
-          description: 'An link to any external documentation for the value'
-          type: string
           nullable: true
         example:
           description: 'An example of the value that should be supplied'
@@ -5328,14 +5229,6 @@ components:
           nullable: true
         maxDate:
           description: 'The maximum date for value, either a date, datetime or duration (ISO_8601)'
-          type: string
-          nullable: true
-        icon:
-          description: 'The icon of this property'
-          type: string
-          nullable: true
-        slug:
-          description: 'The slug of this property'
           type: string
           nullable: true
         dateCreated:
@@ -5349,14 +5242,14 @@ components:
           format: date-time
           nullable: true
       required:
-        - title
+        - name
         - type
         - format
     'Attribute:jsonld-write':
       type: object
       description: Description
       required:
-        - title
+        - name
         - type
         - format
       properties:
@@ -5369,18 +5262,10 @@ components:
         '@type':
           readOnly: true
           type: string
-        title:
-          description: 'The title of this property'
+        name:
+          description: 'The name of the property as used in api calls'
           type: string
-        attributeValues:
-          type: array
-          items:
-            $ref: '#/components/schemas/Value:jsonld-write'
-        entity:
           nullable: true
-          anyOf:
-            -
-              $ref: '#/components/schemas/Entity:jsonld-write'
         type:
           description: 'The type of this property'
           type: string
@@ -5389,16 +5274,15 @@ components:
           description: 'The swagger type of the property as used in api calls'
           type: string
           nullable: true
-        iri:
-          description: 'The iri type of the property used to standarize datas'
-          type: string
+        entity:
           nullable: true
-        query:
-          description: 'An array of aditional query values that need to be applied to the iri, for example anly accept products from a specific catagory'
+          anyOf:
+            -
+              $ref: '#/components/schemas/Entity:jsonld-write'
+        attributeValues:
           type: array
           items:
-            type: string
-          nullable: true
+            $ref: '#/components/schemas/Value:jsonld-write'
         multipleOf:
           description: '*Can only be used in combination with type integer* Specifies a number where the value should be a multiple of, e.g. a multiple of 2 would validate 2,4 and 6 but would prevent 5'
           type: integer
@@ -5427,10 +5311,6 @@ components:
           description: 'The minimal amount of characters in the value'
           type: integer
           nullable: true
-        pattern:
-          description: 'A [regular expression](https://en.wikipedia.org/wiki/Regular_expression) that the value should comply to'
-          type: string
-          nullable: true
         maxItems:
           description: '*Can only be used in combination with type array* The maximum array length'
           type: integer
@@ -5444,7 +5324,7 @@ components:
           type: boolean
           nullable: true
         maxProperties:
-          description: '*Can only be used in combination with type integer* The maximum amount of properties an object should contain'
+          description: '*Can only be used in combination with type object* The maximum amount of properties an object should contain'
           type: integer
           nullable: true
         minProperties:
@@ -5473,10 +5353,6 @@ components:
           description: 'Whether or not this property can be left empty'
           type: boolean
           nullable: true
-        discriminator:
-          description: 'To help API consumers detect the object type, you can add the discriminator/propertyName keyword to model definitions. This keyword points to the property that specifies the data type name'
-          type: string
-          nullable: true
         readOnly:
           description: 'Whether or not this property is read only'
           type: boolean
@@ -5484,14 +5360,6 @@ components:
         writeOnly:
           description: 'Whether or not this property is write only'
           type: boolean
-          nullable: true
-        xml:
-          description: 'An XML representation of the swagger docs'
-          type: string
-          nullable: true
-        externalDoc:
-          description: 'An link to any external documentation for the value'
-          type: string
           nullable: true
         example:
           description: 'An example of the value that should be supplied'
@@ -5507,14 +5375,6 @@ components:
           nullable: true
         maxDate:
           description: 'The maximum date for value, either a date, datetime or duration (ISO_8601)'
-          type: string
-          nullable: true
-        icon:
-          description: 'The icon of this property'
-          type: string
-          nullable: true
-        slug:
-          description: 'The slug of this property'
           type: string
           nullable: true
     AuditTrail-read:
@@ -5934,6 +5794,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ObjectEntity-read'
+        dateCreated:
+          description: 'The moment this request was created'
+          type: string
+          format: date-time
+          nullable: true
+        dateModified:
+          description: 'The moment this request last Modified'
+          type: string
+          format: date-time
+          nullable: true
       required:
         - type
         - name
@@ -5998,6 +5868,16 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/ObjectEntity:jsonld-read'
+        dateCreated:
+          description: 'The moment this request was created'
+          type: string
+          format: date-time
+          nullable: true
+        dateModified:
+          description: 'The moment this request last Modified'
+          type: string
+          format: date-time
+          nullable: true
       required:
         - type
         - name
@@ -6156,6 +6036,26 @@ components:
         value:
           description: 'The actual value'
           type: string
+          nullable: true
+        integerValue:
+          description: 'Integer if the value is type integer'
+          type: integer
+          nullable: true
+        booleanValue:
+          description: 'Boolean if the value is type boolean'
+          type: boolean
+          nullable: true
+        arrayValue:
+          description: 'Array if the value is type array'
+          type: array
+          items:
+            type: string
+          nullable: true
+        dateTimeValue:
+          description: 'DateTime if the value is type DateTime'
+          type: string
+          format: date-time
+          nullable: true
         attribute:
           $ref: '#/components/schemas/Attribute-read'
         objectEntity:
@@ -6172,6 +6072,26 @@ components:
         value:
           description: 'The actual value'
           type: string
+          nullable: true
+        integerValue:
+          description: 'Integer if the value is type integer'
+          type: integer
+          nullable: true
+        booleanValue:
+          description: 'Boolean if the value is type boolean'
+          type: boolean
+          nullable: true
+        arrayValue:
+          description: 'Array if the value is type array'
+          type: array
+          items:
+            type: string
+          nullable: true
+        dateTimeValue:
+          description: 'DateTime if the value is type DateTime'
+          type: string
+          format: date-time
+          nullable: true
         attribute:
           $ref: '#/components/schemas/Attribute-write'
         objectEntity:
@@ -6202,6 +6122,26 @@ components:
         value:
           description: 'The actual value'
           type: string
+          nullable: true
+        integerValue:
+          description: 'Integer if the value is type integer'
+          type: integer
+          nullable: true
+        booleanValue:
+          description: 'Boolean if the value is type boolean'
+          type: boolean
+          nullable: true
+        arrayValue:
+          description: 'Array if the value is type array'
+          type: array
+          items:
+            type: string
+          nullable: true
+        dateTimeValue:
+          description: 'DateTime if the value is type DateTime'
+          type: string
+          format: date-time
+          nullable: true
         attribute:
           $ref: '#/components/schemas/Attribute:jsonld-read'
         objectEntity:
@@ -6227,6 +6167,26 @@ components:
         value:
           description: 'The actual value'
           type: string
+          nullable: true
+        integerValue:
+          description: 'Integer if the value is type integer'
+          type: integer
+          nullable: true
+        booleanValue:
+          description: 'Boolean if the value is type boolean'
+          type: boolean
+          nullable: true
+        arrayValue:
+          description: 'Array if the value is type array'
+          type: array
+          items:
+            type: string
+          nullable: true
+        dateTimeValue:
+          description: 'DateTime if the value is type DateTime'
+          type: string
+          format: date-time
+          nullable: true
         attribute:
           $ref: '#/components/schemas/Attribute:jsonld-write'
         objectEntity:
@@ -6239,18 +6199,11 @@ definitions:
         type: string
         example: e2984465-190a-4562-829e-a8cca81aa35d
         format: uuid
-      title:
-        description: 'The title of this property'
-        type: string
-        example: 'My Property'
-        maxLength: 255
-        minLength: 3
       name:
-        description: 'The name of the property as used in api calls, extracted from title on snake_case basis'
+        description: 'The name of the property as used in api calls'
         type: string
         example: my_property
         maxLength: 255
-        minLength: 15
       type:
         description: 'The type of this property'
         type: string
@@ -6261,14 +6214,6 @@ definitions:
         type: string
         example: string
         maxLength: 255
-      iri:
-        description: 'The iri type of the property used to standarize datas'
-        type: string
-        example: 'https://schema.org/name'
-        maxLength: 255
-      query:
-        description: 'An array of aditional query values that need to be applied to the iri, for example anly accept products from a specific catagory'
-        type: array
       multipleOf:
         description: '*Can only be used in combination with type integer* Specifies a number where the value should be a multiple of, e.g. a multiple of 2 would validate 2,4 and 6 but would prevent 5'
         type: string
@@ -6297,11 +6242,6 @@ definitions:
         description: 'The minimal amount of characters in the value'
         type: int
         example: '2'
-      pattern:
-        description: 'A [regular expression](https://en.wikipedia.org/wiki/Regular_expression) that the value should comply to'
-        type: string
-        example: regex
-        maxLength: 255
       maxItems:
         description: '*Can only be used in combination with type array* The maximum array length'
         type: string
@@ -6315,7 +6255,7 @@ definitions:
         type: bool
         example: 'false'
       maxProperties:
-        description: '*Can only be used in combination with type integer* The maximum amount of properties an object should contain'
+        description: '*Can only be used in combination with type object* The maximum amount of properties an object should contain'
         type: string
         example: '2'
       minProperties:
@@ -6342,11 +6282,6 @@ definitions:
         description: 'Whether or not this property can be left empty'
         type: bool
         example: 'false'
-      discriminator:
-        description: 'To help API consumers detect the object type, you can add the discriminator/propertyName keyword to model definitions. This keyword points to the property that specifies the data type name'
-        type: string
-        example: name
-        maxLength: 255
       readOnly:
         description: 'Whether or not this property is read only'
         type: bool
@@ -6355,15 +6290,6 @@ definitions:
         description: 'Whether or not this property is write only'
         type: bool
         example: 'false'
-      xml:
-        description: 'An XML representation of the swagger docs'
-        type: string
-        example: '''<xml></xml>'''
-      externalDoc:
-        description: 'An link to any external documentation for the value'
-        type: string
-        example: 'https://www.w3.org/TR/NOTE-datetime'
-        maxLength: 255
       example:
         description: 'An example of the value that should be supplied'
         type: string
@@ -6381,35 +6307,23 @@ definitions:
         description: 'The maximum date for value, either a date, datetime or duration (ISO_8601)'
         type: string
         example: '2019-09-16T14:26:51+00:00'
-      icon:
-        description: 'The icon of this property'
-        type: string
-        example: 'My Property'
-        maxLength: 255
-        minLength: 3
-      slug:
-        description: 'The slug of this property'
-        type: string
-        example: my-slug
-        maxLength: 255
-        minLength: 3
       dateCreated:
         description: 'The moment this request was created'
         type: \Datetime
       dateModified:
         description: 'The moment this request last Modified'
         type: \Datetime
-      attributeValues: []
       entity: []
-    required: []
+      attributeValues: []
+    required:
+      - name
   Attribute-write:
     properties:
-      title:
-        description: 'The title of this property'
+      name:
+        description: 'The name of the property as used in api calls'
         type: string
-        example: 'My Property'
+        example: my_property
         maxLength: 255
-        minLength: 3
       type:
         description: 'The type of this property'
         type: string
@@ -6420,14 +6334,6 @@ definitions:
         type: string
         example: string
         maxLength: 255
-      iri:
-        description: 'The iri type of the property used to standarize datas'
-        type: string
-        example: 'https://schema.org/name'
-        maxLength: 255
-      query:
-        description: 'An array of aditional query values that need to be applied to the iri, for example anly accept products from a specific catagory'
-        type: array
       multipleOf:
         description: '*Can only be used in combination with type integer* Specifies a number where the value should be a multiple of, e.g. a multiple of 2 would validate 2,4 and 6 but would prevent 5'
         type: string
@@ -6456,11 +6362,6 @@ definitions:
         description: 'The minimal amount of characters in the value'
         type: int
         example: '2'
-      pattern:
-        description: 'A [regular expression](https://en.wikipedia.org/wiki/Regular_expression) that the value should comply to'
-        type: string
-        example: regex
-        maxLength: 255
       maxItems:
         description: '*Can only be used in combination with type array* The maximum array length'
         type: string
@@ -6474,7 +6375,7 @@ definitions:
         type: bool
         example: 'false'
       maxProperties:
-        description: '*Can only be used in combination with type integer* The maximum amount of properties an object should contain'
+        description: '*Can only be used in combination with type object* The maximum amount of properties an object should contain'
         type: string
         example: '2'
       minProperties:
@@ -6501,11 +6402,6 @@ definitions:
         description: 'Whether or not this property can be left empty'
         type: bool
         example: 'false'
-      discriminator:
-        description: 'To help API consumers detect the object type, you can add the discriminator/propertyName keyword to model definitions. This keyword points to the property that specifies the data type name'
-        type: string
-        example: name
-        maxLength: 255
       readOnly:
         description: 'Whether or not this property is read only'
         type: bool
@@ -6514,15 +6410,6 @@ definitions:
         description: 'Whether or not this property is write only'
         type: bool
         example: 'false'
-      xml:
-        description: 'An XML representation of the swagger docs'
-        type: string
-        example: '''<xml></xml>'''
-      externalDoc:
-        description: 'An link to any external documentation for the value'
-        type: string
-        example: 'https://www.w3.org/TR/NOTE-datetime'
-        maxLength: 255
       example:
         description: 'An example of the value that should be supplied'
         type: string
@@ -6540,69 +6427,10 @@ definitions:
         description: 'The maximum date for value, either a date, datetime or duration (ISO_8601)'
         type: string
         example: '2019-09-16T14:26:51+00:00'
-      icon:
-        description: 'The icon of this property'
-        type: string
-        example: 'My Property'
-        maxLength: 255
-        minLength: 3
-      slug:
-        description: 'The slug of this property'
-        type: string
-        example: my-slug
-        maxLength: 255
-        minLength: 3
+      entity: []
       attributeValues: []
-      entity: []
-    required: []
-  Value-read:
-    properties:
-      id:
-        description: 'UUID of this person'
-        type: \UuidInterface
-      uri:
-        description: 'An uri'
-        type: string
-        format: url
-      value:
-        description: 'The actual value'
-        type: string
-      attribute: []
-      objectEntity: []
-    required: []
-  Value-write:
-    properties:
-      uri:
-        description: 'An uri'
-        type: string
-        format: url
-      value:
-        description: 'The actual value'
-        type: string
-      attribute: []
-      objectEntity: []
-    required: []
-  ObjectEntity-read:
-    properties:
-      id:
-        description: 'UUID of this person'
-        type: \UuidInterface
-      uri:
-        description: 'An uri'
-        type: string
-        format: url
-      entity: []
-      objectValues: []
-    required: []
-  ObjectEntity-write:
-    properties:
-      uri:
-        description: 'An uri'
-        type: string
-        format: url
-      entity: []
-      objectValues: []
-    required: []
+    required:
+      - name
   Entity-read:
     properties:
       id:
@@ -6620,6 +6448,12 @@ definitions:
         description: 'The description of this Entity'
         type: string
         maxLength: 255
+      dateCreated:
+        description: 'The moment this request was created'
+        type: \Datetime
+      dateModified:
+        description: 'The moment this request last Modified'
+        type: \Datetime
       attributes: []
       objectEntities: []
     required:
@@ -6644,6 +6478,78 @@ definitions:
     required:
       - type
       - name
+  ObjectEntity-read:
+    properties:
+      id:
+        description: 'UUID of this person'
+        type: \UuidInterface
+      uri:
+        description: 'An uri'
+        type: string
+        format: url
+      entity: []
+      objectValues: []
+    required: []
+  ObjectEntity-write:
+    properties:
+      uri:
+        description: 'An uri'
+        type: string
+        format: url
+      entity: []
+      objectValues: []
+    required: []
+  Value-read:
+    properties:
+      id:
+        description: 'UUID of this person'
+        type: \UuidInterface
+      uri:
+        description: 'An uri'
+        type: string
+        format: url
+      value:
+        description: 'The actual value'
+        type: string
+      integerValue:
+        description: 'Integer if the value is type integer'
+        type: int
+      booleanValue:
+        description: 'Boolean if the value is type boolean'
+        type: bool
+      arrayValue:
+        description: 'Array if the value is type array'
+        type: array
+      dateTimeValue:
+        description: 'DateTime if the value is type DateTime'
+        type: \DateTime
+      attribute: []
+      objectEntity: []
+    required: []
+  Value-write:
+    properties:
+      uri:
+        description: 'An uri'
+        type: string
+        format: url
+      value:
+        description: 'The actual value'
+        type: string
+      integerValue:
+        description: 'Integer if the value is type integer'
+        type: int
+      booleanValue:
+        description: 'Boolean if the value is type boolean'
+        type: bool
+      arrayValue:
+        description: 'Array if the value is type array'
+        type: array
+      dateTimeValue:
+        description: 'DateTime if the value is type DateTime'
+        type: \DateTime
+      attribute: []
+      objectEntity: []
+    required: []
   ChangeLog-read:
     properties:
       id:
@@ -6682,12 +6588,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-05 16:09:06'
+        example: '2021-03-07 16:45:28'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-05 16:09:06'
+        example: '2021-03-07 16:45:28'
     required: []
   ChangeLog-write:
     properties:
@@ -6801,12 +6707,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-05 16:09:06'
+        example: '2021-03-07 16:45:28'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-05 16:09:06'
+        example: '2021-03-07 16:45:28'
     required: []
   AuditTrail-write:
     properties:
@@ -6824,9 +6730,9 @@ tags:
       
       
   -
-    name: Value
+    name: Entity
     description: |
-      Description.
+      
       
       
   -
@@ -6836,9 +6742,9 @@ tags:
       
       
   -
-    name: Entity
+    name: Value
     description: |
-      
+      Description.
       
       
   -
