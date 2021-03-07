@@ -80,7 +80,8 @@ class ObjectEntityService
                 if ($attribute->getName() == $key) {
                     $foundAttribute = true;
                     // Create the value
-                    // TODO:what to do with attributes that aren't String types!?! (change App\Entity\Value) and check attribute settings
+                    // TODO:what to do with attributes that aren't String types:
+                    // TODO: (already changed App\Entity\Value for this) create a createAttributeValue function that gets attribute settings and compares it to the value, than saves value in the correct way.
                     $value = new Value();
                     $value->setUri($uri);
                     $value->setValue($bodyValue);
@@ -104,13 +105,13 @@ class ObjectEntityService
         // Check component code and if it is not EAV also create/update the normal object.
         if ($this->componentCode != 'eav') {
             $response = $this->commonGroundService->saveResource($object, ['component' => $this->componentCode, 'type' => $this->entityName]);
-            $response['ObjectID'] = $id;
         } else {
             $response['@context'] = '/contexts/' . ucfirst($this->entityName);
-            $response['@id'] = $uri;
-            $response['@type'] = ucfirst($this->entityName);
-            $response['id'] = $id;
         }
+        $response['@id'] = $uri;
+        $response['@self'] = $uri;
+        $response['@type'] = ucfirst($this->entityName);
+        $response['id'] = $id;
 
         $objectEntity->setUri($response['@id']);
         $this->em->persist($objectEntity);
@@ -180,7 +181,8 @@ class ObjectEntityService
                     foreach ($attribute->getAttributeValues() as $value) {
                         if ($value->getUri() == $uri) {
                             // Update the value
-                            // TODO:what to do with attributes that aren't String types!?! (change App\Entity\Value) and check attribute settings
+                            // TODO:what to do with attributes that aren't String types:
+                            // TODO: (already changed App\Entity\Value for this) create a create(/update?)AttributeValue function that gets attribute settings and compares it to the value, than saves value in the correct way.
                             $value->setUri($uri);
                             $value->setValue($bodyValue);
 //                            $value->setAttribute($attribute); // <<< This should already be set and would never ever change?!
@@ -209,13 +211,13 @@ class ObjectEntityService
         // Check component code and if it is not EAV also create/update the normal object.
         if ($this->componentCode != 'eav') {
             $response = $this->commonGroundService->updateResource($object, $objectEntity->getUri());
-            $response['ObjectID'] = $id;
         } else {
             $response['@context'] = '/contexts/' . ucfirst($this->entityName);
-            $response['@id'] = $uri;
-            $response['@type'] = ucfirst($this->entityName);
-            $response['id'] = $id;
         }
+        $response['@id'] = $uri;
+        $response['@self'] = $uri;
+        $response['@type'] = ucfirst($this->entityName);
+        $response['id'] = $id;
 
         $response = array_merge($response, $values);
 
@@ -280,13 +282,13 @@ class ObjectEntityService
         // Check component code and if it is not EAV also create/update the normal object.
         if ($this->componentCode != 'eav') {
             $response = $this->commonGroundService->getResource($objectEntity->getUri());
-            $response['ObjectID'] = $id;
         } else {
             $response['@context'] = '/contexts/' . ucfirst($this->entityName);
-            $response['@id'] = $uri;
-            $response['@type'] = ucfirst($this->entityName);
-            $response['id'] = $id;
         }
+        $response['@id'] = $uri;
+        $response['@self'] = $uri;
+        $response['@type'] = ucfirst($this->entityName);
+        $response['id'] = $id;
 
         $response = array_merge($response, $values);
 
