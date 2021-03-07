@@ -2,6 +2,7 @@
 
 namespace App\Service;
 
+use App\Entity\Attribute;
 use App\Entity\ObjectEntity;
 use App\Entity\Value;
 use App\Repository\ValueRepository;
@@ -80,17 +81,9 @@ class ObjectEntityService
                 if ($attribute->getName() == $key) {
                     $foundAttribute = true;
                     // Create the value
-                    // TODO:what to do with attributes that aren't String types:
-                    // TODO: (already changed App\Entity\Value for this) create a createAttributeValue function that gets attribute settings and compares it to the value, than saves value in the correct way.
-                    $value = new Value();
-                    $value->setUri($uri);
-                    $value->setValue($bodyValue);
-                    $value->setAttribute($attribute);
-                    $value->setObjectEntity($objectEntity);
-                    $this->em->persist($value);
-                    $this->em->flush();
+                    $value = $this->saveValue($objectEntity, $attribute, $bodyValue, $uri);
 
-                    $values[$value->getAttribute()->getName()] = $value->getValue();
+                    $values[$attribute->getName()] = $this->getValue($attribute, $value);
                 }
             }
             if (!$foundAttribute) {
@@ -181,16 +174,9 @@ class ObjectEntityService
                     foreach ($attribute->getAttributeValues() as $value) {
                         if ($value->getUri() == $uri) {
                             // Update the value
-                            // TODO:what to do with attributes that aren't String types:
-                            // TODO: (already changed App\Entity\Value for this) create a create(/update?)AttributeValue function that gets attribute settings and compares it to the value, than saves value in the correct way.
-                            $value->setUri($uri);
-                            $value->setValue($bodyValue);
-//                            $value->setAttribute($attribute); // <<< This should already be set and would never ever change?!
-//                            $value->setObjectEntity($objectEntity); // <<< Setting this doesn't work unless we first get the ObjectEntity with the $id! and same as attribute^
-                            $this->em->persist($value);
-                            $this->em->flush();
+                            $value = $this->saveValue($objectEntity, $attribute, $bodyValue, $uri);
 
-                            $values[$value->getAttribute()->getName()] = $value->getValue();
+                            $values[$attribute->getName()] = $this->getValue($attribute, $value);
                         }
                     }
                 }
@@ -270,7 +256,7 @@ class ObjectEntityService
         foreach ($attributes as $attribute) {
             foreach ($attribute->getAttributeValues() as $value) {
                 if ($value->getUri() == $uri) {
-                    $values[$attribute->getName()] = $value->getValue();
+                    $values[$attribute->getName()] = $this->getValue($attribute, $value);
                 }
             }
         }
@@ -293,6 +279,55 @@ class ObjectEntityService
         $response = array_merge($response, $values);
 
         return $response;
+    }
+
+    private function saveValue(ObjectEntity $objectEntity, Attribute $attribute, $bodyValue, $uri)
+    {
+        $value = new Value();
+        $value->setObjectEntity($objectEntity);
+        $value->setAttribute($attribute);
+        $value->setUri($uri);
+
+        $typeFormat = $attribute->getType() . '-' . $attribute->getFormat();
+        switch ($typeFormat) {
+            case 'string-string':
+                $value->setValue($bodyValue);
+                break;
+            case 'number-number': //TODO: 'number' is probably for numbers other than integer?
+            case 'integer-integer':
+                $value->setIntegerValue($bodyValue);
+                break;
+            case 'boolean-boolean':
+                $value->setBooleanValue($bodyValue);
+                break;
+            case 'array-array':
+                $value->setArrayValue($bodyValue);
+                break;
+            default:
+                throw new HttpException('The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] with an unknown type-format combination: [' . $typeFormat . '] !', 400);
+        }
+
+        $this->em->persist($value);
+        $this->em->flush();
+        return $value;
+    }
+
+    private function getValue(Attribute $attribute, Value $value)
+    {
+        $typeFormat = $attribute->getType() . '-' . $attribute->getFormat();
+        switch ($typeFormat) {
+            case 'string-string':
+                return $value->getValue();
+            case 'number-number': //TODO: 'number' is probably for numbers other than integer?
+            case 'integer-integer':
+                return $value->getIntegerValue();
+            case 'boolean-boolean':
+                return $value->getBooleanValue();
+            case 'array-array':
+                return $value->getArrayValue();
+            default:
+                throw new HttpException('The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] with an unknown type-format combination: [' . $typeFormat . '] !', 400);
+        }
     }
 
     private function createUri($id)
