@@ -181,8 +181,8 @@ class ObjectEntityService
         $uri = $this->createUri($id);
 
         // Compare Post ($this->)body to the Attributes :
-        $values = [];
-        $object = [];
+        $values = []; // !
+        $object = []; // !
         foreach ($this->body as $key => $bodyValue) {
             // TODO:something about this:
             if ($key == '@type' || $key == '@self') {
@@ -299,7 +299,7 @@ class ObjectEntityService
         // Now create the uri
         $uri = $this->createUri($id);
 
-        // Find the correct values
+        // Find the correct values TODO:just get them from the $objectEntity?
         foreach ($attributes as $attribute) {
             foreach ($attribute->getAttributeValues() as $value) {
                 if ($value->getUri() == $uri) {
@@ -330,8 +330,6 @@ class ObjectEntityService
 
     private function checkValue($values, Attribute $attribute, $bodyValue)
     {
-        $exceptionMessage = '';
-
         // Get attribute type and format
         $typeFormat = $attribute->getType() . '-' . $attribute->getFormat();
 
@@ -350,13 +348,26 @@ class ObjectEntityService
                 } else {
                     $enumValues = '[' . implode( ", ", $attribute->getEnum() ) . ']';
                 }
-                $exceptionMessage ='Attribute: [' . $attribute->getName() . '] must be one of the following values: ' . $enumValues . ' !';
+                throw new HttpException('Attribute: [' . $attribute->getName() . '] must be one of the following values: ' . $enumValues . ' !', 400);
+            }
+        }
+
+        // Check if the value is null and if so if this is allowed or not
+        if (!isset($bodyValue)) {
+            if (!$attribute->getNullable()) {
+                throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
             }
         }
 
         // Do checks for attribute depending on its type-format
         switch ($typeFormat) {
             case 'string-string':
+                if ($attribute->getMinLength() && strlen($bodyValue) <= $attribute->getMinLength()) {
+                    throw new HttpException('Attribute: [' . $attribute->getName() . '] is to short, minimum length is ' . $attribute->getMinLength() . ' !', 400);
+                }
+                if ($attribute->getMaxLength() && strlen($bodyValue) >= $attribute->getMaxLength()) {
+                    throw new HttpException('Attribute: [' . $attribute->getName() . '] is to long, maximum length is ' . $attribute->getMaxLength() . ' !', 400);
+                }
                 break;
             case 'number-number': //TODO: 'number' is probably for numbers other than integer?
             case 'integer-integer':
@@ -368,12 +379,9 @@ class ObjectEntityService
             case 'datetime-datetime':
                 break;
             default:
-                $exceptionMessage = 'The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] with an unknown type-format combination: [' . $typeFormat . '] !';
+                throw new HttpException('The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] with an unknown type-format combination: [' . $typeFormat . '] !', 400);
         }
 
-        if ($exceptionMessage != ''){
-            throw new HttpException($exceptionMessage, 400);
-        }
         $values[$attribute->getName()] = ['attribute'=>$attribute, 'value'=>$bodyValue];
         return $values;
     }
