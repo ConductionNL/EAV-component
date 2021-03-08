@@ -332,31 +332,45 @@ class ObjectEntityService
     {
         $exceptionMessage = '';
 
+        // Get attribute type and format
         $typeFormat = $attribute->getType() . '-' . $attribute->getFormat();
+
+        // Check if attribute has an enum and if so check if the bodyValue equals one of the enumValues
+        if ($attribute->getEnum()) {
+            $inEnum = false;
+            foreach ($attribute->getEnum() as $enumValue) {
+                if ($enumValue == $bodyValue){
+                    $inEnum = true;
+                    break;
+                }
+            }
+            if (!$inEnum) {
+                if ($typeFormat == 'array-array'){
+                    $enumValues = json_encode($attribute->getEnum());
+                } else {
+                    $enumValues = '[' . implode( ", ", $attribute->getEnum() ) . ']';
+                }
+                $exceptionMessage ='Attribute: [' . $attribute->getName() . '] must be one of the following values: ' . $enumValues . ' !';
+            }
+        }
+
+        // Do checks for attribute depending on its type-format
         switch ($typeFormat) {
             case 'string-string':
-                if ($attribute->getEnum()) {
-                    $inEnum = false;
-                    foreach ($attribute->getEnum() as $enumValue) {
-                        if ($enumValue == $bodyValue){
-                            $inEnum = true;
-                            break;
-                        }
-                    }
-                    if (!$inEnum) {
-                        $exceptionMessage ='Attribute: [' . $attribute->getName() . '] must be one of the following values: [' . implode( ", ", $attribute->getEnum() ) . '] !';
-                    }
-                }
                 break;
-            case 'integer-integer':
             case 'number-number': //TODO: 'number' is probably for numbers other than integer?
+            case 'integer-integer':
+                break;
             case 'boolean-boolean':
+                break;
             case 'array-array':
+                break;
             case 'datetime-datetime':
                 break;
             default:
                 $exceptionMessage = 'The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] with an unknown type-format combination: [' . $typeFormat . '] !';
         }
+
         if ($exceptionMessage != ''){
             throw new HttpException($exceptionMessage, 400);
         }
@@ -371,24 +385,44 @@ class ObjectEntityService
         $value->setAttribute($attribute);
         $value->setUri($uri);
 
-        $typeFormat = $attribute->getType() . '-' . $attribute->getFormat();
-        switch ($typeFormat) {
-            case 'string-string':
-                $value->setValue($bodyValue);
-                break;
-            case 'number-number': //TODO: 'number' is probably for numbers other than integer?
-            case 'integer-integer':
-                $value->setIntegerValue($bodyValue);
-                break;
-            case 'boolean-boolean':
-                $value->setBooleanValue($bodyValue);
-                break;
-            case 'array-array':
-                $value->setArrayValue($bodyValue);
-                break;
-            case 'datetime-datetime':
-                $value->setDateTimeValue($bodyValue);
-                break;
+        // If the attribute is nullable just set no value so it is null
+        if (!empty($bodyValue)) {
+            // Get attribute type and format
+            $typeFormat = $attribute->getType() . '-' . $attribute->getFormat();
+            switch ($typeFormat) {
+                case 'string-string':
+                    $value->setValue($bodyValue);
+                    break;
+                case 'number-number': //TODO: 'number' is probably for numbers other than integer?
+                case 'integer-integer':
+                    $value->setIntegerValue($bodyValue);
+                    break;
+                case 'boolean-boolean':
+                    if (is_string($bodyValue)) {
+                        $bodyValue = $bodyValue === 'true';
+                    }
+                    $value->setBooleanValue($bodyValue);
+                    break;
+                case 'array-array':
+                    if (is_string($bodyValue)) {
+                        $bodyValue = explode(";", $bodyValue);
+                        foreach ($bodyValue as &$object){
+                            $object = explode(",", $object);
+                            foreach ($object as $key => $keyValue) {
+                                $keyValue = explode(":",$keyValue);
+                                if (is_array($keyValue) && count($keyValue) > 1) {
+                                    unset($object[$key]);
+                                    $object[$keyValue[0]] = $keyValue[1];
+                                }
+                            }
+                        }
+                    }
+                    $value->setArrayValue($bodyValue);
+                    break;
+                case 'datetime-datetime':
+                    $value->setDateTimeValue(new \DateTime($bodyValue));
+                    break;
+            }
         }
 
         $this->em->persist($value);
@@ -398,6 +432,7 @@ class ObjectEntityService
 
     private function getValue(Attribute $attribute, Value $value)
     {
+        // Get attribute type and format
         $typeFormat = $attribute->getType() . '-' . $attribute->getFormat();
         switch ($typeFormat) {
             case 'string-string':
@@ -410,7 +445,11 @@ class ObjectEntityService
             case 'array-array':
                 return $value->getArrayValue();
             case 'datetime-datetime':
-                return $value->getDateTimeValue();
+                $datetime = $value->getDateTimeValue();
+                if (!empty($datetime)){
+                    $datetime = $datetime->format('Y-m-d\TH:i:sP');
+                }
+                return $datetime;
             default:
                 throw new HttpException('The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] with an unknown type-format combination: [' . $typeFormat . '] !', 400);
         }
