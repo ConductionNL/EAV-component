@@ -43,13 +43,7 @@ class ObjectEntityService
     public function handlePost(ObjectEntity $objectEntity)
     {
         // Create a new uuid
-        $id = \Ramsey\Uuid\Uuid::uuid4()->toString();
-
-        $this->em->persist($objectEntity);
-        $objectEntity->setId(Uuid::fromString($id));
-        $this->em->persist($objectEntity);
-        $this->em->flush();
-        $objectEntity = $this->em->getRepository('App:ObjectEntity')->findOneBy(['id'=> Uuid::fromString($id)]);
+        $id = $objectEntity->getId();
 
         // Check if entity exists
         $entity = $this->em->getRepository("App\Entity\Entity")->findOneBy(['type' => $this->componentCode . '/' . $this->entityName]);
@@ -354,10 +348,11 @@ class ObjectEntityService
                     }
                 }
                 break;
+            case 'integer-integer':
             case 'number-number': //TODO: 'number' is probably for numbers other than integer?
             case 'boolean-boolean':
             case 'array-array':
-            case 'integer-integer':
+            case 'datetime-datetime':
                 break;
             default:
                 $exceptionMessage = 'The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] with an unknown type-format combination: [' . $typeFormat . '] !';
@@ -391,6 +386,9 @@ class ObjectEntityService
             case 'array-array':
                 $value->setArrayValue($bodyValue);
                 break;
+            case 'datetime-datetime':
+                $value->setDateTimeValue($bodyValue);
+                break;
         }
 
         $this->em->persist($value);
@@ -411,6 +409,8 @@ class ObjectEntityService
                 return $value->getBooleanValue();
             case 'array-array':
                 return $value->getArrayValue();
+            case 'datetime-datetime':
+                return $value->getDateTimeValue();
             default:
                 throw new HttpException('The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] with an unknown type-format combination: [' . $typeFormat . '] !', 400);
         }

@@ -110,7 +110,7 @@ class ObjectEntity
         $this->objectValues = new ArrayCollection();
     }
 
-    public function getId(): Uuid
+    public function getId()
     {
         return $this->id;
     }
