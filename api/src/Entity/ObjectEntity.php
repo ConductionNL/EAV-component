@@ -100,7 +100,7 @@ class ObjectEntity
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="objectEntity", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="objectEntity", cascade={"remove"})
      * @MaxDepth(1)
      */
     private $objectValues;
