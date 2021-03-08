@@ -108,7 +108,7 @@ class Attribute
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="attribute", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="attribute", cascade={"remove"})
      * @MaxDepth(1)
      */
     private $attributeValues;
