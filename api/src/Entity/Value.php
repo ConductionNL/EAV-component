@@ -2,7 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -32,6 +37,11 @@ use Symfony\Component\Validator\Constraints as Assert;
  *  })
  * @ORM\Entity(repositoryClass="App\Repository\ValueRepository")
  * @Gedmo\Loggable(logEntryClass="Conduction\CommonGroundBundle\Entity\ChangeLog")
+ *
+ * @ApiFilter(BooleanFilter::class)
+ * @ApiFilter(OrderFilter::class)
+ * @ApiFilter(DateFilter::class, strategy=DateFilter::EXCLUDE_NULL)
+ * @ApiFilter(SearchFilter::class)
  */
 class Value
 {
@@ -45,19 +55,6 @@ class Value
      * @ORM\CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidGenerator")
      */
     private $id;
-
-    /**
-     * @var string The name of this Entity (must be slugable)
-     *
-     * @Gedmo\Versioned
-     * @Assert\Length(
-     *     max = 255
-     * )
-     * @Assert\NotNull
-     * @Groups({"read","write"})
-     * @ORM\Column(type="string", length=255)
-     */
-    private $name;
 
     // TODO:indexeren
     /**
@@ -74,9 +71,41 @@ class Value
      * @var string The actual value
      *
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $value;
+
+    /**
+     * @var integer Integer if the value is type integer
+     *
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $integerValue;
+
+    /**
+     * @var boolean Boolean if the value is type boolean
+     *
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $booleanValue;
+
+    /**
+     * @var array Array if the value is type array
+     *
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $arrayValue;
+
+    /**
+     * @var DateTime DateTime if the value is type DateTime
+     *
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateTimeValue;
 
     /**
      * @Groups({"read", "write"})
@@ -106,18 +135,6 @@ class Value
         return $this;
     }
 
-    public function getName(): ?string
-    {
-        return $this->name;
-    }
-
-    public function setName(string $name): self
-    {
-        $this->name = $name;
-
-        return $this;
-    }
-
     public function getUri(): ?string
     {
         return $this->uri;
@@ -135,9 +152,57 @@ class Value
         return $this->value;
     }
 
-    public function setValue(string $value): self
+    public function setValue(?string $value): self
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    public function getIntegerValue(): ?int
+    {
+        return $this->integerValue;
+    }
+
+    public function setIntegerValue(?int $integerValue): self
+    {
+        $this->integerValue = $integerValue;
+
+        return $this;
+    }
+
+    public function getBooleanValue(): ?bool
+    {
+        return $this->booleanValue;
+    }
+
+    public function setBooleanValue(?bool $booleanValue): self
+    {
+        $this->booleanValue = $booleanValue;
+
+        return $this;
+    }
+
+    public function getArrayValue(): ?array
+    {
+        return $this->arrayValue;
+    }
+
+    public function setArrayValue(?array $arrayValue): self
+    {
+        $this->arrayValue = $arrayValue;
+
+        return $this;
+    }
+
+    public function getDateTimeValue(): ?\DateTimeInterface
+    {
+        return $this->dateTimeValue;
+    }
+
+    public function setDateTimeValue(\DateTimeInterface $dateTimeValue): self
+    {
+        $this->dateTimeValue = $dateTimeValue;
 
         return $this;
     }

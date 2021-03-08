@@ -2,7 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,6 +34,13 @@ use Symfony\Component\Validator\Constraints as Assert;
  *  })
  * @ORM\Entity(repositoryClass="App\Repository\EntityRepository")
  * @Gedmo\Loggable(logEntryClass="Conduction\CommonGroundBundle\Entity\ChangeLog")
+ *
+ * @ApiFilter(BooleanFilter::class)
+ * @ApiFilter(OrderFilter::class)
+ * @ApiFilter(DateFilter::class, strategy=DateFilter::EXCLUDE_NULL)
+ * @ApiFilter(SearchFilter::class, properties={
+ *     "type": "exact"
+ * })
  */
 class Entity
 {
@@ -57,7 +69,7 @@ class Entity
     private $type;
 
     /**
-     * @var string The name of this Entity (must be slugable)
+     * @var string The name of this Entity
      *
      * @Gedmo\Versioned
      * @Assert\Length(
@@ -83,38 +95,40 @@ class Entity
 
     /**
      * @Groups({"read","write"})
-     * @ORM\OneToMany(targetEntity=Attribute::class, mappedBy="entity")
+     * @ORM\OneToMany(targetEntity=Attribute::class, mappedBy="entity", cascade={"persist"})
      * @MaxDepth(1)
      */
     private Collection $attributes;
 
     /**
      * @Groups({"read","write"})
-     * @ORM\OneToMany(targetEntity=Attribute::class, mappedBy="entity")
+     * @ORM\OneToMany(targetEntity=ObjectEntity::class, mappedBy="entity")
      * @MaxDepth(1)
      */
     private Collection $objectEntities;
 
     /**
-     *  @ORM\PrePersist
-     *  @ORM\PreUpdate
+     * @var Datetime The moment this request was created
      *
-     *  */
-    public function prePersist()
-    {
-        // TODO: This doesn't work as we hoped it does :(
-        // TODO: make the name slugable
-        $string = $this->name;
-        $string = trim($string); //removes whitespace at begin and ending
-        $string = preg_replace('/\s+/', '_', $string); // replaces other whitespaces with _
-        $string = strtolower($string);
+     * @Groups({"read"})
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateCreated;
 
-        $this->name = $string;
-    }
+    /**
+     * @var Datetime The moment this request last Modified
+     *
+     * @Groups({"read"})
+     * @Gedmo\Timestampable(on="update")
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $dateModified;
 
     public function __construct()
     {
         $this->attributes = new ArrayCollection();
+        $this->objectEntities = new ArrayCollection();
     }
 
     public function getId()
@@ -141,6 +155,11 @@ class Entity
 
     public function setName(string $name): self
     {
+        // lets make sure this name is slugable
+        $name = trim($name); //removes whitespace at begin and ending
+        $name = preg_replace('/\s+/', '_', $name); // replaces other whitespaces with _
+        $name = strtolower($name);
+
         $this->name = $name;
 
         return $this;
@@ -193,7 +212,7 @@ class Entity
      */
     public function getObjectEntities(): Collection
     {
-        return $this->attributes;
+        return $this->objectEntities;
     }
 
     public function addObjectEntity(ObjectEntity $objectEntity): self
@@ -214,6 +233,30 @@ class Entity
                 $objectEntity->setEntity(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDateCreated(): ?\DateTimeInterface
+    {
+        return $this->dateCreated;
+    }
+
+    public function setDateCreated(\DateTimeInterface $dateCreated): self
+    {
+        $this->dateCreated = $dateCreated;
+
+        return $this;
+    }
+
+    public function getDateModified(): ?\DateTimeInterface
+    {
+        return $this->dateModified;
+    }
+
+    public function setDateModified(\DateTimeInterface $dateModified): self
+    {
+        $this->dateModified = $dateModified;
 
         return $this;
     }

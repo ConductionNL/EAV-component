@@ -2,7 +2,12 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Core\Annotation\ApiFilter;
 use ApiPlatform\Core\Annotation\ApiResource;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -28,10 +33,41 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     },
  *  collectionOperations={
  *  	"get",
- *  	"post"
+ *      "get_objectentity"={
+ *          "method"="GET",
+ *          "path"="/object_entities/{component}/{entity}/{uuid}",
+ *          "swagger_context" = {
+ *               "summary"="Get object",
+ *               "description"="Returns the object"
+ *          }
+ *      },
+ *  	"post",
+ *      "post_objectentity"={
+ *          "method"="POST",
+ *          "path"="/object_entities/{component}/{entity}",
+ *          "swagger_context" = {
+ *              "summary"="Post object",
+ *              "description"="Returns the created object"
+ *          }
+ *      },
+ *      "post_putobjectentity"={
+ *          "method"="POST",
+ *          "path"="/object_entities/{component}/{entity}/{uuid}",
+ *          "swagger_context" = {
+ *              "summary"="Put object",
+ *              "description"="Returns the updated object"
+ *          }
+ *      },
  *  })
  * @ORM\Entity(repositoryClass="App\Repository\ObjectEntityRepository")
  * @Gedmo\Loggable(logEntryClass="Conduction\CommonGroundBundle\Entity\ChangeLog")
+ *
+ * @ApiFilter(BooleanFilter::class)
+ * @ApiFilter(OrderFilter::class)
+ * @ApiFilter(DateFilter::class, strategy=DateFilter::EXCLUDE_NULL)
+ * @ApiFilter(SearchFilter::class, properties={
+ *     "uri": "exact"
+ * })
  */
 class ObjectEntity
 {
@@ -47,17 +83,13 @@ class ObjectEntity
     private $id;
 
     /**
-     * @var string The name of this Entity (must be slugable)
+     * @var string An uri
      *
-     * @Gedmo\Versioned
-     * @Assert\Length(
-     *     max = 255
-     * )
-     * @Assert\NotNull
-     * @Groups({"read","write"})
-     * @ORM\Column(type="string", length=255)
+     * @Assert\Url
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $name;
+    private $uri;
 
     /**
      * @Groups({"read", "write"})
@@ -78,7 +110,7 @@ class ObjectEntity
         $this->objectValues = new ArrayCollection();
     }
 
-    public function getId(): Uuid
+    public function getId()
     {
         return $this->id;
     }
@@ -90,14 +122,14 @@ class ObjectEntity
         return $this;
     }
 
-    public function getName(): ?string
+    public function getUri(): ?string
     {
-        return $this->name;
+        return $this->uri;
     }
 
-    public function setName(string $name): self
+    public function setUri(string $uri): self
     {
-        $this->name = $name;
+        $this->uri = $uri;
 
         return $this;
     }
