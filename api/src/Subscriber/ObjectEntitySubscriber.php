@@ -9,6 +9,7 @@ use App\Entity\ObjectEntity;
 use App\Service\ObjectEntityService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Doctrine\ORM\EntityManagerInterface;
+use SensioLabs\Security\Exception\HttpException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
@@ -18,12 +19,14 @@ use Symfony\Component\Serializer\SerializerInterface;
 
 class ObjectEntitySubscriber implements EventSubscriberInterface
 {
+    private $em;
     private $params;
     private $commonGroundService;
     private $objectEntityService;
 
-    public function __construct(ParameterBagInterface $params, CommongroundService $commonGroundService, ObjectEntityService $objectEntityService)
+    public function __construct(EntityManagerInterface $em, ParameterBagInterface $params, CommongroundService $commonGroundService, ObjectEntityService $objectEntityService)
     {
+        $this->em = $em;
         $this->params = $params;
         $this->commonGroundService = $commonGroundService;
         $this->objectEntityService = $objectEntityService;
@@ -55,9 +58,14 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
             $this->objectEntityService->setEventVariables($componentCode, $entityName, $uuid, $body);
 
             //TODO: post_objectentity and post_putobjectentity should use the same 'handlePost' function
-            //TODO: It looks like, when doing a post_objectentity an ObjectEntity is always created, even if an error is thrown.
             if ($route == 'api_object_entities_post_objectentity_collection' && $resource instanceof ObjectEntity) {
-                $result = $this->objectEntityService->handlePost($resource);
+                try {
+                    $result = $this->objectEntityService->handlePost($resource);
+                } catch (HttpException $e) {
+                    $this->em->remove($resource);
+                    $this->em->flush();
+                    throw new HttpException($e->getMessage(), 400);
+                }
             } elseif ($route == 'api_object_entities_post_putobjectentity_collection' && $resource instanceof ObjectEntity) {
                 $result = $this->objectEntityService->handlePut($resource);
             } elseif ($route == 'api_object_entities_get_objectentity_collection') {
