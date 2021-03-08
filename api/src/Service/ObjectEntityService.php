@@ -365,7 +365,7 @@ class ObjectEntityService
                 if ($attribute->getMinLength() && strlen($bodyValue) <= $attribute->getMinLength()) {
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] is to short, minimum length is ' . $attribute->getMinLength() . ' !', 400);
                 }
-                if ($attribute->getMaxLength() && strlen($bodyValue) >= $attribute->getMaxLength()) {
+                if ($attribute->getMaxLength() && strlen($bodyValue) > $attribute->getMaxLength()) {
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] is to long, maximum length is ' . $attribute->getMaxLength() . ' !', 400);
                 }
                 break;
