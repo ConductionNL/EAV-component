@@ -356,7 +356,7 @@ class ObjectEntityService
                 if (!is_string($bodyValue)) {
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
                 }
-                if ($attribute->getMinLength() && strlen($bodyValue) <= $attribute->getMinLength()) {
+                if ($attribute->getMinLength() && strlen($bodyValue) < $attribute->getMinLength()) {
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] is to short, minimum length is ' . $attribute->getMinLength() . ' !', 400);
                 }
                 if ($attribute->getMaxLength() && strlen($bodyValue) > $attribute->getMaxLength()) {
@@ -395,7 +395,7 @@ class ObjectEntityService
                 if (!is_array($bodyValue)) {
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
                 }
-                if ($attribute->getMinItems() && count($bodyValue) <= $attribute->getMinItems()) {
+                if ($attribute->getMinItems() && count($bodyValue) < $attribute->getMinItems()) {
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] has to few items ( ' . count($bodyValue) . ' ), the minimum array length of this attribute is ' . $attribute->getMinItems() . ' !', 400);
                 }
                 if ($attribute->getMaxItems() && count($bodyValue) > $attribute->getMaxItems()) {
@@ -443,18 +443,7 @@ class ObjectEntityService
                     break;
                 case 'array-array':
                     if (is_string($bodyValue)) {
-                        // This is used for defaultValue, this is always a string type instead of an array
-                        $bodyValue = explode(";", $bodyValue);
-                        foreach ($bodyValue as &$object){
-                            $object = explode(",", $object);
-                            foreach ($object as $key => $keyValue) {
-                                $keyValue = explode(":",$keyValue);
-                                if (is_array($keyValue) && count($keyValue) > 1) {
-                                    unset($object[$key]);
-                                    $object[$keyValue[0]] = $keyValue[1];
-                                }
-                            }
-                        }
+                        $bodyValue = $this->createArrayFromString($bodyValue);
                     }
                     $value->setArrayValue($bodyValue);
                     break;
@@ -521,5 +510,26 @@ class ObjectEntityService
         }
 
         return true;
+    }
+
+    private function createArrayFromString($bodyValue){
+        if (is_string($bodyValue) ) {
+            if (strpos($bodyValue, ";")){
+                $bodyValue = explode(";", $bodyValue);
+                foreach ($bodyValue as &$object) {
+                    $object = $this->createArrayFromString($object);
+                }
+            } else {
+                $bodyValue = explode(",", $bodyValue);
+                foreach ($bodyValue as $key => $keyValue) {
+                    if (strpos($keyValue, ":")){
+                        $keyValue = explode(":",$keyValue);
+                        unset($bodyValue[$key]);
+                        $bodyValue[$keyValue[0]] = $keyValue[1];
+                    }
+                }
+            }
+        }
+        return $bodyValue;
     }
 }
