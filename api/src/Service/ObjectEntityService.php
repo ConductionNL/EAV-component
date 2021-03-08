@@ -5,7 +5,6 @@ namespace App\Service;
 use App\Entity\Attribute;
 use App\Entity\ObjectEntity;
 use App\Entity\Value;
-use App\Repository\ValueRepository;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Doctrine\ORM\EntityManagerInterface;
 use Ramsey\Uuid\Uuid;
@@ -65,12 +64,18 @@ class ObjectEntityService
             throw new HttpException('This entity '.$this->componentCode . '/' . $this->entityName.' has no attributes!', 400);
         }
 
+        if ($this->componentCode != 'eav' && isset($this->body['@self'])) {
+            // Get existing object with @self
+            $object = $this->commonGroundService->getResource($this->body['@self']);
+        } else {
+            $object = [];
+        }
+
         // Create the @id uri for the values
         $uri = $this->createUri($id);
 
         // Compare Post ($this->)body to the Attributes :
         $values = [];
-        $object = [];
         foreach ($this->body as $key => $bodyValue) {
             // TODO:something about this:
             if ($key == '@type' || $key == '@self') {
@@ -80,10 +85,8 @@ class ObjectEntityService
             foreach ($attributes as $attribute) {
                 if ($attribute->getName() == $key) {
                     $foundAttribute = true;
-                    // Create the value
-                    $value = $this->saveValue($objectEntity, $attribute, $bodyValue, $uri);
-
-                    $values[$attribute->getName()] = $this->getValue($attribute, $value);
+                    // Check the value
+                    $values = $this->checkValue($values, $attribute, $bodyValue);
                 }
             }
             if (!$foundAttribute) {
@@ -91,6 +94,32 @@ class ObjectEntityService
                     throw new HttpException('The entity ' . $this->componentCode . '/' . $this->entityName . ' has no attribute for ' . $key . ' !', 400);
                 } else {
                     $object[$key] = $bodyValue;
+                }
+            }
+        }
+
+        // Create the values if no errors where thrown when checking them ^
+        foreach ($values as $key => $value) {
+            $value = $this->saveValue($objectEntity, $value['attribute'], $value['value'], $uri);
+
+            $values[$key] = $this->getValue($value->getAttribute(), $value);
+        }
+
+        $bodyValues = array_keys($values);
+        foreach ($attributes as $attribute) {
+            // If the attribute is not set in the body
+            if (!in_array($attribute->getName(), $bodyValues)){
+                // Check if it has a default value
+                if ($attribute->getDefaultValue()) {
+                    $value = $this->saveValue($objectEntity, $attribute, $attribute->getDefaultValue(), $uri);
+
+                    $values[$attribute->getName()] = $this->getValue($attribute, $value);
+                } elseif ($attribute->getNullable()) {
+                    $value = $this->saveValue($objectEntity, $attribute, null, $uri);
+
+                    $values[$attribute->getName()] = $this->getValue($attribute, $value);
+                } elseif ($attribute->getRequired()){
+                    throw new HttpException('The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] that is required!', 400);
                 }
             }
         }
@@ -170,13 +199,11 @@ class ObjectEntityService
                 if ($attribute->getName() == $key) {
                     $foundAttribute = true;
 
-                    // Find the correct values
+                    // Find the correct values TODO:just get them from the $objectEntity?
                     foreach ($attribute->getAttributeValues() as $value) {
                         if ($value->getUri() == $uri) {
                             // Update the value
-                            $value = $this->saveValue($objectEntity, $attribute, $bodyValue, $uri);
-
-                            $values[$attribute->getName()] = $this->getValue($attribute, $value);
+                            $values = $this->checkValue($values, $attribute, $bodyValue);
                         }
                     }
                 }
@@ -194,7 +221,33 @@ class ObjectEntityService
             throw new HttpException('No values found with this uuid '.$id, 400);
         }
 
-        // Check component code and if it is not EAV also create/update the normal object.
+        // Update the values if no errors where thrown when checking them ^
+        foreach ($values as $key => $value) {
+            $value = $this->saveValue($objectEntity, $value['attribute'], $value['value'], $uri);
+
+            $values[$key] = $this->getValue($value->getAttribute(), $value);
+        }
+
+        $bodyValues = array_keys($values);
+        foreach ($attributes as $attribute) {
+            // If the attribute is not set in the body
+            if (!in_array($attribute->getName(), $bodyValues)){
+                // Check if it has a default value
+                if ($attribute->getDefaultValue()) {
+                    $value = $this->saveValue($objectEntity, $attribute, $attribute->getDefaultValue(), $uri);
+
+                    $values[$attribute->getName()] = $this->getValue($attribute, $value);
+                } elseif ($attribute->getNullable()) {
+                    $value = $this->saveValue($objectEntity, $attribute, null, $uri);
+
+                    $values[$attribute->getName()] = $this->getValue($attribute, $value);
+                } elseif ($attribute->getRequired()){
+                    throw new HttpException('The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] that is required!', 400);
+                }
+            }
+        }
+
+        // Check component code and if it is not EAV also update the normal object.
         if ($this->componentCode != 'eav') {
             $response = $this->commonGroundService->updateResource($object, $objectEntity->getUri());
         } else {
@@ -281,6 +334,41 @@ class ObjectEntityService
         return $response;
     }
 
+    private function checkValue($values, Attribute $attribute, $bodyValue)
+    {
+        $exceptionMessage = '';
+
+        $typeFormat = $attribute->getType() . '-' . $attribute->getFormat();
+        switch ($typeFormat) {
+            case 'string-string':
+                if ($attribute->getEnum()) {
+                    $inEnum = false;
+                    foreach ($attribute->getEnum() as $enumValue) {
+                        if ($enumValue == $bodyValue){
+                            $inEnum = true;
+                            break;
+                        }
+                    }
+                    if (!$inEnum) {
+                        $exceptionMessage ='Attribute: [' . $attribute->getName() . '] must be one of the following values: [' . implode( ", ", $attribute->getEnum() ) . '] !';
+                    }
+                }
+                break;
+            case 'number-number': //TODO: 'number' is probably for numbers other than integer?
+            case 'boolean-boolean':
+            case 'array-array':
+            case 'integer-integer':
+                break;
+            default:
+                $exceptionMessage = 'The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] with an unknown type-format combination: [' . $typeFormat . '] !';
+        }
+        if ($exceptionMessage != ''){
+            throw new HttpException($exceptionMessage, 400);
+        }
+        $values[$attribute->getName()] = ['attribute'=>$attribute, 'value'=>$bodyValue];
+        return $values;
+    }
+
     private function saveValue(ObjectEntity $objectEntity, Attribute $attribute, $bodyValue, $uri)
     {
         $value = new Value();
@@ -303,8 +391,6 @@ class ObjectEntityService
             case 'array-array':
                 $value->setArrayValue($bodyValue);
                 break;
-            default:
-                throw new HttpException('The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] with an unknown type-format combination: [' . $typeFormat . '] !', 400);
         }
 
         $this->em->persist($value);
