@@ -334,22 +334,13 @@ class ObjectEntityService
         $typeFormat = $attribute->getType() . '-' . $attribute->getFormat();
 
         // Check if attribute has an enum and if so check if the bodyValue equals one of the enumValues
-        if ($attribute->getEnum()) {
-            $inEnum = false;
-            foreach ($attribute->getEnum() as $enumValue) {
-                if ($enumValue == $bodyValue){
-                    $inEnum = true;
-                    break;
-                }
+        if ($attribute->getEnum() && !in_array($bodyValue, $attribute->getEnum())) {
+            if ($typeFormat == 'array-array' || $typeFormat == 'boolean-boolean'){
+                $enumValues = json_encode($attribute->getEnum());
+            } else {
+                $enumValues = '[' . implode( ", ", $attribute->getEnum() ) . ']';
             }
-            if (!$inEnum) {
-                if ($typeFormat == 'array-array'){
-                    $enumValues = json_encode($attribute->getEnum());
-                } else {
-                    $enumValues = '[' . implode( ", ", $attribute->getEnum() ) . ']';
-                }
-                throw new HttpException('Attribute: [' . $attribute->getName() . '] must be one of the following values: ' . $enumValues . ' !', 400);
-            }
+            throw new HttpException('Attribute: [' . $attribute->getName() . '] must be one of the following values: ' . $enumValues . ' !', 400);
         }
 
         // Check if the value is null and if so if this is allowed or not
@@ -362,6 +353,9 @@ class ObjectEntityService
         // Do checks for attribute depending on its type-format
         switch ($typeFormat) {
             case 'string-string':
+                if (!is_string($bodyValue)) {
+                    throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
+                }
                 if ($attribute->getMinLength() && strlen($bodyValue) <= $attribute->getMinLength()) {
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] is to short, minimum length is ' . $attribute->getMinLength() . ' !', 400);
                 }
@@ -371,10 +365,45 @@ class ObjectEntityService
                 break;
             case 'number-number': //TODO: 'number' is probably for numbers other than integer?
             case 'integer-integer':
+                if (!is_integer($bodyValue)) {
+                    throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
+                }
+                if ($attribute->getMinimum()) {
+                    if ($attribute->getExclusiveMinimum() && $bodyValue <= $attribute->getMinimum()) {
+                        throw new HttpException('Attribute: [' . $attribute->getName() . '] must be higher than ' . $attribute->getMinimum() . ' !', 400);
+                    } elseif ($bodyValue < $attribute->getMinimum()) {
+                        throw new HttpException('Attribute: [' . $attribute->getName() . '] must be ' . $attribute->getMinimum() . ' or higher!', 400);
+                    }
+                }
+                if ($attribute->getMaximum()) {
+                    if ($attribute->getExclusiveMaximum() && $bodyValue >= $attribute->getMaximum()) {
+                        throw new HttpException('Attribute: [' . $attribute->getName() . '] must be lower than ' . $attribute->getMaximum() . ' !', 400);
+                    } elseif ($bodyValue > $attribute->getMaximum()) {
+                        throw new HttpException('Attribute: [' . $attribute->getName() . '] must be ' . $attribute->getMaximum() . ' or lower!', 400);
+                    }
+                }
+                if ($attribute->getMultipleOf() && $bodyValue % $attribute->getMultipleOf() != 0) {
+                    throw new HttpException('Attribute: [' . $attribute->getName() . '] must be a multiple of ' . $attribute->getMultipleOf() . ', ' . $bodyValue . ' is not a multiple of ' . $attribute->getMultipleOf() . ' !', 400);
+                }
                 break;
             case 'boolean-boolean':
+                if (!is_bool($bodyValue)) {
+                    throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
+                }
                 break;
             case 'array-array':
+                if (!is_array($bodyValue)) {
+                    throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
+                }
+                if ($attribute->getMinItems() && count($bodyValue) <= $attribute->getMinItems()) {
+                    throw new HttpException('Attribute: [' . $attribute->getName() . '] has to few items ( ' . count($bodyValue) . ' ), the minimum array length of this attribute is ' . $attribute->getMinItems() . ' !', 400);
+                }
+                if ($attribute->getMaxItems() && count($bodyValue) > $attribute->getMaxItems()) {
+                    throw new HttpException('Attribute: [' . $attribute->getName() . '] has to many items ( ' . count($bodyValue) . ' ), the maximum array length of this attribute is ' . $attribute->getMaxItems() . ' !', 400);
+                }
+                if ($attribute->getUniqueItems() && count($bodyValue) !== count(array_unique($bodyValue))) {
+                    throw new HttpException('Attribute: [' . $attribute->getName() . '] must be an array of unique items!', 400);
+                }
                 break;
             case 'datetime-datetime':
                 break;
@@ -407,12 +436,14 @@ class ObjectEntityService
                     break;
                 case 'boolean-boolean':
                     if (is_string($bodyValue)) {
+                        // This is used for defaultValue, this is always a string type instead of a boolean
                         $bodyValue = $bodyValue === 'true';
                     }
                     $value->setBooleanValue($bodyValue);
                     break;
                 case 'array-array':
                     if (is_string($bodyValue)) {
+                        // This is used for defaultValue, this is always a string type instead of an array
                         $bodyValue = explode(";", $bodyValue);
                         foreach ($bodyValue as &$object){
                             $object = explode(",", $object);

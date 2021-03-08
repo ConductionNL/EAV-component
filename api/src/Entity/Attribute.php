@@ -203,7 +203,7 @@ class Attribute
     private $maxItems;
 
     /**
-     * @var string *Can only be used in combination with type array* The minimum allowed value
+     * @var string *Can only be used in combination with type array* The minimum array length
      *
      * @example 2
      *
