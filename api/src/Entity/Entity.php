@@ -95,14 +95,14 @@ class Entity
 
     /**
      * @Groups({"read","write"})
-     * @ORM\OneToMany(targetEntity=Attribute::class, mappedBy="entity", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=Attribute::class, mappedBy="entity", cascade={"persist", "remove"})
      * @MaxDepth(1)
      */
     private Collection $attributes;
 
     /**
      * @Groups({"read","write"})
-     * @ORM\OneToMany(targetEntity=ObjectEntity::class, mappedBy="entity")
+     * @ORM\OneToMany(targetEntity=ObjectEntity::class, mappedBy="entity", cascade={"remove"})
      * @MaxDepth(1)
      */
     private Collection $objectEntities;

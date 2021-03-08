@@ -61,6 +61,7 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
             if ($route == 'api_object_entities_post_objectentity_collection' && $resource instanceof ObjectEntity) {
                 try {
                     $result = $this->objectEntityService->handlePost($resource);
+                    $responseType = Response::HTTP_CREATED;
                 } catch (HttpException $e) {
                     $this->em->remove($resource);
                     $this->em->flush();
@@ -68,13 +69,15 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                 }
             } elseif ($route == 'api_object_entities_post_putobjectentity_collection' && $resource instanceof ObjectEntity) {
                 $result = $this->objectEntityService->handlePut($resource);
+                $responseType = Response::HTTP_CREATED;
             } elseif ($route == 'api_object_entities_get_objectentity_collection') {
                 $result = $this->objectEntityService->handleGet();
+                $responseType = Response::HTTP_OK;
             }
 
             $response = new Response(
                 json_encode($result),
-                Response::HTTP_OK,
+                $responseType,
                 ['content-type' => 'application/json']
             );
             $event->setResponse($response);
