@@ -423,7 +423,7 @@ class ObjectEntityService
         $value->setUri($uri);
 
         // If the attribute is nullable just set no value so it is null
-        if (!empty($bodyValue)) {
+        if (!is_null($bodyValue)) {
             // Get attribute type and format
             $typeFormat = $attribute->getType() . '-' . $attribute->getFormat();
             switch ($typeFormat) {
