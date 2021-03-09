@@ -68,7 +68,11 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                     throw new HttpException($e->getMessage(), 400);
                 }
             } elseif ($route == 'api_object_entities_post_putobjectentity_collection' && $resource instanceof ObjectEntity) {
-                $result = $this->objectEntityService->handlePut($resource);
+                // Lets not create a new ObjectEntity every time we do a put!
+                $this->em->remove($resource);
+                $this->em->flush();
+
+                $result = $this->objectEntityService->handlePut();
                 $responseType = Response::HTTP_CREATED;
             } elseif ($route == 'api_object_entities_get_objectentity_collection') {
                 $result = $this->objectEntityService->handleGet();
