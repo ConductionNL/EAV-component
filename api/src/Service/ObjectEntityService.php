@@ -383,8 +383,17 @@ class ObjectEntityService
                 if ($attribute->getMaxItems() && count($bodyValue) > $attribute->getMaxItems()) {
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] has to many items ( ' . count($bodyValue) . ' ), the maximum array length of this attribute is ' . $attribute->getMaxItems() . ' !', 400);
                 }
-                if ($attribute->getUniqueItems() && count($bodyValue) !== count(array_unique($bodyValue))) {
-                    throw new HttpException('Attribute: [' . $attribute->getName() . '] must be an array of unique items!', 400);
+                if ($attribute->getUniqueItems() && count(array_filter(array_keys($bodyValue), 'is_string')) == 0) {
+                    // TODO:check this in another way so all kinds of arrays work with it.
+                    $containsStringKey = false;
+                    foreach ($bodyValue as $arrayItem) {
+                        if (is_array($arrayItem) && count(array_filter(array_keys($arrayItem), 'is_string')) > 0){
+                            $containsStringKey = true; break;
+                        }
+                    }
+                    if (!$containsStringKey && count($bodyValue) !== count(array_unique($bodyValue))) {
+                        throw new HttpException('Attribute: [' . $attribute->getName() . '] must be an array of unique items!', 400);
+                    }
                 }
                 break;
             case 'datetime-datetime':
