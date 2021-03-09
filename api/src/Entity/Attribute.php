@@ -104,7 +104,7 @@ class Attribute
      * @ORM\ManyToOne(targetEntity=Entity::class, inversedBy="attributes")
      * @MaxDepth(1)
      */
-    private ?Entity $entity;
+    private $entity;
 
     /**
      * @Groups({"read", "write"})

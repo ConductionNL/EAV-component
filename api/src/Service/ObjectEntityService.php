@@ -493,7 +493,7 @@ class ObjectEntityService
         $uri .= $_SERVER['HTTP_HOST'];
         // if not localhost add /api/v1 ?
         if ($_SERVER['HTTP_HOST'] != 'localhost') {
-            $uri .= '/api/v1';
+            $uri .= '/api/v1/eav';
         }
         return $uri . '/object_entities/' . $this->componentCode . '/' . $this->entityName . '/' . $id;
     }
