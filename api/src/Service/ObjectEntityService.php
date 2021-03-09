@@ -123,15 +123,16 @@ class ObjectEntityService
             $response = $this->commonGroundService->saveResource($object, ['component' => $this->componentCode, 'type' => $this->entityName]);
         } else {
             $response['@context'] = '/contexts/' . ucfirst($this->entityName);
+            $response['@id'] = $uri;
         }
+        $objectEntity->setUri($response['@id']);
+        $this->em->persist($objectEntity);
+        $this->em->flush();
+
         $response['@id'] = $uri;
         $response['@self'] = $uri;
         $response['@type'] = ucfirst($this->entityName);
         $response['id'] = $id;
-
-        $objectEntity->setUri($response['@id']);
-        $this->em->persist($objectEntity);
-        $this->em->flush();
 
         $response = array_merge($response, $values);
 
