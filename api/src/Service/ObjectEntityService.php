@@ -198,7 +198,7 @@ class ObjectEntityService
                     foreach ($attribute->getAttributeValues() as $value) {
                         if ($value->getUri() == $uri) {
                             // Update the value
-                            $values = $this->checkValue($values, $attribute, $bodyValue);
+                            $values = $this->checkValue($values, $attribute, $bodyValue, $value);
                         }
                     }
                 }
@@ -218,28 +218,9 @@ class ObjectEntityService
 
         // Update the values if no errors where thrown when checking them ^
         foreach ($values as $key => $value) {
-            $value = $this->saveValue($objectEntity, $value['attribute'], $value['value'], $uri);
+            $value = $this->saveValue($objectEntity, $value['attribute'], $value['value'], $uri, $value['valueObject']);
 
             $values[$key] = $this->getValue($value->getAttribute(), $value);
-        }
-
-        $bodyValues = array_keys($values);
-        foreach ($attributes as $attribute) {
-            // If the attribute is not set in the body
-            if (!in_array($attribute->getName(), $bodyValues)){
-                // Check if it has a default value
-                if ($attribute->getDefaultValue()) {
-                    $value = $this->saveValue($objectEntity, $attribute, $attribute->getDefaultValue(), $uri);
-
-                    $values[$attribute->getName()] = $this->getValue($attribute, $value);
-                } elseif ($attribute->getNullable()) {
-                    $value = $this->saveValue($objectEntity, $attribute, null, $uri);
-
-                    $values[$attribute->getName()] = $this->getValue($attribute, $value);
-                } elseif ($attribute->getRequired()){
-                    throw new HttpException('The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] that is required!', 400);
-                }
-            }
         }
 
         // Check component code and if it is not EAV also update the normal object.
@@ -329,7 +310,7 @@ class ObjectEntityService
         return $response;
     }
 
-    private function checkValue($values, Attribute $attribute, $bodyValue)
+    private function checkValue($values, Attribute $attribute, $bodyValue, Value $valueObject = null)
     {
         // Get attribute type and format
         $typeFormat = $attribute->getType() . '-' . $attribute->getFormat();
@@ -413,12 +394,19 @@ class ObjectEntityService
         }
 
         $values[$attribute->getName()] = ['attribute'=>$attribute, 'value'=>$bodyValue];
+        if (isset($valueObject)){
+            $values[$attribute->getName()]['valueObject'] = $valueObject;
+        }
         return $values;
     }
 
-    private function saveValue(ObjectEntity $objectEntity, Attribute $attribute, $bodyValue, $uri)
+    private function saveValue(ObjectEntity $objectEntity, Attribute $attribute, $bodyValue, $uri, Value $valueObject = null)
     {
-        $value = new Value();
+        if (isset($valueObject)){
+            $value = $valueObject;
+        } else {
+            $value = new Value();
+        }
         $value->setObjectEntity($objectEntity);
         $value->setAttribute($attribute);
         $value->setUri($uri);
