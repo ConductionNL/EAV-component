@@ -1,18 +1,18 @@
 openapi: 3.0.2
 info:
-  title: 'EAV Component'
+  title: ''
   version: V1.0
   description: |
     API Details
-    - Component: EAV Component
-    - Reference: eav
+    - Component: 
+    - Reference: eav-component
     - Enviroment: dev
     - Version: V1.0
     - Repository: [online](https://github.com/ConductionNL/EAV-component) / [zip](https://github.com/ConductionNL/EAV-component/archive/master.zip)
-    - Docker Image: [online](https://hub.docker.com/repository/docker/conduction/eav-php) 
-    - Datamodel: [postman](schema/eav.postman_collection.json) / [oas](schema/openapi.yaml) / [pdf](schema/datamodel.pdf) / [modelio (zip)](schema/Datamodel_Modelio.zip) 
+    - Docker Image: [online]() 
+    - Datamodel: [postman](schema/eav-component.postman_collection.json) / [oas](schema/openapi.yaml) / [pdf](schema/datamodel.pdf) / [modelio (zip)](schema/Datamodel_Modelio.zip) 
     
-    Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.         
+    &#039;Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.&#039;         
     
 paths:
   /attributes:
@@ -6173,7 +6173,7 @@ components:
           type: integer
           nullable: true
         minItems:
-          description: '*Can only be used in combination with type array* The minimum allowed value'
+          description: '*Can only be used in combination with type array* The minimum array length'
           type: integer
           nullable: true
         uniqueItems:
@@ -6310,7 +6310,7 @@ components:
           type: integer
           nullable: true
         minItems:
-          description: '*Can only be used in combination with type array* The minimum allowed value'
+          description: '*Can only be used in combination with type array* The minimum array length'
           type: integer
           nullable: true
         uniqueItems:
@@ -6445,7 +6445,7 @@ components:
           type: integer
           nullable: true
         minItems:
-          description: '*Can only be used in combination with type array* The minimum allowed value'
+          description: '*Can only be used in combination with type array* The minimum array length'
           type: integer
           nullable: true
         uniqueItems:
@@ -6591,7 +6591,7 @@ components:
           type: integer
           nullable: true
         minItems:
-          description: '*Can only be used in combination with type array* The minimum allowed value'
+          description: '*Can only be used in combination with type array* The minimum array length'
           type: integer
           nullable: true
         uniqueItems:
@@ -7522,7 +7522,7 @@ definitions:
         type: string
         example: '2'
       minItems:
-        description: '*Can only be used in combination with type array* The minimum allowed value'
+        description: '*Can only be used in combination with type array* The minimum array length'
         type: string
         example: '2'
       uniqueItems:
@@ -7642,7 +7642,7 @@ definitions:
         type: string
         example: '2'
       minItems:
-        description: '*Can only be used in combination with type array* The minimum allowed value'
+        description: '*Can only be used in combination with type array* The minimum array length'
         type: string
         example: '2'
       uniqueItems:
@@ -7863,12 +7863,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-08 13:35:46'
+        example: '2021-03-09 10:34:36'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-08 13:35:46'
+        example: '2021-03-09 10:34:36'
     required: []
   ChangeLog-write:
     properties:
@@ -7982,12 +7982,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-08 13:35:46'
+        example: '2021-03-09 10:34:36'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-08 13:35:46'
+        example: '2021-03-09 10:34:36'
     required: []
   AuditTrail-write:
     properties:
@@ -8053,7 +8053,7 @@ host: irc.zaakonline.nl
 servers:
   -
     name: taalhuizen-bisc.commonground.nu
-    url: eav.dev.taalhuizen-bisc.commonground.nu
+    url: eav-component.dev.taalhuizen-bisc.commonground.nu
 externalDocs:
   -
     description: 'OAS Documentatie'
