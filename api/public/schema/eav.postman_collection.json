@@ -227,7 +227,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"type\":\"eav/test\",\n    \"name\":\"test\"\n}"
+							"raw": "{\n    \"type\":\"eav/test\",\n    \"name\":\"test\",\n    \"entities\":[]\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/entities",
@@ -2675,7 +2675,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"@type\":\"test-doetnogniks\",\n    \"@self\":\"localhost/eav/test/eenuuidhier-doetnogniks\",\n    \"lievelingskleur\":\"rood\",\n    \"lievelingsnummer\": 2,\n    \"eenboolean\": false,\n    \"testarray\": [\n        {\n            \"hoi\":\"test\",\n            \"blabla\":\"test2\"\n        },\n        {\n            \"hoi\":\"doei\",\n            \"oke\":\"nee\"\n        }\n    ],\n    \"lievelingsdier\":\"kat\"\n}"
+							"raw": "{\n    \"@type\":\"test-doetnogniks\",\n    \"@self\":\"localhost/eav/test/eenuuidhier-doetnogniks\",\n    \"lievelingsdier\":\"kat\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/object_entities/eav/test",
@@ -3122,7 +3122,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"@type\":\"test-doetnogniks\",\n    \"@self\":\"http://localhost/object_entities/eav/test/{{object_entity2}}\",\n    \"lievelingskleur\":\"blauw\",\n    \"lievelingsnummer\": 3,\n    \"eenboolean\": true,\n    \"testarray\": [\n        {\n            \"hoi\":\"oke\",\n            \"blabla\":\"test\"\n        }\n    ],\n    \"lievelingsdier\":\"hond\"\n}"
+							"raw": "{\n    \"@type\":\"test-doetnogniks\",\n    \"@self\":\"http://localhost/object_entities/eav/test/{{object_entity2}}\",\n    \"lievelingsdier\":\"hond\"\n}"
 						},
 						"url": {
 							"raw": "{{baseUrl}}/object_entities/eav/test/{{object_entity2}}",
