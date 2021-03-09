@@ -140,7 +140,7 @@ class ObjectEntityService
     }
 
     // TODO: needs a merge with handlePost function
-    public function handlePut(ObjectEntity $objectEntity) {
+    public function handlePut() {
         // Check if there is a uuid set
         if (isset($this->uuid) && $this->isValidUuid($this->uuid)) {
             $id = $this->uuid;
