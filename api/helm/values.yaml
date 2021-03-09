@@ -4,20 +4,23 @@
 
 settings:
   registryBase: docker.io/conduction
-  projectName: eav
-  name: eav
+  projectName: eav-component
+  name: eav-component
   version: V1.0
-  description: 'Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.'
+  majorVersion: v1
+  description: '&amp;#039;Naast deze JSON rest API is er ook een [graphql](/graphql) interface beschikbaar.&amp;#039;'
   repro: https://github.com/ConductionNL/EAV-component
   demo: eav.zaakonline.nl
   domain: taalhuizen-bisc.commonground.nu
-  subdomain: eav
+  subdomain: eav-component
   subpath: eav
   subpathRouting: true
   env: dev
   web: false
   debug: 1
   cache: false
+  type: component
+  id: 
   replicaCount: 1
   corsAllowOrigin: ['*']
   trustedHosts: '^.+$'
@@ -48,6 +51,18 @@ php:
   env: prod
   secret: ""
   replicaCount: 2
+
+redis:
+  cluster:
+    enabled: false
+  redisPort: 6379
+  usePassword: false
+  enabled: false
+commonground:
+  eherkenning:
+    location: https://taalhuizen-bisc.commonground.nu/eherkenning
+  digispoof:
+    location: https://taalhuizen-bisc.commonground.nu/digispoof
 
 nginx:
   repository: docker.io/conduction/protocomponent-nginx
