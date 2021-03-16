@@ -37,7 +37,15 @@ use Symfony\Component\Validator\Constraints as Assert;
  *          "method"="GET",
  *          "path"="/object_entities/{component}/{entity}/{uuid}",
  *          "swagger_context" = {
- *               "summary"="Get object",
+ *               "summary"="Get object with objectEntity id",
+ *               "description"="Returns the object"
+ *          }
+ *      },
+ *     "get_uriobjectentity"={
+ *          "method"="GET",
+ *          "path"="/object_entities/{component}/{entity}",
+ *          "swagger_context" = {
+ *               "summary"="Get object with objectEntity uri",
  *               "description"="Returns the object"
  *          }
  *      },

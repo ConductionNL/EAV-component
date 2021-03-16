@@ -31,18 +31,18 @@ class ObjectEntityService
         $this->params = $params;
     }
 
-    public function setEventVariables($componentCode, $entityName, $uuid, $body)
+    public function setEventVariables($body, $entityName, $uuid, $componentCode)
     {
-        $this->componentCode = $componentCode;
+        $this->body = $body;
         $this->entityName = $entityName;
         $this->uuid = $uuid;
-        $this->body = $body;
+        $this->componentCode = $componentCode;
     }
 
     // TODO: needs a merge with handlePut function
     public function handlePost(ObjectEntity $objectEntity)
     {
-        // Create a new uuid
+        // Get the uuid
         $id = $objectEntity->getId();
 
         // Check if entity exists
@@ -121,16 +121,17 @@ class ObjectEntityService
         // Check component code and if it is not EAV also create/update the normal object.
         if ($this->componentCode != 'eav') {
             $response = $this->commonGroundService->saveResource($object, ['component' => $this->componentCode, 'type' => $this->entityName]);
+            $response['@self'] = $response['@id'];
         } else {
             $response['@context'] = '/contexts/' . ucfirst($this->entityName);
             $response['@id'] = $uri;
+            $response['@self'] = $uri;
         }
         $objectEntity->setUri($response['@id']);
         $this->em->persist($objectEntity);
         $this->em->flush();
 
         $response['@id'] = $uri;
-        $response['@self'] = $uri;
         $response['@type'] = ucfirst($this->entityName);
         $response['id'] = $id;
 
@@ -144,10 +145,8 @@ class ObjectEntityService
         // Check if there is a uuid set
         if (isset($this->uuid) && $this->isValidUuid($this->uuid)) {
             $id = $this->uuid;
-        } elseif (isset($this->body['id']) && $this->isValidUuid($this->body['id'])) {
-            $id = $this->body['id'];
-        } else {
-            throw new HttpException('No valid uuid found!', 400);
+        } elseif (!isset($this->body['@self'])) {
+            throw new HttpException('No @self or valid uuid found!', 400);
         }
 
         // Get entity using the entity name as type
@@ -177,6 +176,7 @@ class ObjectEntityService
             }
             $objectEntity = $object;
         }
+        $id = $objectEntity->getId(); // important!
 
         // Now create the uri for the values
         $uri = $this->createUri($id);
@@ -226,11 +226,12 @@ class ObjectEntityService
         // Check component code and if it is not EAV also update the normal object.
         if ($this->componentCode != 'eav') {
             $response = $this->commonGroundService->updateResource($object, $objectEntity->getUri());
+            $response['@self'] = $response['@id'];
         } else {
             $response['@context'] = '/contexts/' . ucfirst($this->entityName);
+            $response['@self'] = $uri;
         }
         $response['@id'] = $uri;
-        $response['@self'] = $uri;
         $response['@type'] = ucfirst($this->entityName);
         $response['id'] = $id;
 
@@ -244,10 +245,8 @@ class ObjectEntityService
         // Check if there is a uuid set
         if (isset($this->uuid) && $this->isValidUuid($this->uuid)) {
             $id = $this->uuid;
-        } elseif (isset($this->body['id']) && $this->isValidUuid($this->body['id'])) {
-            $id = $this->body['id'];
-        } else {
-            throw new HttpException('No valid uuid found!', 400);
+        } elseif (!isset($this->body['@self'])) {
+            throw new HttpException('No @self or valid uuid found!', 400);
         }
 
         // Get entity using the entity name as type
@@ -277,6 +276,7 @@ class ObjectEntityService
             }
             $objectEntity = $object;
         }
+        $id = $objectEntity->getId(); // important!
 
         // Now create the uri
         $uri = $this->createUri($id);
@@ -294,14 +294,15 @@ class ObjectEntityService
             throw new HttpException('No values found with this uuid '.$id, 400);
         }
 
-        // Check component code and if it is not EAV also create/update the normal object.
+        // Check component code and if it is not EAV also get the normal object.
         if ($this->componentCode != 'eav') {
             $response = $this->commonGroundService->getResource($objectEntity->getUri());
+            $response['@self'] = $response['@id'];
         } else {
             $response['@context'] = '/contexts/' . ucfirst($this->entityName);
+            $response['@self'] = $uri;
         }
         $response['@id'] = $uri;
-        $response['@self'] = $uri;
         $response['@type'] = ucfirst($this->entityName);
         $response['id'] = $id;
 
