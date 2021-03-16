@@ -5,6 +5,7 @@ namespace App\Subscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Component;
+use App\Entity\ObjectCommunication;
 use App\Entity\ObjectEntity;
 use App\Service\ObjectEntityService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
@@ -41,21 +42,22 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
 
     public function objectEntity(ViewEvent $event)
     {
-        $method = $event->getRequest()->getMethod();
-        $contentType = $event->getRequest()->headers->get('accept');
+//        $method = $event->getRequest()->getMethod();
+//        $contentType = $event->getRequest()->headers->get('accept');
         $route = $event->getRequest()->attributes->get('_route');
         $resource = $event->getControllerResult();
 
         if ($route == 'api_object_entities_post_objectentity_collection'
             || $route == 'api_object_entities_post_putobjectentity_collection'
-            || $route == 'api_object_entities_get_objectentity_collection')
+            || $route == 'api_object_entities_get_objectentity_collection'
+            || $route == 'api_object_entities_get_uriobjectentity_collection')
         {
             $componentCode = $event->getRequest()->attributes->get("component");
             $entityName = $event->getRequest()->attributes->get("entity");
             $uuid = $event->getRequest()->attributes->get("uuid");
             $body = json_decode($event->getRequest()->getContent(), true);
 
-            $this->objectEntityService->setEventVariables($componentCode, $entityName, $uuid, $body);
+            $this->objectEntityService->setEventVariables($body, $entityName, $uuid, $componentCode);
 
             //TODO: post_objectentity and post_putobjectentity should use the same 'handlePost' function
             if ($route == 'api_object_entities_post_objectentity_collection' && $resource instanceof ObjectEntity) {
@@ -63,6 +65,7 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                     $result = $this->objectEntityService->handlePost($resource);
                     $responseType = Response::HTTP_CREATED;
                 } catch (HttpException $e) {
+                    // Lets not create a new ObjectEntity when we get an error!
                     $this->em->remove($resource);
                     $this->em->flush();
                     throw new HttpException($e->getMessage(), 400);
@@ -74,7 +77,67 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
 
                 $result = $this->objectEntityService->handlePut();
                 $responseType = Response::HTTP_CREATED;
-            } elseif ($route == 'api_object_entities_get_objectentity_collection') {
+            } elseif ($route == 'api_object_entities_get_objectentity_collection' || $route == 'api_object_entities_get_uriobjectentity_collection') {
+                $result = $this->objectEntityService->handleGet();
+                $responseType = Response::HTTP_OK;
+            }
+
+            $response = new Response(
+                json_encode($result),
+                $responseType,
+                ['content-type' => 'application/json']
+            );
+            $event->setResponse($response);
+        } elseif ($route == 'api_object_communications_post_collection'
+            || $route == 'api_object_communications_get_collection')
+        {
+            $body = json_decode($event->getRequest()->getContent(), true);
+
+            $componentCode = 'eav';
+            $uuid = null;
+
+            if (isset($body['componentCode'])) {
+                $componentCode = $body['componentCode'];
+                unset($body['componentCode']);
+            }
+            if (isset($body['entityName'])) {
+                $entityName = $body['entityName'];
+                unset($body['entityName']);
+            } else {
+                throw new HttpException('No entityName given!', 400);
+            }
+            if (isset($body['objectEntityId'])) {
+                $uuid = $body['objectEntityId'];
+                unset($body['objectEntityId']);
+            }
+
+            $this->objectEntityService->setEventVariables($body, $entityName, $uuid, $componentCode);
+
+            if ($route == 'api_object_communications_post_collection' && $resource instanceof ObjectCommunication) {
+                // Lets not create the actual ObjectCommunication objects that we can not see or do anything with.
+                $this->em->remove($resource);
+                $this->em->flush();
+                try {
+                    if (isset($uuid)) {
+                        // put
+                        $result = $this->objectEntityService->handlePut();
+                    } else {
+                        // post
+                        $objectEntity = new ObjectEntity();
+                        $this->em->persist($objectEntity);
+                        $this->em->flush();
+                        $result = $this->objectEntityService->handlePost($objectEntity);
+                    }
+                    $responseType = Response::HTTP_CREATED;
+                } catch (HttpException $e) {
+                    if (isset($objectEntity)){
+                        // Lets not create a new ObjectEntity when we get an error!
+                        $this->em->remove($objectEntity);
+                        $this->em->flush();
+                    }
+                    throw new HttpException($e->getMessage(), 400);
+                }
+            } elseif ($route == 'api_object_communications_get_collection') {
                 $result = $this->objectEntityService->handleGet();
                 $responseType = Response::HTTP_OK;
             }
