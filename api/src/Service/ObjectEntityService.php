@@ -114,6 +114,11 @@ class ObjectEntityService
                     $values[$attribute->getName()] = $this->getValue($attribute, $value);
                 } elseif ($attribute->getRequired()){
                     throw new HttpException('The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] that is required!', 400);
+                } else {
+                    // also show not set values as null in the response
+                    $value = $this->saveValue($objectEntity, $attribute, null, $uri);
+
+                    $values[$attribute->getName()] = $this->getValue($attribute, $value);
                 }
             }
         }
@@ -221,6 +226,19 @@ class ObjectEntityService
             $value = $this->saveValue($objectEntity, $value['attribute'], $value['value'], $uri, $value['valueObject']);
 
             $values[$key] = $this->getValue($value->getAttribute(), $value);
+        }
+
+        // also show not changed values in the response body
+        $bodyValues = array_keys($values);
+        foreach ($attributes as $attribute) {
+            // If the attribute is not set in the body
+            if (!in_array($attribute->getName(), $bodyValues)){
+                foreach ($attribute->getAttributeValues() as $value) {
+                    if ($value->getUri() == $uri) {
+                        $values[$attribute->getName()] = $this->getValue($attribute, $value);
+                    }
+                }
+            }
         }
 
         // Check component code and if it is not EAV also update the normal object.
