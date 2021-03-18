@@ -59,16 +59,32 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
 
             $this->objectEntityService->setEventVariables($body, $entityName, $uuid, $componentCode);
 
-            //TODO: post_objectentity and post_putobjectentity should use the same 'handlePost' function
+            //TODO: post_objectentity and post_putobjectentity should use the same 'handlePost' function (this should make this code look a lot cleaner as well)
             if ($route == 'api_object_entities_post_objectentity_collection' && $resource instanceof ObjectEntity) {
-                try {
-                    $result = $this->objectEntityService->handlePost($resource);
-                    $responseType = Response::HTTP_CREATED;
-                } catch (HttpException $e) {
-                    // Lets not create a new ObjectEntity when we get an error!
-                    $this->em->remove($resource);
-                    $this->em->flush();
-                    throw new HttpException($e->getMessage(), 400);
+                // Check if we actually need to do / are doing a put. If @self has already an objectEntity object in EAV
+                if (isset($body['@self'])) {
+                    // Get existing objectEntity with @self
+                    $object = $this->em->getRepository("App\Entity\ObjectEntity")->findOneBy(['uri' => $body['@self']]);
+                    if (!empty($object)) {
+                        $this->em->remove($resource);
+                        $this->em->flush();
+
+                        $result = $this->objectEntityService->handlePut();
+                        $responseType = Response::HTTP_CREATED;
+                    }
+                }
+
+                // If not, we are just doing a post
+                if (!isset($result)) {
+                    try {
+                        $result = $this->objectEntityService->handlePost($resource);
+                        $responseType = Response::HTTP_CREATED;
+                    } catch (HttpException $e) {
+                        // Lets not create a new ObjectEntity when we get an error!
+                        $this->em->remove($resource);
+                        $this->em->flush();
+                        throw new HttpException($e->getMessage(), 400);
+                    }
                 }
             } elseif ($route == 'api_object_entities_post_putobjectentity_collection' && $resource instanceof ObjectEntity) {
                 // Lets not create a new ObjectEntity every time we do a put!
@@ -119,9 +135,19 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                 $this->em->flush();
                 try {
                     if (isset($uuid)) {
-                        // put
+                        // Put for objectEntity with this id^
                         $result = $this->objectEntityService->handlePut();
-                    } else {
+                    } elseif (isset($body['@self'])) {
+                        // Check if we need to do a put if @self has already an objectEntity object in EAV
+                        // Get existing objectEntity with @self
+                        $object = $this->em->getRepository("App\Entity\ObjectEntity")->findOneBy(['uri' => $body['@self']]);
+                        if (!empty($object)) {
+                            $result = $this->objectEntityService->handlePut();
+                        }
+                    }
+
+                    // If not, we are doing a post
+                    if (!isset($result)){
                         // post
                         $objectEntity = new ObjectEntity();
                         $this->em->persist($objectEntity);
