@@ -59,7 +59,7 @@ class ObjectEntityService
         }
 
         if ($this->componentCode != 'eav' && isset($this->body['@self'])) {
-            // Get existing object with @self
+            // Get existing extern object with @self
             $object = $this->commonGroundService->getResource($this->body['@self']);
         } else {
             $object = [];
