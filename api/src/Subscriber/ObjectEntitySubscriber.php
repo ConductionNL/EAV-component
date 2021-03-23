@@ -17,6 +17,7 @@ use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
+use function GuzzleHttp\json_decode;
 
 class ObjectEntitySubscriber implements EventSubscriberInterface
 {
@@ -125,6 +126,14 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
             if (isset($body['objectEntityId'])) {
                 $uuid = $body['objectEntityId'];
                 unset($body['objectEntityId']);
+            }
+            if (isset($body['self'])) {
+                $body['@self'] = $body['self'];
+                unset($body['self']);
+            }
+            if (isset($body['body'])) {
+                $body = array_merge($body, $body['body']);
+                unset($body['body']);
             }
 
             $this->objectEntityService->setEventVariables($body, $entityName, $uuid, $componentCode);
