@@ -112,6 +112,7 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
 
             $componentCode = 'eav';
             $uuid = null;
+            $doGet = false;
 
             if (isset($body['componentCode'])) {
                 $componentCode = $body['componentCode'];
@@ -135,6 +136,10 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                 $body = array_merge($body, $body['body']);
                 unset($body['body']);
             }
+            if (isset($body['doGet'])) {
+                $doGet = $body['doGet'];
+                unset($body['doGet']);
+            }
 
             $this->objectEntityService->setEventVariables($body, $entityName, $uuid, $componentCode);
 
@@ -143,7 +148,10 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                 $this->em->remove($resource);
                 $this->em->flush();
                 try {
-                    if (isset($uuid)) {
+                    if ($doGet) {
+                        $result = $this->objectEntityService->handleGet();
+                        $responseType = Response::HTTP_OK;
+                    } elseif (isset($uuid)) {
                         // Put for objectEntity with this id^
                         $result = $this->objectEntityService->handlePut();
                     } elseif (isset($body['@self'])) {
@@ -155,7 +163,7 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                         }
                     }
 
-                    // If not, we are doing a post
+                    // If not, we are doing a put
                     if (!isset($result)){
                         // post
                         $objectEntity = new ObjectEntity();
@@ -163,7 +171,9 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                         $this->em->flush();
                         $result = $this->objectEntityService->handlePost($objectEntity);
                     }
-                    $responseType = Response::HTTP_CREATED;
+                    if (!$doGet){
+                        $responseType = Response::HTTP_CREATED;
+                    }
                 } catch (HttpException $e) {
                     if (isset($objectEntity)){
                         // Lets not create a new ObjectEntity when we get an error!

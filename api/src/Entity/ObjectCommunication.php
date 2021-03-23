@@ -75,6 +75,16 @@ class ObjectCommunication
      */
     private $body;
 
+    /**
+     * @var bool If you want to do a get call through a post for some weird reason, use this boolean and set it to True
+     *
+     * @example false
+     *
+     * @Groups({"read"})
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $doGet = false;
+
     public function getId(): Uuid
     {
         return $this->id;
@@ -136,6 +146,18 @@ class ObjectCommunication
     public function setBody(array $body): self
     {
         $this->body = $body;
+
+        return $this;
+    }
+
+    public function getDoGet(): ?bool
+    {
+        return $this->doGet;
+    }
+
+    public function setDoGet(bool $doGet): self
+    {
+        $this->doGet = $doGet;
 
         return $this;
     }
