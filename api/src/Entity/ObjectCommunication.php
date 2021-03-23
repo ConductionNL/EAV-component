@@ -58,6 +58,23 @@ class ObjectCommunication
      */
     private $objectEntityId;
 
+    /**
+     * @var string (get, post or put) The url of the extern object that has an Entity with Attributes in EAV. That we are getting, updating or creating a new EAV objectEntity for
+     *
+     * @Groups({"read"})
+     * @Assert\Url
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $self;
+
+    /**
+     * @var array (post or put) The values for creating or updating an extern object and the values for the Entity with Attributes in EAV for this extern object.
+     *
+     * @Groups({"read"})
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $body;
+
     public function getId(): Uuid
     {
         return $this->id;
@@ -95,6 +112,30 @@ class ObjectCommunication
     public function setObjectEntityId(string $objectEntityId): self
     {
         $this->objectEntityId = $objectEntityId;
+
+        return $this;
+    }
+
+    public function getSelf(): ?string
+    {
+        return $this->self;
+    }
+
+    public function setSelf(string $self): self
+    {
+        $this->self = $self;
+
+        return $this;
+    }
+
+    public function getBody(): ?array
+    {
+        return $this->body;
+    }
+
+    public function setBody(array $body): self
+    {
+        $this->body = $body;
 
         return $this;
     }
