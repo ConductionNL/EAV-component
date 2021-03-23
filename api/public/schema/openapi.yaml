@@ -8148,6 +8148,18 @@ components:
         objectEntityId:
           description: '(get or put) The uuid of the objectEntity we are getting or updating'
           type: string
+        self:
+          description: '(get, post or put) The url of the extern object that has an Entity with Attributes in EAV. That we are getting, updating or creating a new EAV objectEntity for'
+          externalDocs:
+            url: 'http://schema.org/url'
+          type: string
+          nullable: true
+        body:
+          description: '(post or put) The values for creating or updating an extern object and the values for the Entity with Attributes in EAV for this extern object.'
+          type: array
+          items:
+            type: string
+          nullable: true
     'ObjectCommunication:jsonld':
       type: object
       description: Description
@@ -8175,6 +8187,18 @@ components:
         objectEntityId:
           description: '(get or put) The uuid of the objectEntity we are getting or updating'
           type: string
+        self:
+          description: '(get, post or put) The url of the extern object that has an Entity with Attributes in EAV. That we are getting, updating or creating a new EAV objectEntity for'
+          externalDocs:
+            url: 'http://schema.org/url'
+          type: string
+          nullable: true
+        body:
+          description: '(post or put) The values for creating or updating an extern object and the values for the Entity with Attributes in EAV for this extern object.'
+          type: array
+          items:
+            type: string
+          nullable: true
     ObjectEntity-read:
       type: object
       description: Description
@@ -8738,6 +8762,28 @@ definitions:
     required:
       - type
       - name
+  ObjectCommunication-read:
+    properties:
+      id:
+        description: 'UUID of this person'
+        type: \UuidInterface
+      componentCode:
+        description: '(get, post and put) The component code for the objectEntity we are getting, creating or updating'
+        type: string
+      entityName:
+        description: '(get, post and put) The entity name for the objectEntity we are getting, creating or updating. (this actually needs to be the second value of the entity type, so in case of entity type: cc/people, this would/should be people)'
+        type: string
+      objectEntityId:
+        description: '(get or put) The uuid of the objectEntity we are getting or updating'
+        type: string
+      self:
+        description: '(get, post or put) The url of the extern object that has an Entity with Attributes in EAV. That we are getting, updating or creating a new EAV objectEntity for'
+        type: string
+        format: url
+      body:
+        description: '(post or put) The values for creating or updating an extern object and the values for the Entity with Attributes in EAV for this extern object.'
+        type: array
+    required: []
   ObjectEntity-read:
     properties:
       id:
@@ -8809,74 +8855,6 @@ definitions:
         type: \DateTime
       attribute: []
       objectEntity: []
-    required: []
-  ObjectCommunication-read:
-    properties:
-      id:
-        description: 'UUID of this person'
-        type: \UuidInterface
-      componentCode:
-        description: '(get, post and put) The component code for the objectEntity we are getting, creating or updating'
-        type: string
-      entityName:
-        description: '(get, post and put) The entity name for the objectEntity we are getting, creating or updating. (this actually needs to be the second value of the entity type, so in case of entity type: cc/people, this would/should be people)'
-        type: string
-      objectEntityId:
-        description: '(get or put) The uuid of the objectEntity we are getting or updating'
-        type: string
-    required: []
-  ChangeLog-read:
-    properties:
-      id:
-        description: 'The UUID identifier of this object'
-        type: string
-        example: e2984465-190a-4562-829e-a8cca81aa35d
-        format: uuid
-      note:
-        description: 'A note conserning this log lin'
-        type: string
-        example: 'This log line is suspicius'
-        maxLength: 2555
-      action:
-        description: ''
-        type: string
-      objectId:
-        description: ''
-        type: string
-      objectClass:
-        description: ''
-        type: string
-      version:
-        description: ''
-        type: int
-      data:
-        description: ''
-        type: array
-      username:
-        description: ''
-        type: string
-      session:
-        description: 'The moment this request was created'
-        type: string
-        maxLength: 255
-      dateCreated:
-        description: 'The moment this request was created'
-        type: string
-        format: date-time
-        example: '2021-03-18 08:16:58'
-      dateModified:
-        description: 'The moment this request last Modified'
-        type: string
-        format: date-time
-        example: '2021-03-18 08:16:58'
-    required: []
-  ChangeLog-write:
-    properties:
-      note:
-        description: 'A note conserning this log lin'
-        type: string
-        example: 'This log line is suspicius'
-        maxLength: 2555
     required: []
   AuditTrail-read:
     properties:
@@ -8982,12 +8960,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-18 08:16:58'
+        example: '2021-03-23 09:21:14'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-18 08:16:58'
+        example: '2021-03-23 09:21:14'
     required: []
   AuditTrail-write:
     properties:
@@ -8995,6 +8973,59 @@ definitions:
         description: 'A note conserning this log lin'
         type: string
         example: 'This log line looks suspicius'
+        maxLength: 2555
+    required: []
+  ChangeLog-read:
+    properties:
+      id:
+        description: 'The UUID identifier of this object'
+        type: string
+        example: e2984465-190a-4562-829e-a8cca81aa35d
+        format: uuid
+      note:
+        description: 'A note conserning this log lin'
+        type: string
+        example: 'This log line is suspicius'
+        maxLength: 2555
+      action:
+        description: ''
+        type: string
+      objectId:
+        description: ''
+        type: string
+      objectClass:
+        description: ''
+        type: string
+      version:
+        description: ''
+        type: int
+      data:
+        description: ''
+        type: array
+      username:
+        description: ''
+        type: string
+      session:
+        description: 'The moment this request was created'
+        type: string
+        maxLength: 255
+      dateCreated:
+        description: 'The moment this request was created'
+        type: string
+        format: date-time
+        example: '2021-03-23 09:21:14'
+      dateModified:
+        description: 'The moment this request last Modified'
+        type: string
+        format: date-time
+        example: '2021-03-23 09:21:14'
+    required: []
+  ChangeLog-write:
+    properties:
+      note:
+        description: 'A note conserning this log lin'
+        type: string
+        example: 'This log line is suspicius'
         maxLength: 2555
     required: []
 tags:
@@ -9011,6 +9042,12 @@ tags:
       
       
   -
+    name: ObjectCommunication
+    description: |
+      Description
+      
+      
+  -
     name: ObjectEntity
     description: |
       Description
@@ -9023,19 +9060,13 @@ tags:
       
       
   -
-    name: ObjectCommunication
-    description: |
-      Description
-      
-      
-  -
-    name: ChangeLog
+    name: AuditTrail
     description: |
       An resource representing a log line.
       
       This entity represents a product that can be ordered via the OrderRegistratieComponent.
   -
-    name: AuditTrail
+    name: ChangeLog
     description: |
       An resource representing a log line.
       
@@ -9046,15 +9077,15 @@ securityDefinitions:
     authorizationUrl: 'http://petstore.swagger.io/api/oauth/dialog'
     flow: implicit
     scopes:
-      read: 'read right to the AuditTrail resource'
-      write: 'write right to the AuditTrail resource'
+      read: 'read right to the ChangeLog resource'
+      write: 'write right to the ChangeLog resource'
   JWT-Token:
     type: apiKey
     in: header
     name: Authorization
     scopes:
-      read: 'read right to the AuditTrail resource'
-      write: 'write right to the AuditTrail resource'
+      read: 'read right to the ChangeLog resource'
+      write: 'write right to the ChangeLog resource'
 host: irc.zaakonline.nl
 servers:
   -
