@@ -8160,6 +8160,10 @@ components:
           items:
             type: string
           nullable: true
+        doGet:
+          description: 'If you want to do a get call through a post for some weird reason, use this boolean and set it to True'
+          type: boolean
+          nullable: true
     'ObjectCommunication:jsonld':
       type: object
       description: Description
@@ -8198,6 +8202,10 @@ components:
           type: array
           items:
             type: string
+          nullable: true
+        doGet:
+          description: 'If you want to do a get call through a post for some weird reason, use this boolean and set it to True'
+          type: boolean
           nullable: true
     ObjectEntity-read:
       type: object
@@ -8783,6 +8791,10 @@ definitions:
       body:
         description: '(post or put) The values for creating or updating an extern object and the values for the Entity with Attributes in EAV for this extern object.'
         type: array
+      doGet:
+        description: 'If you want to do a get call through a post for some weird reason, use this boolean and set it to True'
+        type: bool
+        example: 'false'
     required: []
   ObjectEntity-read:
     properties:
@@ -8960,12 +8972,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-23 09:21:14'
+        example: '2021-03-23 09:51:16'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-23 09:21:14'
+        example: '2021-03-23 09:51:16'
     required: []
   AuditTrail-write:
     properties:
@@ -9013,12 +9025,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-03-23 09:21:14'
+        example: '2021-03-23 09:51:16'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-03-23 09:21:14'
+        example: '2021-03-23 09:51:16'
     required: []
   ChangeLog-write:
     properties:
