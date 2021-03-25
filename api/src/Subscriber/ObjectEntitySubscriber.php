@@ -163,7 +163,7 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                         }
                     }
 
-                    // If not, we are doing a put
+                    // If not, we are doing a post
                     if (!isset($result)){
                         // post
                         $objectEntity = new ObjectEntity();
