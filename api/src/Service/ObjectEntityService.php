@@ -73,7 +73,7 @@ class ObjectEntityService
         $values = [];
         foreach ($this->body as $key => $bodyValue) {
             // TODO:something about this:
-            if ($key == '@type' || $key == '@self') {
+            if ($key == '@self') {
                 continue;
             }
             $foundAttribute = false;
@@ -128,18 +128,19 @@ class ObjectEntityService
         if ($this->componentCode != 'eav') {
             $response = $this->commonGroundService->saveResource($object, ['component' => $this->componentCode, 'type' => $this->entityName]);
             $response['@self'] = $response['@id'];
+            $response['@eav'] = $uri;
+            $response['@eavType'] = ucfirst($this->entityName);
+            $response['eavId'] = $id;
         } else {
             $response['@context'] = '/contexts/' . ucfirst($this->entityName);
             $response['@id'] = $uri;
+            $response['@type'] = ucfirst($this->entityName);
+            $response['id'] = $id;
             $response['@self'] = $uri;
         }
         $objectEntity->setUri($response['@id']);
         $this->em->persist($objectEntity);
         $this->em->flush();
-
-        $response['@id'] = $uri;
-        $response['@type'] = ucfirst($this->entityName);
-        $response['id'] = $id;
 
         $response = array_merge($response, $values);
 
@@ -192,7 +193,7 @@ class ObjectEntityService
         $object = []; // !
         foreach ($this->body as $key => $bodyValue) {
             // TODO:something about this:
-            if ($key == '@type' || $key == '@self') {
+            if ($key == '@self') {
                 continue;
             }
             $foundAttribute = false;
@@ -246,13 +247,16 @@ class ObjectEntityService
         if ($this->componentCode != 'eav') {
             $response = $this->commonGroundService->updateResource($object, $objectEntity->getUri());
             $response['@self'] = $response['@id'];
+            $response['@eav'] = $uri;
+            $response['@eavType'] = ucfirst($this->entityName);
+            $response['eavId'] = $id;
         } else {
             $response['@context'] = '/contexts/' . ucfirst($this->entityName);
+            $response['@id'] = $uri;
+            $response['@type'] = ucfirst($this->entityName);
+            $response['id'] = $id;
             $response['@self'] = $uri;
         }
-        $response['@id'] = $uri;
-        $response['@type'] = ucfirst($this->entityName);
-        $response['id'] = $id;
 
         $response = array_merge($response, $values);
 
@@ -317,13 +321,16 @@ class ObjectEntityService
         if ($this->componentCode != 'eav') {
             $response = $this->commonGroundService->getResource($objectEntity->getUri());
             $response['@self'] = $response['@id'];
+            $response['@eav'] = $uri;
+            $response['@eavType'] = ucfirst($this->entityName);
+            $response['eavId'] = $id;
         } else {
             $response['@context'] = '/contexts/' . ucfirst($this->entityName);
+            $response['@id'] = $uri;
+            $response['@type'] = ucfirst($this->entityName);
+            $response['id'] = $id;
             $response['@self'] = $uri;
         }
-        $response['@id'] = $uri;
-        $response['@type'] = ucfirst($this->entityName);
-        $response['id'] = $id;
 
         $response = array_merge($response, $values);
 
