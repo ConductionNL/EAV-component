@@ -137,6 +137,9 @@ class ObjectEntityService
             $response['@type'] = ucfirst($this->entityName);
             $response['id'] = $id;
             $response['@self'] = $uri;
+            $response['@eav'] = $response['@id'];
+            $response['@eavType'] = $response['@type'];
+            $response['eavId'] = $response['id'];
         }
         $objectEntity->setUri($response['@id']);
         $this->em->persist($objectEntity);
@@ -256,6 +259,9 @@ class ObjectEntityService
             $response['@type'] = ucfirst($this->entityName);
             $response['id'] = $id;
             $response['@self'] = $uri;
+            $response['@eav'] = $response['@id'];
+            $response['@eavType'] = $response['@type'];
+            $response['eavId'] = $response['id'];
         }
 
         $response = array_merge($response, $values);
@@ -330,6 +336,9 @@ class ObjectEntityService
             $response['@type'] = ucfirst($this->entityName);
             $response['id'] = $id;
             $response['@self'] = $uri;
+            $response['@eav'] = $response['@id'];
+            $response['@eavType'] = $response['@type'];
+            $response['eavId'] = $response['id'];
         }
 
         $response = array_merge($response, $values);
