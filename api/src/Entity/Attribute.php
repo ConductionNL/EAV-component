@@ -426,11 +426,6 @@ class Attribute
 
     public function setName(string $name): self
     {
-        // lets make sure this name is slugable
-        $name = trim($name); //removes whitespace at begin and ending
-        $name = preg_replace('/\s+/', '_', $name); // replaces other whitespaces with _
-        $name = strtolower($name);
-
         $this->name = $name;
 
         return $this;
