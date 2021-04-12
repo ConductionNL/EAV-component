@@ -5016,16 +5016,6 @@ paths:
           schema:
             type: string
         -
-          name: 'uri[]'
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-          style: form
-          explode: true
-        -
           name: page
           in: query
           required: false
@@ -5356,16 +5346,6 @@ paths:
           schema:
             type: string
         -
-          name: 'uri[]'
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-          style: form
-          explode: true
-        -
           name: page
           in: query
           required: false
@@ -5695,16 +5675,6 @@ paths:
           required: false
           schema:
             type: string
-        -
-          name: 'uri[]'
-          in: query
-          required: false
-          schema:
-            type: array
-            items:
-              type: string
-          style: form
-          explode: true
         -
           name: page
           in: query
@@ -8972,12 +8942,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-04-09 10:39:44'
+        example: '2021-04-12 15:46:50'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-04-09 10:39:44'
+        example: '2021-04-12 15:46:50'
     required: []
   AuditTrail-write:
     properties:
@@ -9025,12 +8995,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-04-09 10:39:44'
+        example: '2021-04-12 15:46:50'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-04-09 10:39:44'
+        example: '2021-04-12 15:46:50'
     required: []
   ChangeLog-write:
     properties:
