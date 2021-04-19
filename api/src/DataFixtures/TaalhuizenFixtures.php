@@ -145,6 +145,14 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($participants);
         $manager->flush();
 
+        $participations = new Attribute();
+        $participations->setName('participations');
+        $participations->setType('array');
+        $participations->setFormat('array');
+        $participations->setDescription('An array of EAV/participations urls');
+        $manager->persist($participations);
+        $manager->flush();
+
         $dateCreated = new Attribute();
         $dateCreated->setName('dateCreated');
         $dateCreated->setType('datetime');
@@ -179,6 +187,7 @@ class TaalhuizenFixtures extends Fixture
         $learningNeedEntity->addAttribute($offerDifferenceOther);
         $learningNeedEntity->addAttribute($offerEngagements);
         $learningNeedEntity->addAttribute($participants);
+        $learningNeedEntity->addAttribute($participations);
         $learningNeedEntity->addAttribute($dateCreated);
         $learningNeedEntity->addAttribute($dateModified);
         $manager->persist($learningNeedEntity);
@@ -369,6 +378,14 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($presenceEndParticipationReason);
         $manager->flush();
 
+        $learningNeed = new Attribute();
+        $learningNeed->setName('learningNeed');
+        $learningNeed->setType('string');
+        $learningNeed->setFormat('string');
+        $learningNeed->setDescription('A string of an eav/learning_needs url');
+        $manager->persist($learningNeed);
+        $manager->flush();
+
         $groups = new Attribute();
         $groups->setName('groups');
         $groups->setType('array');
@@ -420,6 +437,7 @@ class TaalhuizenFixtures extends Fixture
         $participationEntity->addAttribute($presenceStartDate);
         $participationEntity->addAttribute($presenceEndDate);
         $participationEntity->addAttribute($presenceEndParticipationReason);
+        $participationEntity->addAttribute($learningNeed);
         $participationEntity->addAttribute($groups);
         $participationEntity->addAttribute($mentors);
         $participationEntity->addAttribute($results);
