@@ -43,8 +43,6 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
 
     public function objectEntity(ViewEvent $event)
     {
-//        $method = $event->getRequest()->getMethod();
-//        $contentType = $event->getRequest()->headers->get('accept');
         $route = $event->getRequest()->attributes->get('_route');
         $resource = $event->getControllerResult();
 

@@ -137,36 +137,12 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($offerEngagements);
         $manager->flush();
 
-        $groups = new Attribute();
-        $groups->setName('groups');
-        $groups->setType('array');
-        $groups->setFormat('array');
-        $groups->setDescription('An array of EAV/edu/groups urls');
-        $manager->persist($groups);
-        $manager->flush();
-
         $participants = new Attribute();
         $participants->setName('participants');
         $participants->setType('array');
         $participants->setFormat('array');
         $participants->setDescription('An array of EAV/edu/participants urls');
         $manager->persist($participants);
-        $manager->flush();
-
-        $tests = new Attribute();
-        $tests->setName('tests');
-        $tests->setType('array');
-        $tests->setFormat('array');
-        $tests->setDescription('An array of EAV/edu/tests urls');
-        $manager->persist($tests);
-        $manager->flush();
-
-        $results = new Attribute();
-        $results->setName('results');
-        $results->setType('array');
-        $results->setFormat('array');
-        $results->setDescription('An array of EAV/edu/results urls');
-        $manager->persist($results);
         $manager->flush();
 
         $dateCreated = new Attribute();
@@ -202,32 +178,10 @@ class TaalhuizenFixtures extends Fixture
         $learningNeedEntity->addAttribute($offerDifference);
         $learningNeedEntity->addAttribute($offerDifferenceOther);
         $learningNeedEntity->addAttribute($offerEngagements);
-        $learningNeedEntity->addAttribute($groups);
         $learningNeedEntity->addAttribute($participants);
-        $learningNeedEntity->addAttribute($tests);
-        $learningNeedEntity->addAttribute($results);
         $learningNeedEntity->addAttribute($dateCreated);
         $learningNeedEntity->addAttribute($dateModified);
         $manager->persist($learningNeedEntity);
-        $manager->flush();
-
-
-        // EDU groupEntity
-        $learningNeeds = new Attribute();
-        $learningNeeds->setName('learningNeeds');
-        $learningNeeds->setType('array');
-        $learningNeeds->setFormat('array');
-        $learningNeeds->setDescription('An array of eav/learning_needs urls');
-        $manager->persist($learningNeeds);
-        $manager->flush();
-
-        $groupEntity = new Entity();
-        $groupEntity->setType('edu/groups');
-        $groupEntity->setName('group');
-        $manager->persist($groupEntity);
-        $manager->flush();
-        $groupEntity->addAttribute($learningNeeds);
-        $manager->persist($groupEntity);
         $manager->flush();
 
 
@@ -250,32 +204,274 @@ class TaalhuizenFixtures extends Fixture
         $manager->flush();
 
 
-        // EDU testEntity
-        $learningNeeds = new Attribute();
-        $learningNeeds->setName('learningNeeds');
-        $learningNeeds->setType('array');
-        $learningNeeds->setFormat('array');
-        $learningNeeds->setDescription('An array of eav/learning_needs urls');
-        $manager->persist($learningNeeds);
+        // EAV participation (/verwijzing -_-)
+        $status = new Attribute();
+        $status->setName('status');
+        $status->setType('string');
+        $status->setFormat('string');
+        $manager->persist($status);
         $manager->flush();
 
-        $testEntity = new Entity();
-        $testEntity->setType('edu/tests');
-        $testEntity->setName('test');
-        $manager->persist($testEntity);
+        $aanbiederId = new Attribute();
+        $aanbiederId->setName('aanbiederId');
+        $aanbiederId->setType('string');
+        $aanbiederId->setFormat('string');
+        $manager->persist($aanbiederId);
         $manager->flush();
-        $testEntity->addAttribute($learningNeeds);
-        $manager->persist($testEntity);
+
+        $aanbiederName = new Attribute();
+        $aanbiederName->setName('aanbiederName');
+        $aanbiederName->setType('string');
+        $aanbiederName->setFormat('string');
+        $manager->persist($aanbiederName);
+        $manager->flush();
+
+        $aanbiederNote = new Attribute();
+        $aanbiederNote->setName('aanbiederNote');
+        $aanbiederNote->setType('string');
+        $aanbiederNote->setFormat('string');
+        $manager->persist($aanbiederNote);
+        $manager->flush();
+
+        $offerName = new Attribute();
+        $offerName->setName('offerName');
+        $offerName->setType('string');
+        $offerName->setFormat('string');
+        $manager->persist($offerName);
+        $manager->flush();
+
+        $offerCourse = new Attribute();
+        $offerCourse->setName('offerCourse');
+        $offerCourse->setType('string');
+        $offerCourse->setFormat('string');
+        $manager->persist($offerCourse);
+        $manager->flush();
+
+        $goal = new Attribute();
+        $goal->setName('goal');
+        $goal->setType('string');
+        $goal->setFormat('string');
+        $manager->persist($goal);
+        $manager->flush();
+
+        $topic = new Attribute();
+        $topic->setName('topic');
+        $topic->setType('string');
+        $topic->setFormat('string');
+        $manager->persist($topic);
+        $manager->flush();
+
+        $topicOther = new Attribute();
+        $topicOther->setName('topicOther');
+        $topicOther->setType('string');
+        $topicOther->setFormat('string');
+        $topicOther->setNullable(true);
+        $manager->persist($topicOther);
+        $manager->flush();
+
+        $application = new Attribute();
+        $application->setName('application');
+        $application->setType('string');
+        $application->setFormat('string');
+        $manager->persist($application);
+        $manager->flush();
+
+        $applicationOther = new Attribute();
+        $applicationOther->setName('applicationOther');
+        $applicationOther->setType('string');
+        $applicationOther->setFormat('string');
+        $applicationOther->setNullable(true);
+        $manager->persist($applicationOther);
+        $manager->flush();
+
+        $level = new Attribute();
+        $level->setName('level');
+        $level->setType('string');
+        $level->setFormat('string');
+        $manager->persist($level);
+        $manager->flush();
+
+        $levelOther = new Attribute();
+        $levelOther->setName('levelOther');
+        $levelOther->setType('string');
+        $levelOther->setFormat('string');
+        $levelOther->setNullable(true);
+        $manager->persist($levelOther);
+        $manager->flush();
+
+        $isFormal = new Attribute();
+        $isFormal->setName('isFormal');
+        $isFormal->setType('boolean');
+        $isFormal->setFormat('boolean');
+        $manager->persist($isFormal);
+        $manager->flush();
+
+        $groupFormation = new Attribute();
+        $groupFormation->setName('groupFormation');
+        $groupFormation->setType('string');
+        $groupFormation->setFormat('string');
+        $manager->persist($groupFormation);
+        $manager->flush();
+
+        $totalClassHours = new Attribute();
+        $totalClassHours->setName('totalClassHours');
+        $totalClassHours->setType('float');
+        $totalClassHours->setFormat('float');
+        $manager->persist($totalClassHours);
+        $manager->flush();
+
+        $certificateWillBeAwarded = new Attribute();
+        $certificateWillBeAwarded->setName('certificateWillBeAwarded');
+        $certificateWillBeAwarded->setType('boolean');
+        $certificateWillBeAwarded->setFormat('boolean');
+        $manager->persist($certificateWillBeAwarded);
+        $manager->flush();
+
+        $startDate = new Attribute();
+        $startDate->setName('startDate');
+        $startDate->setType('datetime');
+        $startDate->setFormat('datetime');
+        $manager->persist($startDate);
+        $manager->flush();
+
+        $endDate = new Attribute();
+        $endDate->setName('endDate');
+        $endDate->setType('datetime');
+        $endDate->setFormat('datetime');
+        $manager->persist($endDate);
+        $manager->flush();
+
+        $engagements = new Attribute();
+        $engagements->setName('engagements');
+        $engagements->setType('string');
+        $engagements->setFormat('string');
+        $manager->persist($engagements);
+        $manager->flush();
+
+        $presenceStartDate = new Attribute();
+        $presenceStartDate->setName('presenceStartDate');
+        $presenceStartDate->setType('datetime');
+        $presenceStartDate->setFormat('datetime');
+        $manager->persist($presenceStartDate);
+        $manager->flush();
+
+        $presenceEndDate = new Attribute();
+        $presenceEndDate->setName('presenceEndDate');
+        $presenceEndDate->setType('datetime');
+        $presenceEndDate->setFormat('datetime');
+        $manager->persist($presenceEndDate);
+        $manager->flush();
+
+        $presenceEndParticipationReason = new Attribute();
+        $presenceEndParticipationReason->setName('presenceEndParticipationReason');
+        $presenceEndParticipationReason->setType('string');
+        $presenceEndParticipationReason->setFormat('string');
+        $manager->persist($presenceEndParticipationReason);
+        $manager->flush();
+
+        $groups = new Attribute();
+        $groups->setName('groups');
+        $groups->setType('array');
+        $groups->setFormat('array');
+        $groups->setDescription('An array of EAV/edu/groups urls');
+        $manager->persist($groups);
+        $manager->flush();
+
+        $mentors = new Attribute();
+        $mentors->setName('mentors');
+        $mentors->setType('array');
+        $mentors->setFormat('array');
+        $mentors->setDescription('An array of EAV/mrc/employees urls');
+        $manager->persist($mentors);
+        $manager->flush();
+
+        $results = new Attribute();
+        $results->setName('results');
+        $results->setType('array');
+        $results->setFormat('array');
+        $results->setDescription('An array of EAV/edu/results urls');
+        $manager->persist($results);
+        $manager->flush();
+
+        $participationEntity = new Entity();
+        $participationEntity->setType('eav/participations');
+        $participationEntity->setName('participation');
+        $manager->persist($participationEntity);
+        $manager->flush();
+        $participationEntity->addAttribute($aanbiederId);
+        $participationEntity->addAttribute($aanbiederName);
+        $participationEntity->addAttribute($aanbiederNote);
+        $participationEntity->addAttribute($offerName);
+        $participationEntity->addAttribute($offerCourse);
+        $participationEntity->addAttribute($goal);
+        $participationEntity->addAttribute($topic);
+        $participationEntity->addAttribute($topicOther);
+        $participationEntity->addAttribute($application);
+        $participationEntity->addAttribute($applicationOther);
+        $participationEntity->addAttribute($level);
+        $participationEntity->addAttribute($levelOther);
+        $participationEntity->addAttribute($isFormal);
+        $participationEntity->addAttribute($groupFormation);
+        $participationEntity->addAttribute($totalClassHours);
+        $participationEntity->addAttribute($certificateWillBeAwarded);
+        $participationEntity->addAttribute($startDate);
+        $participationEntity->addAttribute($endDate);
+        $participationEntity->addAttribute($engagements);
+        $participationEntity->addAttribute($presenceStartDate);
+        $participationEntity->addAttribute($presenceEndDate);
+        $participationEntity->addAttribute($presenceEndParticipationReason);
+        $participationEntity->addAttribute($groups);
+        $participationEntity->addAttribute($mentors);
+        $participationEntity->addAttribute($results);
+        $manager->persist($participationEntity);
+        $manager->flush();
+
+
+        // EDU groupEntity
+        $participations = new Attribute();
+        $participations->setName('participations');
+        $participations->setType('array');
+        $participations->setFormat('array');
+        $participations->setDescription('An array of eav/participations urls');
+        $manager->persist($participations);
+        $manager->flush();
+
+        $groupEntity = new Entity();
+        $groupEntity->setType('edu/groups');
+        $groupEntity->setName('group');
+        $manager->persist($groupEntity);
+        $manager->flush();
+        $groupEntity->addAttribute($participations);
+        $manager->persist($groupEntity);
+        $manager->flush();
+
+
+        // MRC employee
+        $participations = new Attribute();
+        $participations->setName('participations');
+        $participations->setType('array');
+        $participations->setFormat('array');
+        $participations->setDescription('An array of eav/participations urls');
+        $manager->persist($participations);
+        $manager->flush();
+
+        $employeeEntity = new Entity();
+        $employeeEntity->setType('mrc/employees');
+        $employeeEntity->setName('employee');
+        $manager->persist($employeeEntity);
+        $manager->flush();
+        $employeeEntity->addAttribute($participations);
+        $manager->persist($employeeEntity);
         $manager->flush();
 
 
         // EDU resultEntity
-        $learningNeed = new Attribute();
-        $learningNeed->setName('learningNeed');
-        $learningNeed->setType('string');
-        $learningNeed->setFormat('string');
-        $learningNeed->setDescription('A string of an eav/learning_needs url');
-        $manager->persist($learningNeed);
+        $participation = new Attribute();
+        $participation->setName('participation');
+        $participation->setType('string');
+        $participation->setFormat('string');
+        $participation->setDescription('A string of an eav/participations url');
+        $manager->persist($participation);
         $manager->flush();
 
         $resultEntity = new Entity();
@@ -283,8 +479,16 @@ class TaalhuizenFixtures extends Fixture
         $resultEntity->setName('result');
         $manager->persist($resultEntity);
         $manager->flush();
-        $resultEntity->addAttribute($learningNeed);
+        $resultEntity->addAttribute($participation);
         $manager->persist($resultEntity);
+        $manager->flush();
+
+
+        // EDU testEntity
+        $testEntity = new Entity();
+        $testEntity->setType('edu/tests');
+        $testEntity->setName('test');
+        $manager->persist($testEntity);
         $manager->flush();
 
 
