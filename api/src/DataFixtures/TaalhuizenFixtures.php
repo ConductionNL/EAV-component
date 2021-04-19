@@ -394,8 +394,8 @@ class TaalhuizenFixtures extends Fixture
         $manager->flush();
 
         $participationEntity = new Entity();
-        $participationEntity->setType('eav/learning_needs');
-        $participationEntity->setName('learningNeed');
+        $participationEntity->setType('eav/participations');
+        $participationEntity->setName('participation');
         $manager->persist($participationEntity);
         $manager->flush();
         $participationEntity->addAttribute($aanbiederId);
