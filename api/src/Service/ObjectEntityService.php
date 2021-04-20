@@ -382,7 +382,7 @@ class ObjectEntityService
                 }
                 break;
             case 'number-number':
-                if (!is_float($bodyValue) && gettype($bodyValue) != 'float' && gettype($bodyValue) != 'double') {
+                if (!is_integer($bodyValue) && !is_float($bodyValue) && gettype($bodyValue) != 'float' && gettype($bodyValue) != 'double') {
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
                 }
                 break;
