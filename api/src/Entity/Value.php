@@ -84,6 +84,14 @@ class Value
     private $integerValue;
 
     /**
+     * @var float Float if the value is type number
+     *
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="float", nullable=true)
+     */
+    private $numberValue;
+
+    /**
      * @var boolean Boolean if the value is type boolean
      *
      * @Groups({"read", "write"})
@@ -167,6 +175,18 @@ class Value
     public function setIntegerValue(?int $integerValue): self
     {
         $this->integerValue = $integerValue;
+
+        return $this;
+    }
+
+    public function getNumberValue(): ?float
+    {
+        return $this->numberValue;
+    }
+
+    public function setNumberValue(?float $numberValue): self
+    {
+        $this->numberValue = $numberValue;
 
         return $this;
     }

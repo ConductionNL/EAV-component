@@ -324,8 +324,8 @@ class TaalhuizenFixtures extends Fixture
 
         $totalClassHours = new Attribute();
         $totalClassHours->setName('totalClassHours');
-        $totalClassHours->setType('float');
-        $totalClassHours->setFormat('float');
+        $totalClassHours->setType('number');
+        $totalClassHours->setFormat('number');
         $manager->persist($totalClassHours);
         $manager->flush();
 

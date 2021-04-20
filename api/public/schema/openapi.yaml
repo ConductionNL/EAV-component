@@ -6331,6 +6331,15 @@ paths:
               - asc
               - desc
         -
+          name: 'order[numberValue]'
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+        -
           name: 'order[booleanValue]'
           in: query
           required: false
@@ -6443,6 +6452,22 @@ paths:
             type: array
             items:
               type: integer
+          style: form
+          explode: true
+        -
+          name: numberValue
+          in: query
+          required: false
+          schema:
+            type: number
+        -
+          name: 'numberValue[]'
+          in: query
+          required: false
+          schema:
+            type: array
+            items:
+              type: number
           style: form
           explode: true
         -
@@ -8303,6 +8328,10 @@ components:
           description: 'Integer if the value is type integer'
           type: integer
           nullable: true
+        numberValue:
+          description: 'Float if the value is type number'
+          type: number
+          nullable: true
         booleanValue:
           description: 'Boolean if the value is type boolean'
           type: boolean
@@ -8338,6 +8367,10 @@ components:
         integerValue:
           description: 'Integer if the value is type integer'
           type: integer
+          nullable: true
+        numberValue:
+          description: 'Float if the value is type number'
+          type: number
           nullable: true
         booleanValue:
           description: 'Boolean if the value is type boolean'
@@ -8389,6 +8422,10 @@ components:
           description: 'Integer if the value is type integer'
           type: integer
           nullable: true
+        numberValue:
+          description: 'Float if the value is type number'
+          type: number
+          nullable: true
         booleanValue:
           description: 'Boolean if the value is type boolean'
           type: boolean
@@ -8433,6 +8470,10 @@ components:
         integerValue:
           description: 'Integer if the value is type integer'
           type: integer
+          nullable: true
+        numberValue:
+          description: 'Float if the value is type number'
+          type: number
           nullable: true
         booleanValue:
           description: 'Boolean if the value is type boolean'
@@ -8802,6 +8843,9 @@ definitions:
       integerValue:
         description: 'Integer if the value is type integer'
         type: int
+      numberValue:
+        description: 'Float if the value is type number'
+        type: float
       booleanValue:
         description: 'Boolean if the value is type boolean'
         type: bool
@@ -8826,6 +8870,9 @@ definitions:
       integerValue:
         description: 'Integer if the value is type integer'
         type: int
+      numberValue:
+        description: 'Float if the value is type number'
+        type: float
       booleanValue:
         description: 'Boolean if the value is type boolean'
         type: bool
@@ -8942,12 +8989,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-04-19 13:34:06'
+        example: '2021-04-20 10:33:29'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-04-19 13:34:06'
+        example: '2021-04-20 10:33:29'
     required: []
   AuditTrail-write:
     properties:
@@ -8995,12 +9042,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-04-19 13:34:06'
+        example: '2021-04-20 10:33:29'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-04-19 13:34:06'
+        example: '2021-04-20 10:33:29'
     required: []
   ChangeLog-write:
     properties:

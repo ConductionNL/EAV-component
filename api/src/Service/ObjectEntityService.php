@@ -381,7 +381,11 @@ class ObjectEntityService
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] is to long, maximum length is ' . $attribute->getMaxLength() . ' !', 400);
                 }
                 break;
-            case 'number-number': //TODO: 'number' is probably for numbers other than integer?
+            case 'number-number':
+                if (!is_float($bodyValue) && gettype($bodyValue) != 'float' && gettype($bodyValue) != 'double') {
+                    throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
+                }
+                break;
             case 'integer-integer':
                 if (!is_integer($bodyValue)) {
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
@@ -464,7 +468,8 @@ class ObjectEntityService
                 case 'string-string':
                     $value->setValue($bodyValue);
                     break;
-                case 'number-number': //TODO: 'number' is probably for numbers other than integer?
+                case 'number-number':
+                    $value->setNumberValue($bodyValue);
                 case 'integer-integer':
                     $value->setIntegerValue($bodyValue);
                     break;
@@ -499,7 +504,8 @@ class ObjectEntityService
         switch ($typeFormat) {
             case 'string-string':
                 return $value->getValue();
-            case 'number-number': //TODO: 'number' is probably for numbers other than integer?
+            case 'number-number':
+                return $value->getNumberValue();
             case 'integer-integer':
                 return $value->getIntegerValue();
             case 'boolean-boolean':
