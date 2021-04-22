@@ -222,10 +222,6 @@ class ObjectEntityService
             }
         }
 
-        if (!isset($values) || empty($values)) {
-            throw new HttpException('No values found with this uuid '.$id, 400);
-        }
-
         // Update the values if no errors where thrown when checking them ^
         foreach ($values as $key => $value) {
             $value = $this->saveValue($objectEntity, $value['attribute'], $value['value'], $uri, $value['valueObject']);
