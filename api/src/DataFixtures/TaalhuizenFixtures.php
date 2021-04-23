@@ -491,6 +491,15 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($referrer);
         $manager->flush();
 
+        $referrer = new Attribute();
+        $referrer->setName('provider');
+        $referrer->setType('string');
+        $referrer->setFormat('string');
+        $referrer->setDescription('The provider for the employee');
+        $referrer->setNullable(true);
+        $manager->persist($referrer);
+        $manager->flush();
+
         $employeeEntity = new Entity();
         $employeeEntity->setType('mrc/employees');
         $employeeEntity->setName('employee');
