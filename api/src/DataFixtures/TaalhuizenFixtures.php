@@ -473,12 +473,32 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($participations);
         $manager->flush();
 
+        $relevantCertificates = new Attribute();
+        $relevantCertificates->setName('relevantCertificates');
+        $relevantCertificates->setType('string');
+        $relevantCertificates->setFormat('string');
+        $relevantCertificates->setDescription('Relevant certificates that are not mentioned in skills, competences or educations');
+        $relevantCertificates->setNullable(true);
+        $manager->persist($relevantCertificates);
+        $manager->flush();
+
+        $referrer = new Attribute();
+        $referrer->setName('referrer');
+        $referrer->setType('string');
+        $referrer->setFormat('string');
+        $referrer->setDescription('The person who referred employee to the employer');
+        $referrer->setNullable(true);
+        $manager->persist($referrer);
+        $manager->flush();
+
         $employeeEntity = new Entity();
         $employeeEntity->setType('mrc/employees');
         $employeeEntity->setName('employee');
         $manager->persist($employeeEntity);
         $manager->flush();
         $employeeEntity->addAttribute($participations);
+        $employeeEntity->addAttribute($relevantCertificates);
+        $employeeEntity->addAttribute($referrer);
         $manager->persist($employeeEntity);
         $manager->flush();
 
@@ -515,34 +535,6 @@ class TaalhuizenFixtures extends Fixture
         $personEntity->setType('cc/people');
         $personEntity->setName('person');
         $manager->persist($personEntity);
-        $manager->flush();
-
-        $relevantCertificates = new Attribute();
-        $relevantCertificates->setName('relevantCertificates');
-        $relevantCertificates->setType('string');
-        $relevantCertificates->setFormat('string');
-        $relevantCertificates->setDescription('Relevant certificates that are not mentioned in skills, competences or educations');
-        $relevantCertificates->setNullable(true);
-        $manager->persist($relevantCertificates);
-        $manager->flush();
-
-        $referrer = new Attribute();
-        $referrer->setName('referrer');
-        $referrer->setType('string');
-        $referrer->setFormat('string');
-        $referrer->setDescription('The person who referred employee to the employer');
-        $referrer->setNullable(true);
-        $manager->persist($referrer);
-        $manager->flush();
-
-        $employeeEntity = new Entity();
-        $employeeEntity->setType('mrc/employees');
-        $employeeEntity->setName('employee');
-        $manager->persist($employeeEntity);
-        $manager->flush();
-        $employeeEntity->addAttribute($relevantCertificates);
-        $employeeEntity->addAttribute($referrer);
-        $manager->persist($employeeEntity);
         $manager->flush();
 
         $courseProfessionalism = new Attribute();
