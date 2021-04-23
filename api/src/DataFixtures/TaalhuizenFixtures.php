@@ -491,13 +491,13 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($referrer);
         $manager->flush();
 
-        $referrer = new Attribute();
-        $referrer->setName('provider');
-        $referrer->setType('string');
-        $referrer->setFormat('string');
-        $referrer->setDescription('The provider for the employee');
-        $referrer->setNullable(true);
-        $manager->persist($referrer);
+        $provider = new Attribute();
+        $provider->setName('provider');
+        $provider->setType('string');
+        $provider->setFormat('string');
+        $provider->setDescription('The provider for the employee');
+        $provider->setNullable(true);
+        $manager->persist($provider);
         $manager->flush();
 
         $employeeEntity = new Entity();
@@ -508,6 +508,7 @@ class TaalhuizenFixtures extends Fixture
         $employeeEntity->addAttribute($participations);
         $employeeEntity->addAttribute($relevantCertificates);
         $employeeEntity->addAttribute($referrer);
+        $employeeEntity->addAttribute($provider);
         $manager->persist($employeeEntity);
         $manager->flush();
 
