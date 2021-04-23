@@ -568,14 +568,14 @@ class TaalhuizenFixtures extends Fixture
 
 
         $educationEntity = new Entity();
-        $employeeEntity->setType('mrc/educations');
-        $employeeEntity->setName('education');
-        $manager->persist($employeeEntity);
+        $educationEntity->setType('mrc/educations');
+        $educationEntity->setName('education');
+        $manager->persist($educationEntity);
         $manager->flush();
-        $employeeEntity->addAttribute($courseProfessionalism);
-        $employeeEntity->addAttribute($teacherProfessionalism);
-        $employeeEntity->addAttribute($providesCertificate);
-        $manager->persist($employeeEntity);
+        $educationEntity->addAttribute($courseProfessionalism);
+        $educationEntity->addAttribute($teacherProfessionalism);
+        $educationEntity->addAttribute($providesCertificate);
+        $manager->persist($educationEntity);
         $manager->flush();
 
 
