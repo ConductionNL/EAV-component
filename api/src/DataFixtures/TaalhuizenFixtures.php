@@ -422,6 +422,7 @@ class TaalhuizenFixtures extends Fixture
         $participationEntity->setName('participation');
         $manager->persist($participationEntity);
         $manager->flush();
+        $participationEntity->addAttribute($status);
         $participationEntity->addAttribute($aanbiederId);
         $participationEntity->addAttribute($aanbiederName);
         $participationEntity->addAttribute($aanbiederNote);
