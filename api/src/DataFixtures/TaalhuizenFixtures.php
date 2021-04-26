@@ -391,7 +391,7 @@ class TaalhuizenFixtures extends Fixture
         $presenceEndParticipationReason->setName('presenceEndParticipationReason');
         $presenceEndParticipationReason->setType('string');
         $presenceEndParticipationReason->setFormat('string');
-        $groupFormation->setEnum(['MOVED', 'JOB', 'ILLNESS', 'DEATH', 'COMPLETED_SUCCESSFULLY', 'FAMILY_CIRCUMSTANCES', 'DOES_NOT_MEET_EXPECTATIONS', 'OTHER']);
+        $presenceEndParticipationReason->setEnum(['MOVED', 'JOB', 'ILLNESS', 'DEATH', 'COMPLETED_SUCCESSFULLY', 'FAMILY_CIRCUMSTANCES', 'DOES_NOT_MEET_EXPECTATIONS', 'OTHER']);
         $manager->persist($presenceEndParticipationReason);
         $manager->flush();
 
