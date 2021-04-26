@@ -357,6 +357,14 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($engagements);
         $manager->flush();
 
+        $presenceEngagements = new Attribute();
+        $presenceEngagements->setName('presenceEngagements');
+        $presenceEngagements->setType('string');
+        $presenceEngagements->setFormat('string');
+        $presenceEngagements->setNullable(true);
+        $manager->persist($presenceEngagements);
+        $manager->flush();
+
         $presenceStartDate = new Attribute();
         $presenceStartDate->setName('presenceStartDate');
         $presenceStartDate->setType('datetime');
@@ -434,6 +442,7 @@ class TaalhuizenFixtures extends Fixture
         $participationEntity->addAttribute($startDate);
         $participationEntity->addAttribute($endDate);
         $participationEntity->addAttribute($engagements);
+        $participationEntity->addAttribute($presenceEngagements);
         $participationEntity->addAttribute($presenceStartDate);
         $participationEntity->addAttribute($presenceEndDate);
         $participationEntity->addAttribute($presenceEndParticipationReason);
