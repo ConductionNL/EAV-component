@@ -509,7 +509,7 @@ class TaalhuizenFixtures extends Fixture
         $manager->flush();
 
         $employeeEntity = new Entity();
-        $employeeEntity->setType('mrc/employees');
+        $employeeEntity->setType('mrc/employee');
         $employeeEntity->setName('employee');
         $manager->persist($employeeEntity);
         $manager->flush();
