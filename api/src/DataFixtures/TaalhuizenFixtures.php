@@ -482,12 +482,42 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($participations);
         $manager->flush();
 
+        $relevantCertificates = new Attribute();
+        $relevantCertificates->setName('relevantCertificates');
+        $relevantCertificates->setType('string');
+        $relevantCertificates->setFormat('string');
+        $relevantCertificates->setDescription('Relevant certificates that are not mentioned in skills, competences or educations');
+        $relevantCertificates->setNullable(true);
+        $manager->persist($relevantCertificates);
+        $manager->flush();
+
+        $referrer = new Attribute();
+        $referrer->setName('referrer');
+        $referrer->setType('string');
+        $referrer->setFormat('string');
+        $referrer->setDescription('The person who referred employee to the employer');
+        $referrer->setNullable(true);
+        $manager->persist($referrer);
+        $manager->flush();
+
+        $provider = new Attribute();
+        $provider->setName('provider');
+        $provider->setType('string');
+        $provider->setFormat('string');
+        $provider->setDescription('The provider for the employee');
+        $provider->setNullable(true);
+        $manager->persist($provider);
+        $manager->flush();
+
         $employeeEntity = new Entity();
         $employeeEntity->setType('mrc/employees');
         $employeeEntity->setName('employee');
         $manager->persist($employeeEntity);
         $manager->flush();
         $employeeEntity->addAttribute($participations);
+        $employeeEntity->addAttribute($relevantCertificates);
+        $employeeEntity->addAttribute($referrer);
+        $employeeEntity->addAttribute($provider);
         $manager->persist($employeeEntity);
         $manager->flush();
 
@@ -525,5 +555,48 @@ class TaalhuizenFixtures extends Fixture
         $personEntity->setName('person');
         $manager->persist($personEntity);
         $manager->flush();
+
+        $courseProfessionalism = new Attribute();
+        $courseProfessionalism->setName('courseProfessionalism');
+        $courseProfessionalism->setType('string');
+        $courseProfessionalism->setFormat('string');
+        $courseProfessionalism->setDescription('The professionalism of the course');
+//        $courseProfessionalism->setEnum(['PROFESSIONAL', 'VOLUNTEER', 'BOTH']);
+        $courseProfessionalism->setNullable(true);
+        $manager->persist($courseProfessionalism);
+        $manager->flush();
+
+        $teacherProfessionalism = new Attribute();
+        $teacherProfessionalism->setName('teacherProfessionalism');
+        $teacherProfessionalism->setType('string');
+        $teacherProfessionalism->setFormat('string');
+        $teacherProfessionalism->setDescription('The professionalism of the teacher');
+//        $teacherProfessionalism->setEnum(['PROFESSIONAL', 'VOLUNTEER', 'BOTH']);
+        $teacherProfessionalism->setNullable(true);
+        $manager->persist($teacherProfessionalism);
+        $manager->flush();
+
+        $providesCertificate = new Attribute();
+        $providesCertificate->setName('providesCertificate');
+        $providesCertificate->setType('boolean');
+        $providesCertificate->setFormat('boolean');
+        $providesCertificate->setDescription('Denotes whether or not the education provides a certificate');
+        $providesCertificate->setNullable(true);
+        $manager->persist($providesCertificate);
+        $manager->flush();
+
+
+        $educationEntity = new Entity();
+        $educationEntity->setType('mrc/educations');
+        $educationEntity->setName('education');
+        $manager->persist($educationEntity);
+        $manager->flush();
+        $educationEntity->addAttribute($courseProfessionalism);
+        $educationEntity->addAttribute($teacherProfessionalism);
+        $educationEntity->addAttribute($providesCertificate);
+        $manager->persist($educationEntity);
+        $manager->flush();
+
+
     }
 }
