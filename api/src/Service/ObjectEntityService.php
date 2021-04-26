@@ -358,7 +358,7 @@ class ObjectEntityService
         }
 
         // Check if the value is null and if so if this is allowed or not
-        if (!isset($bodyValue)) {
+        if (is_null($bodyValue)) {
             if (!$attribute->getNullable()) {
                 throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
             }
@@ -367,7 +367,7 @@ class ObjectEntityService
         // Do checks for attribute depending on its type-format
         switch ($typeFormat) {
             case 'string-string':
-                if (!is_string($bodyValue)) {
+                if (!is_string($bodyValue) && (!is_null($bodyValue) && $attribute->getNullable())) {
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
                 }
                 if ($attribute->getMinLength() && strlen($bodyValue) < $attribute->getMinLength()) {
@@ -378,12 +378,13 @@ class ObjectEntityService
                 }
                 break;
             case 'number-number':
-                if (!is_integer($bodyValue) && !is_float($bodyValue) && gettype($bodyValue) != 'float' && gettype($bodyValue) != 'double') {
+                if (!is_integer($bodyValue) && !is_float($bodyValue) && gettype($bodyValue) != 'float' && gettype($bodyValue) != 'double'
+                    && (!is_null($bodyValue) && $attribute->getNullable())) {
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
                 }
                 break;
             case 'integer-integer':
-                if (!is_integer($bodyValue)) {
+                if (!is_integer($bodyValue) && (!is_null($bodyValue) && $attribute->getNullable())) {
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
                 }
                 if ($attribute->getMinimum()) {
@@ -405,12 +406,12 @@ class ObjectEntityService
                 }
                 break;
             case 'boolean-boolean':
-                if (!is_bool($bodyValue)) {
+                if (!is_bool($bodyValue) && (!is_null($bodyValue) && $attribute->getNullable())) {
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
                 }
                 break;
             case 'array-array':
-                if (!is_array($bodyValue)) {
+                if (!is_array($bodyValue) && (!is_null($bodyValue) && $attribute->getNullable())) {
                     throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
                 }
                 if ($attribute->getMinItems() && count($bodyValue) < $attribute->getMinItems()) {
