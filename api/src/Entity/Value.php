@@ -220,7 +220,7 @@ class Value
         return $this->dateTimeValue;
     }
 
-    public function setDateTimeValue(\DateTimeInterface $dateTimeValue): self
+    public function setDateTimeValue(?\DateTimeInterface $dateTimeValue): self
     {
         $this->dateTimeValue = $dateTimeValue;
 
