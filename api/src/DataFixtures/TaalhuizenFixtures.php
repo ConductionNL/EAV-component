@@ -193,7 +193,6 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($learningNeedEntity);
         $manager->flush();
 
-
         // EDU participantEntity
         $learningNeeds = new Attribute();
         $learningNeeds->setName('learningNeeds');
@@ -510,10 +509,23 @@ class TaalhuizenFixtures extends Fixture
         $manager->flush();
 
 
+        // CC personEntity/availability
+        $availability = new Attribute();
+        $availability->setName('availability');
+        $availability->setType('array');
+        $availability->setFormat('array');
+        $availability->setDescription('A array that holds availability information from the person');
+        $manager->persist($availability);
+        $manager->flush();
+
+
         // CC personEntity
         $personEntity = new Entity();
         $personEntity->setType('cc/people');
         $personEntity->setName('person');
+        $manager->persist($personEntity);
+        $manager->flush();
+        $personEntity->addAttribute($availability);
         $manager->persist($personEntity);
         $manager->flush();
     }
