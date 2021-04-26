@@ -393,27 +393,27 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($learningNeed);
         $manager->flush();
 
-        $groups = new Attribute();
-        $groups->setName('groups');
-        $groups->setType('array');
-        $groups->setFormat('array');
-        $groups->setDescription('An array of EAV/edu/groups urls');
-        $manager->persist($groups);
+        $group = new Attribute();
+        $group->setName('group');
+        $group->setType('string');
+        $group->setFormat('string');
+        $group->setDescription('A string of an edu/groups url');
+        $manager->persist($group);
         $manager->flush();
 
-        $mentors = new Attribute();
-        $mentors->setName('mentors');
-        $mentors->setType('array');
-        $mentors->setFormat('array');
-        $mentors->setDescription('An array of EAV/mrc/employees urls');
-        $manager->persist($mentors);
+        $mentor = new Attribute();
+        $mentor->setName('mentor');
+        $mentor->setType('string');
+        $mentor->setFormat('string');
+        $mentor->setDescription('A string of an mrc/employees url');
+        $manager->persist($mentor);
         $manager->flush();
 
         $results = new Attribute();
         $results->setName('results');
         $results->setType('array');
         $results->setFormat('array');
-        $results->setDescription('An array of EAV/edu/results urls');
+        $results->setDescription('An array of edu/results urls');
         $manager->persist($results);
         $manager->flush();
 
@@ -446,8 +446,8 @@ class TaalhuizenFixtures extends Fixture
         $participationEntity->addAttribute($presenceEndDate);
         $participationEntity->addAttribute($presenceEndParticipationReason);
         $participationEntity->addAttribute($learningNeed);
-        $participationEntity->addAttribute($groups);
-        $participationEntity->addAttribute($mentors);
+        $participationEntity->addAttribute($group);
+        $participationEntity->addAttribute($mentor);
         $participationEntity->addAttribute($results);
         $manager->persist($participationEntity);
         $manager->flush();
