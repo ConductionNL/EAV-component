@@ -457,36 +457,37 @@ class ObjectEntityService
         $value->setAttribute($attribute);
         $value->setUri($uri);
 
-        // If the attribute is nullable just set no value so it is null
-        if (!is_null($bodyValue)) {
-            // Get attribute type and format
-            $typeFormat = $attribute->getType() . '-' . $attribute->getFormat();
-            switch ($typeFormat) {
-                case 'string-string':
-                    $value->setValue($bodyValue);
-                    break;
-                case 'number-number':
-                    $value->setNumberValue($bodyValue);
-                case 'integer-integer':
-                    $value->setIntegerValue($bodyValue);
-                    break;
-                case 'boolean-boolean':
-                    if (is_string($bodyValue)) {
-                        // This is used for defaultValue, this is always a string type instead of a boolean
-                        $bodyValue = $bodyValue === 'true';
-                    }
-                    $value->setBooleanValue($bodyValue);
-                    break;
-                case 'array-array':
-                    if (is_string($bodyValue)) {
-                        $bodyValue = $this->createArrayFromString($bodyValue);
-                    }
-                    $value->setArrayValue($bodyValue);
-                    break;
-                case 'datetime-datetime':
+        // Get attribute type and format
+        $typeFormat = $attribute->getType() . '-' . $attribute->getFormat();
+        switch ($typeFormat) {
+            case 'string-string':
+                $value->setValue($bodyValue);
+                break;
+            case 'number-number':
+                $value->setNumberValue($bodyValue);
+            case 'integer-integer':
+                $value->setIntegerValue($bodyValue);
+                break;
+            case 'boolean-boolean':
+                if (is_string($bodyValue)) {
+                    // This is used for defaultValue, this is always a string type instead of a boolean
+                    $bodyValue = $bodyValue === 'true';
+                }
+                $value->setBooleanValue($bodyValue);
+                break;
+            case 'array-array':
+                if (is_string($bodyValue)) {
+                    $bodyValue = $this->createArrayFromString($bodyValue);
+                }
+                $value->setArrayValue($bodyValue);
+                break;
+            case 'datetime-datetime':
+                if (!is_null($bodyValue)) {
                     $value->setDateTimeValue(new \DateTime($bodyValue));
-                    break;
-            }
+                } else {
+                    $value->setDateTimeValue(null);
+                }
+                break;
         }
 
         $this->em->persist($value);
