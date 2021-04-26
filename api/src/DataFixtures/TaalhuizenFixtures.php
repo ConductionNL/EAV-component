@@ -377,6 +377,7 @@ class TaalhuizenFixtures extends Fixture
         $presenceStartDate->setName('presenceStartDate');
         $presenceStartDate->setType('datetime');
         $presenceStartDate->setFormat('datetime');
+        $presenceStartDate->setNullable(true);
         $manager->persist($presenceStartDate);
         $manager->flush();
 
@@ -384,6 +385,7 @@ class TaalhuizenFixtures extends Fixture
         $presenceEndDate->setName('presenceEndDate');
         $presenceEndDate->setType('datetime');
         $presenceEndDate->setFormat('datetime');
+        $presenceEndDate->setNullable(true);
         $manager->persist($presenceEndDate);
         $manager->flush();
 
@@ -392,6 +394,7 @@ class TaalhuizenFixtures extends Fixture
         $presenceEndParticipationReason->setType('string');
         $presenceEndParticipationReason->setFormat('string');
         $presenceEndParticipationReason->setEnum(['MOVED', 'JOB', 'ILLNESS', 'DEATH', 'COMPLETED_SUCCESSFULLY', 'FAMILY_CIRCUMSTANCES', 'DOES_NOT_MEET_EXPECTATIONS', 'OTHER']);
+        $presenceEndParticipationReason->setNullable(true);
         $manager->persist($presenceEndParticipationReason);
         $manager->flush();
 
