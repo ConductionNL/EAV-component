@@ -598,7 +598,7 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($providesCertificate);
         $manager->flush();
 
-
+        // WARNING, in mrc, Entity Education plural form is set to mrc/education and not (what we expect it to be:) mrc/educations
         $educationEntity = new Entity();
         $educationEntity->setType('mrc/education');
         $educationEntity->setName('education');
@@ -609,7 +609,5 @@ class TaalhuizenFixtures extends Fixture
         $educationEntity->addAttribute($providesCertificate);
         $manager->persist($educationEntity);
         $manager->flush();
-
-
     }
 }
