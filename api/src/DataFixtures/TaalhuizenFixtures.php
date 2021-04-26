@@ -398,6 +398,7 @@ class TaalhuizenFixtures extends Fixture
         $group->setType('string');
         $group->setFormat('string');
         $group->setDescription('A string of an edu/groups url');
+        $group->setNullable(true);
         $manager->persist($group);
         $manager->flush();
 
@@ -406,6 +407,7 @@ class TaalhuizenFixtures extends Fixture
         $mentor->setType('string');
         $mentor->setFormat('string');
         $mentor->setDescription('A string of an mrc/employees url');
+        $mentor->setNullable(true);
         $manager->persist($mentor);
         $manager->flush();
 
