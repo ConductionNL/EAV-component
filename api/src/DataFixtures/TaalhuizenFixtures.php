@@ -478,15 +478,119 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($participations);
         $manager->flush();
 
+        $outComesGoal = new Attribute();
+        $outComesGoal->setName('goal');
+        $outComesGoal->setType('string');
+        $outComesGoal->setFormat('string');
+        $outComesGoal->setDescription('A string of the goal of this group');
+        $manager->persist($outComesGoal);
+        $manager->flush();
+
+        $outComesTopic = new Attribute();
+        $outComesTopic->setName('topic');
+        $outComesTopic->setType('string');
+        $outComesTopic->setFormat('string');
+        $outComesTopic->setDescription('the topic of this group');
+        $outComesTopic->setEnum(['DUTCH_READING','DUTCH_WRITING','MATH_NUMBERS','MATH_PROPORTION','MATH_GEOMETRY','MATH_LINKS','DIGITAL_USING_ICT_SYSTEMS','DIGITAL_SEARCHING_INFORMATION', 'DIGITAL_PROCESSING_INFORMATION','DIGITAL_COMMUNICATION','KNOWLEDGE','SKILLS','ATTITUDE','BEHAVIOUR','OTHER']);
+        $manager->persist($outComesTopic);
+        $manager->flush();
+
+        $outComesTopicOther = new Attribute();
+        $outComesTopicOther->setName('topicOther');
+        $outComesTopicOther->setType('string');
+        $outComesTopicOther->setFormat('string');
+        $outComesTopicOther->setDescription('the topic of this group if topic is not in list');
+        $outComesTopicOther->setNullable(true);
+        $manager->persist($outComesTopicOther);
+        $manager->flush();
+
+        $outComesApplication = new Attribute();
+        $outComesApplication->setName('application');
+        $outComesApplication->setType('string');
+        $outComesApplication->setFormat('string');
+        $outComesApplication->setDescription('application of what is being learned');
+        $outComesApplication->setEnum(['FAMILY_AND_PARENTING','LABOR_MARKET_AND_WORK','HEALTH_AND_WELLBEING','ADMINISTRATION_AND_FINANCE','HOUSING_AND_NEIGHBORHOOD','SELFRELIANCE','OTHER']);
+        $manager->persist($outComesApplication);
+        $manager->flush();
+
+        $outComesApplicationOther = new Attribute();
+        $outComesApplicationOther->setName('applicationOther');
+        $outComesApplicationOther->setType('string');
+        $applicationOther->setFormat('string');
+        $applicationOther->setDescription('application of what is being learned if application not in list');
+        $applicationOther->setNullable(true);
+        $manager->persist($applicationOther);
+        $manager->flush();
+
+        $outComesLevel = new Attribute();
+        $outComesLevel->setName('level');
+        $outComesLevel->setType('string');
+        $outComesLevel->setFormat('string');
+        $outComesLevel->setDescription('the level that will be taught');
+        $outComesLevel->setEnum(['INFLOW','NLQF1','NLQF2','NLQF3','NLQF4','OTHER']);
+        $manager->persist($outComesLevel);
+        $manager->flush();
+
+        $outComesLevelOther = new Attribute();
+        $outComesLevelOther->setName('levelOther');
+        $outComesLevelOther->setType('string');
+        $outComesLevelOther->setFormat('string');
+        $outComesLevelOther->setDescription('the level that will be taught if level is not in list');
+        $outComesLevelOther->setNullable(true);
+        $manager->persist($outComesLevelOther);
+        $manager->flush();
+
+        $detailsIsFormal = new Attribute();
+        $detailsIsFormal->setName('isFormal');
+        $detailsIsFormal->setType('boolean');
+        $detailsIsFormal->setFormat('boolean');
+        $detailsIsFormal->setDescription('Denotes whether or not this is formal');
+        $manager->persist($isFormal);
+        $manager->flush();
+
+        $detailsCertificateWillBeAwarded = new Attribute();
+        $detailsCertificateWillBeAwarded->setName('certificateWillBeAwarded');
+        $detailsCertificateWillBeAwarded->setType('boolean');
+        $detailsCertificateWillBeAwarded->setFormat('boolean');
+        $detailsCertificateWillBeAwarded->setDescription('Denotes if completion of this course grants a certificate');
+        $manager->persist($certificateWillBeAwarded);
+        $manager->flush();
+
+        $generalLocation = new Attribute();
+        $generalLocation->setName('location');
+        $generalLocation->setType('string');
+        $generalLocation->setFormat('string');
+        $generalLocation->setDescription('The location the class will take place');
+        $manager->persist($generalLocation);
+        $manager->flush();
+
+        $generalEvaluation = new Attribute();
+        $generalEvaluation->setName('evaluation');
+        $generalEvaluation->setType('string');
+        $generalEvaluation->setFormat('string');
+        $generalEvaluation->setDescription('The evaluation of this group');
+        $manager->persist($generalEvaluation);
+        $manager->flush();
+
         $groupEntity = new Entity();
         $groupEntity->setType('edu/groups');
         $groupEntity->setName('group');
         $manager->persist($groupEntity);
         $manager->flush();
         $groupEntity->addAttribute($participations);
+        $groupEntity->addAttribute($outComesGoal);
+        $groupEntity->addAttribute($outComesTopic);
+        $groupEntity->addAttribute($outComesTopicOther);
+        $groupEntity->addAttribute($outComesApplication);
+        $groupEntity->addAttribute($outComesApplicationOther);
+        $groupEntity->addAttribute($outComesLevel);
+        $groupEntity->addAttribute($outComesLevelOther);
+        $groupEntity->addAttribute($detailsIsFormal);
+        $groupEntity->addAttribute($detailsCertificateWillBeAwarded);
+        $groupEntity->addAttribute($generalLocation);
+        $groupEntity->addAttribute($generalEvaluation);
         $manager->persist($groupEntity);
         $manager->flush();
-
 
         // MRC employee
         $participations = new Attribute();
