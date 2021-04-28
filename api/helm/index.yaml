@@ -3,10 +3,10 @@ entries:
   eav-component:
   - apiVersion: v1
     appVersion: V1.0
-    created: "2021-04-26T17:47:18.5403353Z"
+    created: "2021-04-22T09:48:48.6875346Z"
     description: '&amp;#039;Naast deze JSON rest API is er ook een [graphql](/graphql)
       interface beschikbaar.&amp;#039;'
-    digest: 5ecf302df37bb99f874d17621ff2f70285b93be4cf8f297de740c0be35e6ed6c
+    digest: 1fc8b2a2ff4a2eb75dc2e6668633ba374b499e1d556b131b00ce5b9b50c15d7c
     home: https://www.conduction.nl
     icon: https://conductionnl.github.io/images/conduction_avatar_blue_on_transparant.svg
     keywords:
@@ -31,7 +31,7 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 11.10.0
-    created: "2021-04-26T17:47:18.5534252Z"
+    created: "2021-04-22T09:48:48.7029257Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -60,4 +60,4 @@ entries:
     urls:
     - charts/postgresql-10.1.1.tgz
     version: 10.1.1
-generated: "2021-04-26T17:47:18.5280379Z"
+generated: "2021-04-22T09:48:48.6752903Z"

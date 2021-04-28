@@ -197,6 +197,48 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($learningNeedEntity);
         $manager->flush();
 
+        /**
+         * EAV Documents
+         */
+        $documentData = new Attribute();
+        $documentData->setName('base64data');
+        $documentData->setType('string');
+        $documentData->setFormat('string');
+        $manager->persist($documentData);
+        $manager->flush();
+
+        $documentFilename = new Attribute();
+        $documentFilename->setName('filename');
+        $documentFilename->setType('string');
+        $documentFilename->setFormat('string');
+        $manager->persist($documentFilename);
+        $manager->flush();
+
+        $documentProviderEmployee = new Attribute();
+        $documentProviderEmployee->setName('aanbiederEmployeeId');
+        $documentProviderEmployee->setType('string');
+        $documentProviderEmployee->setFormat('string');
+        $manager->persist($documentProviderEmployee);
+        $manager->flush();
+
+        $documentStudent = new Attribute();
+        $documentStudent->setName('studentId');
+        $documentStudent->setType('string');
+        $documentStudent->setFormat('string');
+        $manager->persist($documentStudent);
+        $manager->flush();
+
+        $documentEntity = new Entity();
+        $documentEntity->setType('eav/documents');
+        $documentEntity->setName('document');
+        $manager->persist($documentEntity);
+        $manager->flush();
+        $documentEntity->addAttribute($documentData);
+        $documentEntity->addAttribute($documentFilename);
+        $documentEntity->addAttribute($documentFilename);
+        $documentEntity->addAttribute($documentStudent);
+
+
         // EDU participantEntity
         $learningNeeds = new Attribute();
         $learningNeeds->setName('learningNeeds');
