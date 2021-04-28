@@ -59,6 +59,7 @@ class TaalhuizenFixtures extends Fixture
         $topic->setName('topic');
         $topic->setType('string');
         $topic->setFormat('string');
+        $topic->setEnum(['DUTCH_READING', 'DUTCH_WRITING', 'MATH_NUMBERS', 'MATH_PROPORTION', 'MATH_GEOMETRY', 'MATH_LINKS', 'DIGITAL_USING_ICT_SYSTEMS', 'DIGITAL_SEARCHING_INFORMATION', 'DIGITAL_PROCESSING_INFORMATION', 'DIGITAL_COMMUNICATION', 'KNOWLEDGE', 'SKILLS', 'ATTITUDE', 'BEHAVIOUR', 'OTHER']);
         $manager->persist($topic);
         $manager->flush();
 
@@ -74,6 +75,7 @@ class TaalhuizenFixtures extends Fixture
         $application->setName('application');
         $application->setType('string');
         $application->setFormat('string');
+        $application->setEnum(['FAMILY_AND_PARENTING', 'LABOR_MARKET_AND_WORK', 'HEALTH_AND_WELLBEING', 'ADMINISTRATION_AND_FINANCE', 'HOUSING_AND_NEIGHBORHOOD', 'SELFRELIANCE', 'OTHER']);
         $manager->persist($application);
         $manager->flush();
 
@@ -89,6 +91,7 @@ class TaalhuizenFixtures extends Fixture
         $level->setName('level');
         $level->setType('string');
         $level->setFormat('string');
+        $level->setEnum(['INFLOW', 'NLQF1', 'NLQF2', 'NLQF3', 'NLQF4', 'OTHER']);
         $manager->persist($level);
         $manager->flush();
 
@@ -118,6 +121,7 @@ class TaalhuizenFixtures extends Fixture
         $offerDifference->setName('offerDifference');
         $offerDifference->setType('string');
         $offerDifference->setFormat('string');
+        $offerDifference->setEnum(['NO', 'YES_DISTANCE', 'YES_WAITINGLIST', 'YES_OTHER']);
         $manager->persist($offerDifference);
         $manager->flush();
 
@@ -138,15 +142,15 @@ class TaalhuizenFixtures extends Fixture
         $manager->flush();
 
         $participants = new Attribute();
-        $participants->setName('participants');
+        $participants->setName('participants'); //EDU!
         $participants->setType('array');
         $participants->setFormat('array');
-        $participants->setDescription('An array of EAV/edu/participants urls');
+        $participants->setDescription('An array of edu/participants urls');
         $manager->persist($participants);
         $manager->flush();
 
         $participations = new Attribute();
-        $participations->setName('participations');
+        $participations->setName('participations'); //EAV!
         $participations->setType('array');
         $participations->setFormat('array');
         $participations->setDescription('An array of EAV/participations urls');
@@ -217,6 +221,7 @@ class TaalhuizenFixtures extends Fixture
         $status->setName('status');
         $status->setType('string');
         $status->setFormat('string');
+        $status->setEnum(['REFERRED', 'ACTIVE', 'COMPLETED']);
         $manager->persist($status);
         $manager->flush();
 
@@ -266,6 +271,7 @@ class TaalhuizenFixtures extends Fixture
         $topic->setName('topic');
         $topic->setType('string');
         $topic->setFormat('string');
+        $topic->setEnum(['DUTCH_READING', 'DUTCH_WRITING', 'MATH_NUMBERS', 'MATH_PROPORTION', 'MATH_GEOMETRY', 'MATH_LINKS', 'DIGITAL_USING_ICT_SYSTEMS', 'DIGITAL_SEARCHING_INFORMATION', 'DIGITAL_PROCESSING_INFORMATION', 'DIGITAL_COMMUNICATION', 'KNOWLEDGE', 'SKILLS', 'ATTITUDE', 'BEHAVIOUR', 'OTHER']);
         $manager->persist($topic);
         $manager->flush();
 
@@ -281,6 +287,7 @@ class TaalhuizenFixtures extends Fixture
         $application->setName('application');
         $application->setType('string');
         $application->setFormat('string');
+        $application->setEnum(['FAMILY_AND_PARENTING', 'LABOR_MARKET_AND_WORK', 'HEALTH_AND_WELLBEING', 'ADMINISTRATION_AND_FINANCE', 'HOUSING_AND_NEIGHBORHOOD', 'SELFRELIANCE', 'OTHER']);
         $manager->persist($application);
         $manager->flush();
 
@@ -296,6 +303,7 @@ class TaalhuizenFixtures extends Fixture
         $level->setName('level');
         $level->setType('string');
         $level->setFormat('string');
+        $level->setEnum(['INFLOW', 'NLQF1', 'NLQF2', 'NLQF3', 'NLQF4', 'OTHER']);
         $manager->persist($level);
         $manager->flush();
 
@@ -318,6 +326,7 @@ class TaalhuizenFixtures extends Fixture
         $groupFormation->setName('groupFormation');
         $groupFormation->setType('string');
         $groupFormation->setFormat('string');
+        $groupFormation->setEnum(['INDIVIDUALLY', 'IN_A_GROUP']);
         $manager->persist($groupFormation);
         $manager->flush();
 
@@ -356,10 +365,19 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($engagements);
         $manager->flush();
 
+        $presenceEngagements = new Attribute();
+        $presenceEngagements->setName('presenceEngagements');
+        $presenceEngagements->setType('string');
+        $presenceEngagements->setFormat('string');
+        $presenceEngagements->setNullable(true);
+        $manager->persist($presenceEngagements);
+        $manager->flush();
+
         $presenceStartDate = new Attribute();
         $presenceStartDate->setName('presenceStartDate');
         $presenceStartDate->setType('datetime');
         $presenceStartDate->setFormat('datetime');
+        $presenceStartDate->setNullable(true);
         $manager->persist($presenceStartDate);
         $manager->flush();
 
@@ -367,6 +385,7 @@ class TaalhuizenFixtures extends Fixture
         $presenceEndDate->setName('presenceEndDate');
         $presenceEndDate->setType('datetime');
         $presenceEndDate->setFormat('datetime');
+        $presenceEndDate->setNullable(true);
         $manager->persist($presenceEndDate);
         $manager->flush();
 
@@ -374,6 +393,8 @@ class TaalhuizenFixtures extends Fixture
         $presenceEndParticipationReason->setName('presenceEndParticipationReason');
         $presenceEndParticipationReason->setType('string');
         $presenceEndParticipationReason->setFormat('string');
+        $presenceEndParticipationReason->setEnum(['MOVED', 'JOB', 'ILLNESS', 'DEATH', 'COMPLETED_SUCCESSFULLY', 'FAMILY_CIRCUMSTANCES', 'DOES_NOT_MEET_EXPECTATIONS', 'OTHER']);
+        $presenceEndParticipationReason->setNullable(true);
         $manager->persist($presenceEndParticipationReason);
         $manager->flush();
 
@@ -385,27 +406,29 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($learningNeed);
         $manager->flush();
 
-        $groups = new Attribute();
-        $groups->setName('groups');
-        $groups->setType('array');
-        $groups->setFormat('array');
-        $groups->setDescription('An array of EAV/edu/groups urls');
-        $manager->persist($groups);
+        $group = new Attribute();
+        $group->setName('group');
+        $group->setType('string');
+        $group->setFormat('string');
+        $group->setDescription('A string of an edu/groups url');
+        $group->setNullable(true);
+        $manager->persist($group);
         $manager->flush();
 
-        $mentors = new Attribute();
-        $mentors->setName('mentors');
-        $mentors->setType('array');
-        $mentors->setFormat('array');
-        $mentors->setDescription('An array of EAV/mrc/employees urls');
-        $manager->persist($mentors);
+        $mentor = new Attribute();
+        $mentor->setName('mentor');
+        $mentor->setType('string');
+        $mentor->setFormat('string');
+        $mentor->setDescription('A string of an mrc/employees url');
+        $mentor->setNullable(true);
+        $manager->persist($mentor);
         $manager->flush();
 
         $results = new Attribute();
         $results->setName('results');
         $results->setType('array');
         $results->setFormat('array');
-        $results->setDescription('An array of EAV/edu/results urls');
+        $results->setDescription('An array of edu/results urls');
         $manager->persist($results);
         $manager->flush();
 
@@ -414,6 +437,7 @@ class TaalhuizenFixtures extends Fixture
         $participationEntity->setName('participation');
         $manager->persist($participationEntity);
         $manager->flush();
+        $participationEntity->addAttribute($status);
         $participationEntity->addAttribute($aanbiederId);
         $participationEntity->addAttribute($aanbiederName);
         $participationEntity->addAttribute($aanbiederNote);
@@ -433,12 +457,13 @@ class TaalhuizenFixtures extends Fixture
         $participationEntity->addAttribute($startDate);
         $participationEntity->addAttribute($endDate);
         $participationEntity->addAttribute($engagements);
+        $participationEntity->addAttribute($presenceEngagements);
         $participationEntity->addAttribute($presenceStartDate);
         $participationEntity->addAttribute($presenceEndDate);
         $participationEntity->addAttribute($presenceEndParticipationReason);
         $participationEntity->addAttribute($learningNeed);
-        $participationEntity->addAttribute($groups);
-        $participationEntity->addAttribute($mentors);
+        $participationEntity->addAttribute($group);
+        $participationEntity->addAttribute($mentor);
         $participationEntity->addAttribute($results);
         $manager->persist($participationEntity);
         $manager->flush();
@@ -472,12 +497,42 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($participations);
         $manager->flush();
 
+        $relevantCertificates = new Attribute();
+        $relevantCertificates->setName('relevantCertificates');
+        $relevantCertificates->setType('string');
+        $relevantCertificates->setFormat('string');
+        $relevantCertificates->setDescription('Relevant certificates that are not mentioned in skills, competences or educations');
+        $relevantCertificates->setNullable(true);
+        $manager->persist($relevantCertificates);
+        $manager->flush();
+
+        $referrer = new Attribute();
+        $referrer->setName('referrer');
+        $referrer->setType('string');
+        $referrer->setFormat('string');
+        $referrer->setDescription('The person who referred employee to the employer');
+        $referrer->setNullable(true);
+        $manager->persist($referrer);
+        $manager->flush();
+
+        $provider = new Attribute();
+        $provider->setName('provider');
+        $provider->setType('string');
+        $provider->setFormat('string');
+        $provider->setDescription('The provider for the employee');
+        $provider->setNullable(true);
+        $manager->persist($provider);
+        $manager->flush();
+
         $employeeEntity = new Entity();
         $employeeEntity->setType('mrc/employees');
         $employeeEntity->setName('employee');
         $manager->persist($employeeEntity);
         $manager->flush();
         $employeeEntity->addAttribute($participations);
+        $employeeEntity->addAttribute($relevantCertificates);
+        $employeeEntity->addAttribute($referrer);
+        $employeeEntity->addAttribute($provider);
         $manager->persist($employeeEntity);
         $manager->flush();
 
@@ -527,6 +582,47 @@ class TaalhuizenFixtures extends Fixture
         $manager->flush();
         $personEntity->addAttribute($availability);
         $manager->persist($personEntity);
+        $manager->flush();
+
+        $courseProfessionalism = new Attribute();
+        $courseProfessionalism->setName('courseProfessionalism');
+        $courseProfessionalism->setType('string');
+        $courseProfessionalism->setFormat('string');
+        $courseProfessionalism->setDescription('The professionalism of the course');
+        $courseProfessionalism->setEnum(['PROFESSIONAL', 'VOLUNTEER', 'BOTH']);
+        $courseProfessionalism->setNullable(true);
+        $manager->persist($courseProfessionalism);
+        $manager->flush();
+
+        $teacherProfessionalism = new Attribute();
+        $teacherProfessionalism->setName('teacherProfessionalism');
+        $teacherProfessionalism->setType('string');
+        $teacherProfessionalism->setFormat('string');
+        $teacherProfessionalism->setDescription('The professionalism of the teacher');
+        $teacherProfessionalism->setEnum(['PROFESSIONAL', 'VOLUNTEER', 'BOTH']);
+        $teacherProfessionalism->setNullable(true);
+        $manager->persist($teacherProfessionalism);
+        $manager->flush();
+
+        $providesCertificate = new Attribute();
+        $providesCertificate->setName('providesCertificate');
+        $providesCertificate->setType('boolean');
+        $providesCertificate->setFormat('boolean');
+        $providesCertificate->setDescription('Denotes whether or not the education provides a certificate');
+        $providesCertificate->setNullable(true);
+        $manager->persist($providesCertificate);
+        $manager->flush();
+
+        // WARNING, in mrc, Entity Education plural form is set to mrc/education and not (what we expect it to be:) mrc/educations
+        $educationEntity = new Entity();
+        $educationEntity->setType('mrc/education');
+        $educationEntity->setName('education');
+        $manager->persist($educationEntity);
+        $manager->flush();
+        $educationEntity->addAttribute($courseProfessionalism);
+        $educationEntity->addAttribute($teacherProfessionalism);
+        $educationEntity->addAttribute($providesCertificate);
+        $manager->persist($educationEntity);
         $manager->flush();
     }
 }
