@@ -100,15 +100,15 @@ class Attribute
     private $format;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"write"})
      * @ORM\ManyToOne(targetEntity=Entity::class, inversedBy="attributes")
      * @MaxDepth(1)
      */
     private $entity;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="attribute", cascade={"remove"})
+     * @Groups({"write"})
+     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="attribute", cascade={"remove"}, fetch="EXTRA_LAZY")
      * @MaxDepth(1)
      */
     private $attributeValues;
