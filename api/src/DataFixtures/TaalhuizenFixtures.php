@@ -774,12 +774,12 @@ class TaalhuizenFixtures extends Fixture
         $manager->flush();
 
         // CC personEntity/dutchNTDetails
-        $dutchNTDetails = new Attribute();
-        $dutchNTDetails->setName('dutchNTDetails');
-        $dutchNTDetails->setType('string');
-        $dutchNTDetails->setFormat('string');
-        $dutchNTDetails->setDescription('A string that holds the Dutch NT details of this person');
-        $manager->persist($dutchNTDetails);
+        $dutchNTLevel = new Attribute();
+        $dutchNTLevel->setName('dutchNTLevel');
+        $dutchNTLevel->setType('string');
+        $dutchNTLevel->setFormat('string');
+        $dutchNTLevel->setDescription('A string that holds the Dutch NT level of this person');
+        $manager->persist($dutchNTLevel);
         $manager->flush();
 
         // CC personEntity/inNetherlandsSinceYear
@@ -866,8 +866,9 @@ class TaalhuizenFixtures extends Fixture
         $personEntity->addAttribute($wentToTaalhuisBefore);
         $personEntity->addAttribute($wentToTaalhuisBeforeReason);
         $personEntity->addAttribute($wentToTaalhuisBeforeYear);
+        $personEntity->addAttribute($network);
         $personEntity->addAttribute($participationLadder);
-        $personEntity->addAttribute($dutchNTDetails);
+        $personEntity->addAttribute($dutchNTLevel);
         $personEntity->addAttribute($inNetherlandsSinceYear);
         $personEntity->addAttribute($languageInDailyLife);
         $personEntity->addAttribute($knowsLatinAlphabet);
