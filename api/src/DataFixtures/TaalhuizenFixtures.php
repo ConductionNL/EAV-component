@@ -785,9 +785,9 @@ class TaalhuizenFixtures extends Fixture
         // CC personEntity/inNetherlandsSinceYear
         $inNetherlandsSinceYear = new Attribute();
         $inNetherlandsSinceYear->setName('inNetherlandsSinceYear');
-        $inNetherlandsSinceYear->setType('string');
-        $inNetherlandsSinceYear->setFormat('string');
-        $inNetherlandsSinceYear->setDescription('A date that holds the inNetherlandsSinceYear of this person');
+        $inNetherlandsSinceYear->setType('number');
+        $inNetherlandsSinceYear->setFormat('number');
+        $inNetherlandsSinceYear->setDescription('A float number that holds the inNetherlandsSinceYear of this person');
         $manager->persist($inNetherlandsSinceYear);
         $manager->flush();
 
