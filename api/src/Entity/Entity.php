@@ -101,7 +101,7 @@ class Entity
     private Collection $attributes;
 
     /**
-     * @Groups({"read","write"})
+     * @Groups({"write"})
      * @ORM\OneToMany(targetEntity=ObjectEntity::class, mappedBy="entity", cascade={"remove"})
      * @MaxDepth(1)
      */

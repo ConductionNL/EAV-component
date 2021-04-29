@@ -116,7 +116,7 @@ class Value
     private $dateTimeValue;
 
     /**
-     * @Groups({"read", "write"})
+     * @Groups({"read","write"})
      * @ORM\ManyToOne(targetEntity=Attribute::class, inversedBy="attributeValues")
      * @ORM\JoinColumn(nullable=false)
      * @MaxDepth(1)
@@ -124,8 +124,8 @@ class Value
     private $attribute;
 
     /**
-     * @Groups({"read", "write"})
-     * @ORM\ManyToOne(targetEntity=ObjectEntity::class, inversedBy="objectValues")
+     * @Groups({"write"})
+     * @ORM\ManyToOne(targetEntity=ObjectEntity::class, inversedBy="objectValues", fetch="EXTRA_LAZY")
      * @ORM\JoinColumn(nullable=false)
      * @MaxDepth(1)
      */
