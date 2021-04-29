@@ -347,22 +347,22 @@ class ObjectEntityService
         // Get attribute type and format
         $typeFormat = $attribute->getType() . '-' . $attribute->getFormat();
 
-        // Check if attribute has an enum and if so check if the bodyValue equals one of the enumValues
-        if ($attribute->getEnum() && !in_array($bodyValue, $attribute->getEnum())) {
-            if ($typeFormat == 'array-array' || $typeFormat == 'boolean-boolean'){
-                $enumValues = json_encode($attribute->getEnum());
-            } else {
-                $enumValues = '[' . implode( ", ", $attribute->getEnum() ) . ']';
-            }
-            throw new HttpException('Attribute: [' . $attribute->getName() . '] must be one of the following values: ' . $enumValues . ' !', 400);
-        }
-
         // Check if the value is null and if so if this is allowed or not
         if (is_null($bodyValue)) {
             if (!$attribute->getNullable()) {
                 throw new HttpException('Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($bodyValue) . ' given!', 400);
             }
         } else {
+            // Check if attribute has an enum and if so check if the bodyValue equals one of the enumValues
+            if ($attribute->getEnum() && !in_array($bodyValue, $attribute->getEnum())) {
+                if ($typeFormat == 'array-array' || $typeFormat == 'boolean-boolean'){
+                    $enumValues = json_encode($attribute->getEnum());
+                } else {
+                    $enumValues = '[' . implode( ", ", $attribute->getEnum() ) . ']';
+                }
+                throw new HttpException('Attribute: [' . $attribute->getName() . '] must be one of the following values: ' . $enumValues . ' !', 400);
+            }
+
             // Do checks for attribute depending on its type-format
             switch ($typeFormat) {
                 case 'string-string':
