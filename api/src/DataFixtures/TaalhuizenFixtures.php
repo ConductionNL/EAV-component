@@ -197,6 +197,48 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($learningNeedEntity);
         $manager->flush();
 
+        /**
+         * EAV Documents
+         */
+        $documentData = new Attribute();
+        $documentData->setName('base64data');
+        $documentData->setType('string');
+        $documentData->setFormat('string');
+        $manager->persist($documentData);
+        $manager->flush();
+
+        $documentFilename = new Attribute();
+        $documentFilename->setName('filename');
+        $documentFilename->setType('string');
+        $documentFilename->setFormat('string');
+        $manager->persist($documentFilename);
+        $manager->flush();
+
+        $documentProviderEmployee = new Attribute();
+        $documentProviderEmployee->setName('aanbiederEmployeeId');
+        $documentProviderEmployee->setType('string');
+        $documentProviderEmployee->setFormat('string');
+        $manager->persist($documentProviderEmployee);
+        $manager->flush();
+
+        $documentStudent = new Attribute();
+        $documentStudent->setName('studentId');
+        $documentStudent->setType('string');
+        $documentStudent->setFormat('string');
+        $manager->persist($documentStudent);
+        $manager->flush();
+
+        $documentEntity = new Entity();
+        $documentEntity->setType('eav/documents');
+        $documentEntity->setName('document');
+        $manager->persist($documentEntity);
+        $manager->flush();
+        $documentEntity->addAttribute($documentData);
+        $documentEntity->addAttribute($documentFilename);
+        $documentEntity->addAttribute($documentFilename);
+        $documentEntity->addAttribute($documentStudent);
+
+
         // EDU participantEntity
         $learningNeeds = new Attribute();
         $learningNeeds->setName('learningNeeds');
@@ -478,15 +520,119 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($participations);
         $manager->flush();
 
+        $outComesGoal = new Attribute();
+        $outComesGoal->setName('goal');
+        $outComesGoal->setType('string');
+        $outComesGoal->setFormat('string');
+        $outComesGoal->setDescription('A string of the goal of this group');
+        $manager->persist($outComesGoal);
+        $manager->flush();
+
+        $outComesTopic = new Attribute();
+        $outComesTopic->setName('topic');
+        $outComesTopic->setType('string');
+        $outComesTopic->setFormat('string');
+        $outComesTopic->setDescription('the topic of this group');
+        $outComesTopic->setEnum(['DUTCH_READING','DUTCH_WRITING','MATH_NUMBERS','MATH_PROPORTION','MATH_GEOMETRY','MATH_LINKS','DIGITAL_USING_ICT_SYSTEMS','DIGITAL_SEARCHING_INFORMATION', 'DIGITAL_PROCESSING_INFORMATION','DIGITAL_COMMUNICATION','KNOWLEDGE','SKILLS','ATTITUDE','BEHAVIOUR','OTHER']);
+        $manager->persist($outComesTopic);
+        $manager->flush();
+
+        $outComesTopicOther = new Attribute();
+        $outComesTopicOther->setName('topicOther');
+        $outComesTopicOther->setType('string');
+        $outComesTopicOther->setFormat('string');
+        $outComesTopicOther->setDescription('the topic of this group if topic is not in list');
+        $outComesTopicOther->setNullable(true);
+        $manager->persist($outComesTopicOther);
+        $manager->flush();
+
+        $outComesApplication = new Attribute();
+        $outComesApplication->setName('application');
+        $outComesApplication->setType('string');
+        $outComesApplication->setFormat('string');
+        $outComesApplication->setDescription('application of what is being learned');
+        $outComesApplication->setEnum(['FAMILY_AND_PARENTING','LABOR_MARKET_AND_WORK','HEALTH_AND_WELLBEING','ADMINISTRATION_AND_FINANCE','HOUSING_AND_NEIGHBORHOOD','SELFRELIANCE','OTHER']);
+        $manager->persist($outComesApplication);
+        $manager->flush();
+
+        $outComesApplicationOther = new Attribute();
+        $outComesApplicationOther->setName('applicationOther');
+        $outComesApplicationOther->setType('string');
+        $applicationOther->setFormat('string');
+        $applicationOther->setDescription('application of what is being learned if application not in list');
+        $applicationOther->setNullable(true);
+        $manager->persist($applicationOther);
+        $manager->flush();
+
+        $outComesLevel = new Attribute();
+        $outComesLevel->setName('level');
+        $outComesLevel->setType('string');
+        $outComesLevel->setFormat('string');
+        $outComesLevel->setDescription('the level that will be taught');
+        $outComesLevel->setEnum(['INFLOW','NLQF1','NLQF2','NLQF3','NLQF4','OTHER']);
+        $manager->persist($outComesLevel);
+        $manager->flush();
+
+        $outComesLevelOther = new Attribute();
+        $outComesLevelOther->setName('levelOther');
+        $outComesLevelOther->setType('string');
+        $outComesLevelOther->setFormat('string');
+        $outComesLevelOther->setDescription('the level that will be taught if level is not in list');
+        $outComesLevelOther->setNullable(true);
+        $manager->persist($outComesLevelOther);
+        $manager->flush();
+
+        $detailsIsFormal = new Attribute();
+        $detailsIsFormal->setName('isFormal');
+        $detailsIsFormal->setType('boolean');
+        $detailsIsFormal->setFormat('boolean');
+        $detailsIsFormal->setDescription('Denotes whether or not this is formal');
+        $manager->persist($isFormal);
+        $manager->flush();
+
+        $detailsCertificateWillBeAwarded = new Attribute();
+        $detailsCertificateWillBeAwarded->setName('certificateWillBeAwarded');
+        $detailsCertificateWillBeAwarded->setType('boolean');
+        $detailsCertificateWillBeAwarded->setFormat('boolean');
+        $detailsCertificateWillBeAwarded->setDescription('Denotes if completion of this course grants a certificate');
+        $manager->persist($certificateWillBeAwarded);
+        $manager->flush();
+
+        $generalLocation = new Attribute();
+        $generalLocation->setName('location');
+        $generalLocation->setType('string');
+        $generalLocation->setFormat('string');
+        $generalLocation->setDescription('The location the class will take place');
+        $manager->persist($generalLocation);
+        $manager->flush();
+
+        $generalEvaluation = new Attribute();
+        $generalEvaluation->setName('evaluation');
+        $generalEvaluation->setType('string');
+        $generalEvaluation->setFormat('string');
+        $generalEvaluation->setDescription('The evaluation of this group');
+        $manager->persist($generalEvaluation);
+        $manager->flush();
+
         $groupEntity = new Entity();
         $groupEntity->setType('edu/groups');
         $groupEntity->setName('group');
         $manager->persist($groupEntity);
         $manager->flush();
         $groupEntity->addAttribute($participations);
+        $groupEntity->addAttribute($outComesGoal);
+        $groupEntity->addAttribute($outComesTopic);
+        $groupEntity->addAttribute($outComesTopicOther);
+        $groupEntity->addAttribute($outComesApplication);
+        $groupEntity->addAttribute($outComesApplicationOther);
+        $groupEntity->addAttribute($outComesLevel);
+        $groupEntity->addAttribute($outComesLevelOther);
+        $groupEntity->addAttribute($detailsIsFormal);
+        $groupEntity->addAttribute($detailsCertificateWillBeAwarded);
+        $groupEntity->addAttribute($generalLocation);
+        $groupEntity->addAttribute($generalEvaluation);
         $manager->persist($groupEntity);
         $manager->flush();
-
 
         // MRC employee
         $participations = new Attribute();
@@ -563,7 +709,6 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($testEntity);
         $manager->flush();
 
-
         // CC personEntity/availability
         $availability = new Attribute();
         $availability->setName('availability');
@@ -573,6 +718,141 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($availability);
         $manager->flush();
 
+        // CC personEntity/foundVia
+        $foundVia = new Attribute();
+        $foundVia->setName('foundVia');
+        $foundVia->setType('string');
+        $foundVia->setFormat('string');
+        $foundVia->setDescription('A string that holds the found via information from the person');
+        $manager->persist($foundVia);
+        $manager->flush();
+
+        // CC personEntity/wentToTaalhuisBefore
+        $wentToTaalhuisBefore = new Attribute();
+        $wentToTaalhuisBefore->setName('wentToTaalhuisBefore');
+        $wentToTaalhuisBefore->setType('boolean');
+        $wentToTaalhuisBefore->setFormat('boolean');
+        $wentToTaalhuisBefore->setDescription('A bool that holds if the person went to taalhuis before');
+        $manager->persist($wentToTaalhuisBefore);
+        $manager->flush();
+
+        // CC personEntity/wentToTaalhuisBeforeReason
+        $wentToTaalhuisBeforeReason = new Attribute();
+        $wentToTaalhuisBeforeReason->setName('wentToTaalhuisBeforeReason');
+        $wentToTaalhuisBeforeReason->setType('boolean');
+        $wentToTaalhuisBeforeReason->setFormat('boolean');
+        $wentToTaalhuisBeforeReason->setDescription('A boolean that holds the reason this person went to taalhuis before');
+        $manager->persist($wentToTaalhuisBeforeReason);
+        $manager->flush();
+
+        // CC personEntity/wentToTaalhuisBeforeYear
+        $wentToTaalhuisBeforeYear = new Attribute();
+        $wentToTaalhuisBeforeYear->setName('wentToTaalhuisBeforeYear');
+        $wentToTaalhuisBeforeYear->setType('string');
+        $wentToTaalhuisBeforeYear->setFormat('string');
+        $wentToTaalhuisBeforeYear->setDescription('A string that holds the date this person went to taalhuis before');
+        $manager->persist($wentToTaalhuisBeforeYear);
+        $manager->flush();
+
+        // CC personEntity/network
+        $network = new Attribute();
+        $network->setName('network');
+        $network->setType('string');
+        $network->setFormat('string');
+        $network->setDescription('A string that holds the network of this person');
+        $manager->persist($network);
+        $manager->flush();
+
+        // CC personEntity/participationLadder
+        $participationLadder = new Attribute();
+        $participationLadder->setName('participationLadder');
+        $participationLadder->setType('integer');
+        $participationLadder->setFormat('integer');
+        $participationLadder->setDescription('A int that holds the participationLadder of this person');
+        $manager->persist($participationLadder);
+        $manager->flush();
+
+        // CC personEntity/dutchNTDetails
+        $dutchNTDetails = new Attribute();
+        $dutchNTDetails->setName('dutchNTDetails');
+        $dutchNTDetails->setType('string');
+        $dutchNTDetails->setFormat('string');
+        $dutchNTDetails->setDescription('A string that holds the Dutch NT details of this person');
+        $manager->persist($dutchNTDetails);
+        $manager->flush();
+
+        // CC personEntity/inNetherlandsSinceYear
+        $inNetherlandsSinceYear = new Attribute();
+        $inNetherlandsSinceYear->setName('inNetherlandsSinceYear');
+        $inNetherlandsSinceYear->setType('string');
+        $inNetherlandsSinceYear->setFormat('string');
+        $inNetherlandsSinceYear->setDescription('A date that holds the inNetherlandsSinceYear of this person');
+        $manager->persist($inNetherlandsSinceYear);
+        $manager->flush();
+
+        // CC personEntity/languageInDailyLife
+        $languageInDailyLife = new Attribute();
+        $languageInDailyLife->setName('languageInDailyLife');
+        $languageInDailyLife->setType('string');
+        $languageInDailyLife->setFormat('string');
+        $languageInDailyLife->setDescription('A string that holds the languageInDailyLife of this person');
+        $manager->persist($languageInDailyLife);
+        $manager->flush();
+
+        // CC personEntity/knowsLatinAlphabet
+        $knowsLatinAlphabet = new Attribute();
+        $knowsLatinAlphabet->setName('knowsLatinAlphabet');
+        $knowsLatinAlphabet->setType('boolean');
+        $knowsLatinAlphabet->setFormat('boolean');
+        $knowsLatinAlphabet->setDescription('A bool that tells if this person knows the latin alphabet');
+        $manager->persist($knowsLatinAlphabet);
+        $manager->flush();
+
+        // CC personEntity/lastKnownLevel
+        $lastKnownLevel = new Attribute();
+        $lastKnownLevel->setName('lastKnownLevel');
+        $lastKnownLevel->setType('string');
+        $lastKnownLevel->setFormat('string');
+        $lastKnownLevel->setDescription('A string that tells if this person last known level');
+        $manager->persist($lastKnownLevel);
+        $manager->flush();
+
+        // CC personEntity/didSignPermissionForm
+        $didSignPermissionForm = new Attribute();
+        $didSignPermissionForm->setName('didSignPermissionForm');
+        $didSignPermissionForm->setType('boolean');
+        $didSignPermissionForm->setFormat('boolean');
+        $didSignPermissionForm->setDescription('A bool that tells if this person didSignPermissionForm');
+        $manager->persist($didSignPermissionForm);
+        $manager->flush();
+
+        // CC personEntity/hasPermissionToShareDataWithAanbieders
+        $hasPermissionToShareDataWithAanbieders = new Attribute();
+        $hasPermissionToShareDataWithAanbieders->setName('hasPermissionToShareDataWithAanbieders');
+        $hasPermissionToShareDataWithAanbieders->setType('boolean');
+        $hasPermissionToShareDataWithAanbieders->setFormat('boolean');
+        $hasPermissionToShareDataWithAanbieders->setDescription('A bool that tells if this person hasPermissionToShareDataWithAanbieders');
+        $manager->persist($hasPermissionToShareDataWithAanbieders);
+        $manager->flush();
+
+        // CC personEntity/hasPermissionToShareDataWithLibraries
+        $hasPermissionToShareDataWithLibraries = new Attribute();
+        $hasPermissionToShareDataWithLibraries->setName('hasPermissionToShareDataWithLibraries');
+        $hasPermissionToShareDataWithLibraries->setType('boolean');
+        $hasPermissionToShareDataWithLibraries->setFormat('boolean');
+        $hasPermissionToShareDataWithLibraries->setDescription('A bool that tells if this person hasPermissionToShareDataWithLibraries');
+        $manager->persist($hasPermissionToShareDataWithLibraries);
+        $manager->flush();
+
+
+        // CC personEntity/hasPermissionToSendInformationAboutLibraries
+        $hasPermissionToSendInformationAboutLibraries = new Attribute();
+        $hasPermissionToSendInformationAboutLibraries->setName('hasPermissionToSendInformationAboutLibraries');
+        $hasPermissionToSendInformationAboutLibraries->setType('boolean');
+        $hasPermissionToSendInformationAboutLibraries->setFormat('boolean');
+        $hasPermissionToSendInformationAboutLibraries->setDescription('A bool that tells if this person hasPermissionToSendInformationAboutLibraries');
+        $manager->persist($hasPermissionToSendInformationAboutLibraries);
+        $manager->flush();
 
         // CC personEntity
         $personEntity = new Entity();
@@ -581,6 +861,20 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($personEntity);
         $manager->flush();
         $personEntity->addAttribute($availability);
+        $personEntity->addAttribute($foundVia);
+        $personEntity->addAttribute($wentToTaalhuisBefore);
+        $personEntity->addAttribute($wentToTaalhuisBeforeReason);
+        $personEntity->addAttribute($wentToTaalhuisBeforeYear);
+        $personEntity->addAttribute($participationLadder);
+        $personEntity->addAttribute($dutchNTDetails);
+        $personEntity->addAttribute($inNetherlandsSinceYear);
+        $personEntity->addAttribute($languageInDailyLife);
+        $personEntity->addAttribute($knowsLatinAlphabet);
+        $personEntity->addAttribute($lastKnownLevel);
+        $personEntity->addAttribute($didSignPermissionForm);
+        $personEntity->addAttribute($hasPermissionToShareDataWithAanbieders);
+        $personEntity->addAttribute($hasPermissionToShareDataWithLibraries);
+        $personEntity->addAttribute($hasPermissionToSendInformationAboutLibraries);
         $manager->persist($personEntity);
         $manager->flush();
 
