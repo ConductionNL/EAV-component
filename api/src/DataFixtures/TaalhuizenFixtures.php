@@ -558,9 +558,9 @@ class TaalhuizenFixtures extends Fixture
         $outComesApplicationOther = new Attribute();
         $outComesApplicationOther->setName('applicationOther');
         $outComesApplicationOther->setType('string');
-        $applicationOther->setFormat('string');
-        $applicationOther->setDescription('application of what is being learned if application not in list');
-        $applicationOther->setNullable(true);
+        $outComesApplicationOther->setFormat('string');
+        $outComesApplicationOther->setDescription('application of what is being learned if application not in list');
+        $outComesApplicationOther->setNullable(true);
         $manager->persist($applicationOther);
         $manager->flush();
 
@@ -715,6 +715,7 @@ class TaalhuizenFixtures extends Fixture
         $availability->setType('array');
         $availability->setFormat('array');
         $availability->setDescription('A array that holds availability information from the person');
+        $availability->setNullable(true);
         $manager->persist($availability);
         $manager->flush();
 
