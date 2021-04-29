@@ -749,9 +749,9 @@ class TaalhuizenFixtures extends Fixture
         // CC personEntity/wentToTaalhuisBeforeYear
         $wentToTaalhuisBeforeYear = new Attribute();
         $wentToTaalhuisBeforeYear->setName('wentToTaalhuisBeforeYear');
-        $wentToTaalhuisBeforeYear->setType('string');
-        $wentToTaalhuisBeforeYear->setFormat('string');
-        $wentToTaalhuisBeforeYear->setDescription('A string that holds the date this person went to taalhuis before');
+        $wentToTaalhuisBeforeYear->setType('number');
+        $wentToTaalhuisBeforeYear->setFormat('number');
+        $wentToTaalhuisBeforeYear->setDescription('A float number that holds the year this person went to taalhuis before');
         $manager->persist($wentToTaalhuisBeforeYear);
         $manager->flush();
 
