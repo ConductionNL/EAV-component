@@ -758,8 +758,8 @@ class TaalhuizenFixtures extends Fixture
         // CC personEntity/network
         $network = new Attribute();
         $network->setName('network');
-        $network->setType('string');
-        $network->setFormat('string');
+        $network->setType('array');
+        $network->setFormat('array');
         $network->setDescription('A string that holds the network of this person');
         $manager->persist($network);
         $manager->flush();
