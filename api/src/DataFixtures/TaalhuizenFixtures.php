@@ -740,8 +740,8 @@ class TaalhuizenFixtures extends Fixture
         // CC personEntity/wentToTaalhuisBeforeReason
         $wentToTaalhuisBeforeReason = new Attribute();
         $wentToTaalhuisBeforeReason->setName('wentToTaalhuisBeforeReason');
-        $wentToTaalhuisBeforeReason->setType('boolean');
-        $wentToTaalhuisBeforeReason->setFormat('boolean');
+        $wentToTaalhuisBeforeReason->setType('string');
+        $wentToTaalhuisBeforeReason->setFormat('string');
         $wentToTaalhuisBeforeReason->setDescription('A boolean that holds the reason this person went to taalhuis before');
         $manager->persist($wentToTaalhuisBeforeReason);
         $manager->flush();
