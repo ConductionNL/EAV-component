@@ -466,6 +466,15 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($mentor);
         $manager->flush();
 
+        $aanbieder = new Attribute();
+        $aanbieder->setName('aanbieder');
+        $aanbieder->setType('string');
+        $aanbieder->setFormat('string');
+        $aanbieder->setDescription('A string of an cc/organization url');
+        $aanbieder->setNullable(true);
+        $manager->persist($aanbieder);
+        $manager->flush();
+
         $results = new Attribute();
         $results->setName('results');
         $results->setType('array');
@@ -506,6 +515,7 @@ class TaalhuizenFixtures extends Fixture
         $participationEntity->addAttribute($learningNeed);
         $participationEntity->addAttribute($group);
         $participationEntity->addAttribute($mentor);
+        $participationEntity->addAttribute($aanbieder);
         $participationEntity->addAttribute($results);
         $manager->persist($participationEntity);
         $manager->flush();
@@ -880,6 +890,25 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($personEntity);
         $manager->flush();
 
+        // CC organizationEntity
+        $participations = new Attribute();
+        $participations->setName('participations');
+        $participations->setType('array');
+        $participations->setFormat('array');
+        $participations->setDescription('An array of eav/participations urls');
+        $manager->persist($participations);
+        $manager->flush();
+
+        $organizationEntity = new Entity();
+        $organizationEntity->setType('cc/organizations');
+        $organizationEntity->setName('organization');
+        $manager->persist($organizationEntity);
+        $manager->flush();
+        $organizationEntity->addAttribute($participations);
+        $manager->persist($organizationEntity);
+        $manager->flush();
+
+        // MRC/education
         $courseProfessionalism = new Attribute();
         $courseProfessionalism->setName('courseProfessionalism');
         $courseProfessionalism->setType('string');
