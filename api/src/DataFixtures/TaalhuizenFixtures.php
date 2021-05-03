@@ -702,12 +702,81 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($participation);
         $manager->flush();
 
+        $outComesGoal = new Attribute();
+        $outComesGoal->setName('goal');
+        $outComesGoal->setType('string');
+        $outComesGoal->setFormat('string');
+        $outComesGoal->setDescription('A string of the goal of this result');
+        $manager->persist($outComesGoal);
+        $manager->flush();
+
+        $outComesTopic = new Attribute();
+        $outComesTopic->setName('topic');
+        $outComesTopic->setType('string');
+        $outComesTopic->setFormat('string');
+        $outComesTopic->setDescription('the topic of this result');
+        $outComesTopic->setEnum(['DUTCH_READING','DUTCH_WRITING','MATH_NUMBERS','MATH_PROPORTION','MATH_GEOMETRY','MATH_LINKS','DIGITAL_USING_ICT_SYSTEMS','DIGITAL_SEARCHING_INFORMATION', 'DIGITAL_PROCESSING_INFORMATION','DIGITAL_COMMUNICATION','KNOWLEDGE','SKILLS','ATTITUDE','BEHAVIOUR','OTHER']);
+        $manager->persist($outComesTopic);
+        $manager->flush();
+
+        $outComesTopicOther = new Attribute();
+        $outComesTopicOther->setName('topicOther');
+        $outComesTopicOther->setType('string');
+        $outComesTopicOther->setFormat('string');
+        $outComesTopicOther->setDescription('the topic of this result if topic is other');
+        $outComesTopicOther->setNullable(true);
+        $manager->persist($outComesTopicOther);
+        $manager->flush();
+
+        $outComesApplication = new Attribute();
+        $outComesApplication->setName('application');
+        $outComesApplication->setType('string');
+        $outComesApplication->setFormat('string');
+        $outComesApplication->setDescription('application of what is being learned');
+        $outComesApplication->setEnum(['FAMILY_AND_PARENTING','LABOR_MARKET_AND_WORK','HEALTH_AND_WELLBEING','ADMINISTRATION_AND_FINANCE','HOUSING_AND_NEIGHBORHOOD','SELFRELIANCE','OTHER']);
+        $manager->persist($outComesApplication);
+        $manager->flush();
+
+        $outComesApplicationOther = new Attribute();
+        $outComesApplicationOther->setName('applicationOther');
+        $outComesApplicationOther->setType('string');
+        $outComesApplicationOther->setFormat('string');
+        $outComesApplicationOther->setDescription('application of what is being learned if application is other');
+        $outComesApplicationOther->setNullable(true);
+        $manager->persist($applicationOther);
+        $manager->flush();
+
+        $outComesLevel = new Attribute();
+        $outComesLevel->setName('level');
+        $outComesLevel->setType('string');
+        $outComesLevel->setFormat('string');
+        $outComesLevel->setDescription('the level that will be taught');
+        $outComesLevel->setEnum(['INFLOW','NLQF1','NLQF2','NLQF3','NLQF4','OTHER']);
+        $manager->persist($outComesLevel);
+        $manager->flush();
+
+        $outComesLevelOther = new Attribute();
+        $outComesLevelOther->setName('levelOther');
+        $outComesLevelOther->setType('string');
+        $outComesLevelOther->setFormat('string');
+        $outComesLevelOther->setDescription('the level that will be taught if level is other');
+        $outComesLevelOther->setNullable(true);
+        $manager->persist($outComesLevelOther);
+        $manager->flush();
+
         $resultEntity = new Entity();
         $resultEntity->setType('edu/results');
         $resultEntity->setName('result');
         $manager->persist($resultEntity);
         $manager->flush();
         $resultEntity->addAttribute($participation);
+        $resultEntity->addAttribute($outComesGoal);
+        $resultEntity->addAttribute($outComesTopic);
+        $resultEntity->addAttribute($outComesTopicOther);
+        $resultEntity->addAttribute($outComesApplication);
+        $resultEntity->addAttribute($outComesApplicationOther);
+        $resultEntity->addAttribute($outComesLevel);
+        $resultEntity->addAttribute($outComesLevelOther);
         $manager->persist($resultEntity);
         $manager->flush();
 
