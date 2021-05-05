@@ -680,6 +680,15 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($provider);
         $manager->flush();
 
+        $trainedFor = new Attribute();
+        $trainedFor->setName('trainedFor');
+        $trainedFor->setType('string');
+        $trainedFor->setFormat('string');
+        $trainedFor->setDescription('What function the employee is trained for');
+        $trainedFor->setNullable(true);
+        $manager->persist($trainedFor);
+        $manager->flush();
+
         $employeeEntity = new Entity();
         $employeeEntity->setType('mrc/employees');
         $employeeEntity->setName('employee');
@@ -689,6 +698,7 @@ class TaalhuizenFixtures extends Fixture
         $employeeEntity->addAttribute($relevantCertificates);
         $employeeEntity->addAttribute($referrer);
         $employeeEntity->addAttribute($provider);
+        $employeeEntity->addAttribute($trainedFor);
         $manager->persist($employeeEntity);
         $manager->flush();
 
