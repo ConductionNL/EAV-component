@@ -1017,6 +1017,15 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($providesCertificate);
         $manager->flush();
 
+        $providesCertificate = new Attribute();
+        $providesCertificate->setName('amountOfHours');
+        $providesCertificate->setType('integer');
+        $providesCertificate->setFormat('integer');
+        $providesCertificate->setDescription('The amount of hours a course takes');
+        $providesCertificate->setNullable(true);
+        $manager->persist($providesCertificate);
+        $manager->flush();
+
         // WARNING, in mrc, Entity Education plural form is set to mrc/education and not (what we expect it to be:) mrc/educations
         $educationEntity = new Entity();
         $educationEntity->setType('mrc/education');
