@@ -182,7 +182,6 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                             throw new HttpException($e->getMessage().' While trying to throw this error eav also tried to not create an ObjectEntity object in eav, an other error was caught during this: '.$e2->getMessage(), 400);
                         }
                     }
-                    var_dump('test5');
                     throw new HttpException($e->getMessage(), 400);
                 }
             } elseif ($route == 'api_object_communications_get_collection') {
