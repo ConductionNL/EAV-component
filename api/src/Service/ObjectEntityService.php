@@ -60,7 +60,7 @@ class ObjectEntityService
 
         if ($this->componentCode != 'eav' && isset($this->body['@self'])) {
             // Get existing extern object with @self
-            $externObject = $this->commonGroundService->getResource($this->body['@self']);
+            $externObject = $this->commonGroundService->getResource($this->body['@self'], [], true, false, true, false);
             $object['@id'] = $externObject['@id'];
         } else {
             $object = [];
@@ -126,7 +126,7 @@ class ObjectEntityService
 
         // Check component code and if it is not EAV also create/update the normal object.
         if ($this->componentCode != 'eav') {
-            $response = $this->commonGroundService->saveResource($object, ['component' => $this->componentCode, 'type' => $this->entityName]);
+            $response = $this->commonGroundService->saveResource($object, ['component' => $this->componentCode, 'type' => $this->entityName], true, false);
             $response['@self'] = $response['@id'];
             $response['@eav'] = $uri;
             $response['@eavType'] = ucfirst($this->entityName);
@@ -244,7 +244,7 @@ class ObjectEntityService
 
         // Check component code and if it is not EAV also update the normal object.
         if ($this->componentCode != 'eav') {
-            $response = $this->commonGroundService->updateResource($object, $objectEntity->getUri());
+            $response = $this->commonGroundService->updateResource($object, $objectEntity->getUri(), false, true, false);
             $response['@self'] = $response['@id'];
             $response['@eav'] = $uri;
             $response['@eavType'] = ucfirst($this->entityName);
@@ -321,7 +321,7 @@ class ObjectEntityService
 
         // Check component code and if it is not EAV also get the normal object.
         if ($this->componentCode != 'eav') {
-            $response = $this->commonGroundService->getResource($objectEntity->getUri());
+            $response = $this->commonGroundService->getResource($objectEntity->getUri(), [], true, false, true, false);
             $response['@self'] = $response['@id'];
             $response['@eav'] = $uri;
             $response['@eavType'] = ucfirst($this->entityName);
