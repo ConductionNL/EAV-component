@@ -60,7 +60,7 @@ class ObjectEntityService
 
         if ($this->componentCode != 'eav' && isset($this->body['@self'])) {
             // Get existing extern object with @self
-            $externObject = $this->commonGroundService->getResource($this->body['@self'], [], true, false, true, false);
+            $externObject = $this->commonGroundService->getResource($this->body['@self'], [], false, false, true, false);
             $object['@id'] = $externObject['@id'];
         } else {
             $object = [];
@@ -321,7 +321,7 @@ class ObjectEntityService
 
         // Check component code and if it is not EAV also get the normal object.
         if ($this->componentCode != 'eav') {
-            $response = $this->commonGroundService->getResource($objectEntity->getUri(), [], true, false, true, false);
+            $response = $this->commonGroundService->getResource($objectEntity->getUri(), [], false, false, true, false);
             $response['@self'] = $response['@id'];
             $response['@eav'] = $uri;
             $response['@eavType'] = ucfirst($this->entityName);
