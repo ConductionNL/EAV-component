@@ -54,8 +54,20 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
             $componentCode = $event->getRequest()->attributes->get("component");
             $entityName = $event->getRequest()->attributes->get("entity");
             $uuid = $event->getRequest()->attributes->get("uuid");
-            $body = json_decode($event->getRequest()->getContent(), true);
 
+            if ($route == 'api_object_entities_post_objectentity_collection'
+                || $route == 'api_object_entities_post_putobjectentity_collection') {
+                $body = json_decode($event->getRequest()->getContent(), true);
+            } else {
+                $body = [];
+                if ($event->getRequest()->query->get('@self')) {
+                    $body['@self'] = $event->getRequest()->query->get('@self');
+                } elseif ($event->getRequest()->query->get('self')) {
+                    $body['@self'] = $event->getRequest()->query->get('self');
+                } elseif ($event->getRequest()->query->get('objectEntityId')) {
+                    $uuid = $event->getRequest()->query->get('objectEntityId');
+                }
+            }
             $this->objectEntityService->setEventVariables($body, $entityName, $uuid, $componentCode);
 
             //TODO: post_objectentity and post_putobjectentity should use the same 'handlePost' function (this should make this code look a lot cleaner as well)
@@ -106,37 +118,55 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
         } elseif ($route == 'api_object_communications_post_collection'
             || $route == 'api_object_communications_get_collection')
         {
-            $body = json_decode($event->getRequest()->getContent(), true);
-
             $componentCode = 'eav';
             $uuid = null;
-            $doGet = false;
+            if ($route == 'api_object_communications_post_collection') {
+                $doGet = false;
+                $body = json_decode($event->getRequest()->getContent(), true);
 
-            if (isset($body['componentCode'])) {
-                $componentCode = $body['componentCode'];
-                unset($body['componentCode']);
-            }
-            if (isset($body['entityName'])) {
-                $entityName = $body['entityName'];
-                unset($body['entityName']);
+                if (isset($body['componentCode'])) {
+                    $componentCode = $body['componentCode'];
+                    unset($body['componentCode']);
+                }
+                if (isset($body['entityName'])) {
+                    $entityName = $body['entityName'];
+                    unset($body['entityName']);
+                } else {
+                    throw new HttpException('No entityName given!', 400);
+                }
+                if (isset($body['objectEntityId'])) {
+                    $uuid = $body['objectEntityId'];
+                    unset($body['objectEntityId']);
+                }
+                if (isset($body['self'])) {
+                    $body['@self'] = $body['self'];
+                    unset($body['self']);
+                }
+                if (isset($body['body'])) {
+                    $body = array_merge($body, $body['body']);
+                    unset($body['body']);
+                }
+                if (isset($body['doGet'])) {
+                    $doGet = $body['doGet'];
+                    unset($body['doGet']);
+                }
             } else {
-                throw new HttpException('No entityName given!', 400);
-            }
-            if (isset($body['objectEntityId'])) {
-                $uuid = $body['objectEntityId'];
-                unset($body['objectEntityId']);
-            }
-            if (isset($body['self'])) {
-                $body['@self'] = $body['self'];
-                unset($body['self']);
-            }
-            if (isset($body['body'])) {
-                $body = array_merge($body, $body['body']);
-                unset($body['body']);
-            }
-            if (isset($body['doGet'])) {
-                $doGet = $body['doGet'];
-                unset($body['doGet']);
+                if ($event->getRequest()->query->get('componentCode')) {
+                    $componentCode = $event->getRequest()->query->get('componentCode');
+                }
+                if ($event->getRequest()->query->get('entityName')) {
+                    $entityName = $event->getRequest()->query->get('entityName');
+                } else {
+                    throw new HttpException('No entityName given!', 400);
+                }
+                $body = [];
+                if ($event->getRequest()->query->get('@self')) {
+                    $body['@self'] = $event->getRequest()->query->get('@self');
+                } elseif ($event->getRequest()->query->get('self')) {
+                    $body['@self'] = $event->getRequest()->query->get('self');
+                } elseif ($event->getRequest()->query->get('objectEntityId')) {
+                    $uuid = $event->getRequest()->query->get('objectEntityId');
+                }
             }
 
             $this->objectEntityService->setEventVariables($body, $entityName, $uuid, $componentCode);
