@@ -1008,6 +1008,14 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($teacherProfessionalism);
         $manager->flush();
 
+        $groupFormation = new Attribute();
+        $groupFormation->setName('groupFormation');
+        $groupFormation->setType('string');
+        $groupFormation->setFormat('string');
+        $groupFormation->setEnum(['INDIVIDUALLY', 'IN_A_GROUP']);
+        $manager->persist($groupFormation);
+        $manager->flush();
+
         $providesCertificate = new Attribute();
         $providesCertificate->setName('providesCertificate');
         $providesCertificate->setType('boolean');
@@ -1017,13 +1025,13 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($providesCertificate);
         $manager->flush();
 
-        $providesCertificate = new Attribute();
-        $providesCertificate->setName('amountOfHours');
-        $providesCertificate->setType('integer');
-        $providesCertificate->setFormat('integer');
-        $providesCertificate->setDescription('The amount of hours a course takes');
-        $providesCertificate->setNullable(true);
-        $manager->persist($providesCertificate);
+        $amountOfHours = new Attribute();
+        $amountOfHours->setName('amountOfHours');
+        $amountOfHours->setType('integer');
+        $amountOfHours->setFormat('integer');
+        $amountOfHours->setDescription('The amount of hours a course takes');
+        $amountOfHours->setNullable(true);
+        $manager->persist($amountOfHours);
         $manager->flush();
 
         // WARNING, in mrc, Entity Education plural form is set to mrc/education and not (what we expect it to be:) mrc/educations
@@ -1034,7 +1042,9 @@ class TaalhuizenFixtures extends Fixture
         $manager->flush();
         $educationEntity->addAttribute($courseProfessionalism);
         $educationEntity->addAttribute($teacherProfessionalism);
+        $educationEntity->addAttribute($groupFormation);
         $educationEntity->addAttribute($providesCertificate);
+        $educationEntity->addAttribute($amountOfHours);
         $manager->persist($educationEntity);
         $manager->flush();
     }
