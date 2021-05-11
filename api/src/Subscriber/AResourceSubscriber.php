@@ -1,6 +1,6 @@
 <?php
 
-namespace Conduction\CommonGroundBundle\Subscriber;
+namespace App\Subscriber;
 
 use ApiPlatform\Core\EventListener\EventPriorities;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
@@ -8,14 +8,16 @@ use Conduction\CommonGroundBundle\Service\NLXLogService;
 use Doctrine\Inflector\InflectorFactory;
 use Doctrine\Inflector\Inflector;
 use Doctrine\ORM\EntityManagerInterface;
+use SensioLabs\Security\Exception\HttpException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ViewEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Serializer\SerializerInterface;
+use function GuzzleHttp\json_decode;
 
-class ResourceSubscriber implements EventSubscriberInterface
+class AResourceSubscriber implements EventSubscriberInterface
 {
     private ParameterBagInterface $params;
     private EntityManagerInterface $em;
@@ -45,6 +47,15 @@ class ResourceSubscriber implements EventSubscriberInterface
         $result = $event->getControllerResult();
         $route = $event->getRequest()->attributes->get('_route');
 
+        if ($route == 'api_object_entities_post_objectentity_collection'
+            || $route == 'api_object_entities_post_putobjectentity_collection'
+            || $route == 'api_object_entities_get_objectentity_collection'
+            || $route == 'api_object_entities_get_uriobjectentity_collection'
+            || $route == 'api_object_communications_get_collection'
+            || $route == 'api_object_communications_post_collection') {
+            return;
+        }
+
         if ($result && $this->params->get('app_type') != 'application') {
             $type = explode("\\", get_class($result));
             $type = $this->inflector->pluralize($this->inflector->tableize(end($type)));
@@ -56,7 +67,8 @@ class ResourceSubscriber implements EventSubscriberInterface
         }
 
         // Only do somthing if we are on te log route and the entity is logable
-        if($this->params->get('app_notification') == 'true'){
+        if($this->params->get('app_notification') == 'trueEav'
+            || $this->params->get('app_notification') == 'trueEavInternOnly'){
             $notification = [];
             $notification['topic'] = "{$this->params->get('app_name')}/$type";
             switch ($method){
@@ -73,7 +85,7 @@ class ResourceSubscriber implements EventSubscriberInterface
                     return;
             }
 
-            if($result){
+            if ($result) {
                 $notification['resource'] = "{$this->params->get('app_url')}/$type/{$result->getId()}";
             } else {
                 $notification['resource'] = "{$this->params->get('app_url')}/$type/$id";
