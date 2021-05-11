@@ -36,6 +36,7 @@ COPY public public/
 COPY src src/
 COPY templates templates/
 COPY translations translations/
+COPY config config/
 
 RUN set -eux; \
 	mkdir -p var/cache var/log; \
