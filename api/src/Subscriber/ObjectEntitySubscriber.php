@@ -7,6 +7,7 @@ use ApiPlatform\Core\EventListener\EventPriorities;
 use App\Entity\Component;
 use App\Entity\ObjectCommunication;
 use App\Entity\ObjectEntity;
+use App\Service\NotificationService;
 use App\Service\ObjectEntityService;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -25,13 +26,15 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
     private $params;
     private $commonGroundService;
     private $objectEntityService;
+    private NotificationService $notificationService;
 
-    public function __construct(EntityManagerInterface $em, ParameterBagInterface $params, CommongroundService $commonGroundService, ObjectEntityService $objectEntityService)
+    public function __construct(EntityManagerInterface $em, ParameterBagInterface $params, CommongroundService $commonGroundService, ObjectEntityService $objectEntityService, NotificationService $notificationService)
     {
         $this->em = $em;
         $this->params = $params;
         $this->commonGroundService = $commonGroundService;
         $this->objectEntityService = $objectEntityService;
+        $this->notificationService = $notificationService;
     }
 
     public static function getSubscribedEvents()
@@ -69,6 +72,7 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                 }
             }
             $this->objectEntityService->setEventVariables($body, $entityName, $uuid, $componentCode);
+            $notificationTopic = $componentCode . '/' . $entityName;
 
             //TODO: post_objectentity and post_putobjectentity should use the same 'handlePost' function (this should make this code look a lot cleaner as well)
             if ($route == 'api_object_entities_post_objectentity_collection' && $resource instanceof ObjectEntity) {
@@ -81,6 +85,7 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                         $this->em->flush();
 
                         $result = $this->objectEntityService->handlePut();
+                        $notificationAction = 'Update';
                         $responseType = Response::HTTP_CREATED;
                     }
                 }
@@ -89,6 +94,11 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                 if (!isset($result)) {
                     try {
                         $result = $this->objectEntityService->handlePost($resource);
+                        if (isset($body['@self'])) {
+                            $notificationAction = 'Update';
+                        } else {
+                            $notificationAction = 'Create';
+                        }
                         $responseType = Response::HTTP_CREATED;
                     } catch (HttpException $e) {
                         // Lets not create a new ObjectEntity when we get an error!
@@ -103,10 +113,15 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                 $this->em->flush();
 
                 $result = $this->objectEntityService->handlePut();
+                $notificationAction = 'Update';
                 $responseType = Response::HTTP_CREATED;
             } elseif ($route == 'api_object_entities_get_objectentity_collection' || $route == 'api_object_entities_get_uriobjectentity_collection') {
                 $result = $this->objectEntityService->handleGet();
                 $responseType = Response::HTTP_OK;
+            }
+
+            if (isset($notificationTopic) && isset($notificationAction) && isset($result['@id'])) {
+                $this->notificationService->notify($notificationTopic, $notificationAction, $result['@id']);
             }
 
             $response = new Response(
@@ -170,6 +185,7 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
             }
 
             $this->objectEntityService->setEventVariables($body, $entityName, $uuid, $componentCode);
+            $notificationTopic = $componentCode . '/' . $entityName;
 
             if ($route == 'api_object_communications_post_collection' && $resource instanceof ObjectCommunication) {
                 // Lets not create the actual ObjectCommunication objects that we can not see or do anything with.
@@ -182,12 +198,14 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                     } elseif (isset($uuid)) {
                         // Put for objectEntity with this id^
                         $result = $this->objectEntityService->handlePut();
+                        $notificationAction = 'Update';
                     } elseif (isset($body['@self'])) {
                         // Check if we need to do a put if @self has already an objectEntity object in EAV
                         // Get existing objectEntity with @self
                         $object = $this->em->getRepository("App\Entity\ObjectEntity")->findOneBy(['uri' => $body['@self']]);
                         if (!empty($object)) {
                             $result = $this->objectEntityService->handlePut();
+                            $notificationAction = 'Update';
                         }
                     }
 
@@ -198,6 +216,11 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                         $this->em->persist($objectEntity);
                         $this->em->flush();
                         $result = $this->objectEntityService->handlePost($objectEntity);
+                        if (isset($body['@self'])) {
+                            $notificationAction = 'Update';
+                        } else {
+                            $notificationAction = 'Create';
+                        }
                     }
                     if (!$doGet){
                         $responseType = Response::HTTP_CREATED;
@@ -217,6 +240,10 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
             } elseif ($route == 'api_object_communications_get_collection') {
                 $result = $this->objectEntityService->handleGet();
                 $responseType = Response::HTTP_OK;
+            }
+
+            if (isset($notificationTopic) && isset($notificationAction) && isset($result['@id'])) {
+                $this->notificationService->notify($notificationTopic, $notificationAction, $result['@id']);
             }
 
             $response = new Response(
