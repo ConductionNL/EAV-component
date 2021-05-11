@@ -680,13 +680,40 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($provider);
         $manager->flush();
 
-        $trainedFor = new Attribute();
-        $trainedFor->setName('trainedFor');
-        $trainedFor->setType('string');
-        $trainedFor->setFormat('string');
-        $trainedFor->setDescription('What function the employee is trained for');
-        $trainedFor->setNullable(true);
-        $manager->persist($trainedFor);
+        $trainedForJob = new Attribute();
+        $trainedForJob->setName('trainedForJob');
+        $trainedForJob->setType('string');
+        $trainedForJob->setFormat('string');
+        $trainedForJob->setDescription('What function the employee is trained for');
+        $trainedForJob->setNullable(true);
+        $manager->persist($trainedForJob);
+        $manager->flush();
+
+        $lastJob = new Attribute();
+        $lastJob->setName('lastJob');
+        $lastJob->setType('string');
+        $lastJob->setFormat('string');
+        $lastJob->setDescription('What function the employee had last');
+        $lastJob->setNullable(true);
+        $manager->persist($lastJob);
+        $manager->flush();
+
+        $dayTimeActivities = new Attribute();
+        $dayTimeActivities->setName('dayTimeActivities');
+        $dayTimeActivities->setType('array');
+        $dayTimeActivities->setFormat('array');
+        $dayTimeActivities->setDescription('The dayTimeActivities of the employee');
+        $dayTimeActivities->setNullable(true);
+        $manager->persist($dayTimeActivities);
+        $manager->flush();
+
+        $dayTimeActivitiesOther = new Attribute();
+        $dayTimeActivitiesOther->setName('dayTimeActivitiesOther');
+        $dayTimeActivitiesOther->setType('string');
+        $dayTimeActivitiesOther->setFormat('string');
+        $dayTimeActivitiesOther->setDescription('The other dayTimeActivity of the employee');
+        $dayTimeActivitiesOther->setNullable(true);
+        $manager->persist($dayTimeActivitiesOther);
         $manager->flush();
 
         $employeeEntity = new Entity();
@@ -698,10 +725,12 @@ class TaalhuizenFixtures extends Fixture
         $employeeEntity->addAttribute($relevantCertificates);
         $employeeEntity->addAttribute($referrer);
         $employeeEntity->addAttribute($provider);
-        $employeeEntity->addAttribute($trainedFor);
+        $employeeEntity->addAttribute($trainedForJob);
+        $employeeEntity->addAttribute($lastJob);
+        $employeeEntity->addAttribute($dayTimeActivities);
+        $employeeEntity->addAttribute($dayTimeActivitiesOther);
         $manager->persist($employeeEntity);
         $manager->flush();
-
 
         // EDU resultEntity
         $participation = new Attribute();
