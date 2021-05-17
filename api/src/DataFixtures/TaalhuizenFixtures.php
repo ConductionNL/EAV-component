@@ -973,6 +973,35 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($hasPermissionToSendInformationAboutLibraries);
         $manager->flush();
 
+        $civicIntegrationRequirement = new Attribute();
+        $civicIntegrationRequirement->setName('civicIntegrationRequirement');
+        $civicIntegrationRequirement->setType('string');
+        $civicIntegrationRequirement->setFormat('string');
+        $civicIntegrationRequirement->setDescription('The civicIntegrationRequirement of this person');
+        $civicIntegrationRequirement->setEnum(['NO', 'YES', 'CURRENTLY_WORKING_ON_INTEGRATION']);
+        $civicIntegrationRequirement->setNullable(true);
+        $manager->persist($civicIntegrationRequirement);
+        $manager->flush();
+
+        $civicIntegrationRequirementReason = new Attribute();
+        $civicIntegrationRequirementReason->setName('civicIntegrationRequirementReason');
+        $civicIntegrationRequirementReason->setType('string');
+        $civicIntegrationRequirementReason->setFormat('string');
+        $civicIntegrationRequirementReason->setDescription('The civicIntegrationRequirementReason of this person');
+        $civicIntegrationRequirementReason->setEnum(['FINISHED', 'FROM_EU_COUNTRY', 'EXEMPTED_OR_ZROUTE']);
+        $civicIntegrationRequirementReason->setNullable(true);
+        $manager->persist($civicIntegrationRequirementReason);
+        $manager->flush();
+
+        $civicIntegrationRequirementFinishDate = new Attribute();
+        $civicIntegrationRequirementFinishDate->setName('civicIntegrationRequirementFinishDate');
+        $civicIntegrationRequirementFinishDate->setType('datetime');
+        $civicIntegrationRequirementFinishDate->setFormat('datetime');
+        $civicIntegrationRequirementFinishDate->setDescription('The civicIntegrationRequirementFinishDate of this person');
+        $civicIntegrationRequirementFinishDate->setNullable(true);
+        $manager->persist($civicIntegrationRequirementFinishDate);
+        $manager->flush();
+
         // CC personEntity
         $personEntity = new Entity();
         $personEntity->setType('cc/people');
@@ -995,6 +1024,9 @@ class TaalhuizenFixtures extends Fixture
         $personEntity->addAttribute($hasPermissionToShareDataWithAanbieders);
         $personEntity->addAttribute($hasPermissionToShareDataWithLibraries);
         $personEntity->addAttribute($hasPermissionToSendInformationAboutLibraries);
+        $personEntity->addAttribute($civicIntegrationRequirement);
+        $personEntity->addAttribute($civicIntegrationRequirementReason);
+        $personEntity->addAttribute($civicIntegrationRequirementFinishDate);
         $manager->persist($personEntity);
         $manager->flush();
 
