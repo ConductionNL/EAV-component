@@ -248,12 +248,103 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($learningNeeds);
         $manager->flush();
 
+        $readingTestResult = new Attribute();
+        $readingTestResult->setName('readingTestResult');
+        $readingTestResult->setType('string');
+        $readingTestResult->setFormat('string');
+        $readingTestResult->setEnum(['CAN_NOT_READ', 'A0', 'A1', 'A2', 'B1', 'B2', 'C1', 'C2']);
+        $readingTestResult->setNullable(true);
+        $readingTestResult->setDescription('The readingTestResult of this participant');
+        $manager->persist($readingTestResult);
+        $manager->flush();
+
+        $writingTestResult = new Attribute();
+        $writingTestResult->setName('writingTestResult');
+        $writingTestResult->setType('string');
+        $writingTestResult->setFormat('string');
+        $writingTestResult->setEnum(['CAN_NOT_WRITE', 'WRITE_NAW_DETAILS', 'WRITE_SIMPLE_TEXTS', 'WRITE_SIMPLE_LETTERS']);
+        $writingTestResult->setNullable(true);
+        $writingTestResult->setDescription('The writingTestResult of this participant');
+        $manager->persist($writingTestResult);
+        $manager->flush();
+
+        $desiredSkills = new Attribute();
+        $desiredSkills->setName('desiredSkills');
+        $desiredSkills->setType('array');
+        $desiredSkills->setFormat('array');
+        $desiredSkills->setDescription('The desiredSkills of this participant');
+        $desiredSkills->setNullable(true);
+        $manager->persist($desiredSkills);
+        $manager->flush();
+
+        $desiredSkillsOther = new Attribute();
+        $desiredSkillsOther->setName('desiredSkillsOther');
+        $desiredSkillsOther->setType('string');
+        $desiredSkillsOther->setFormat('string');
+        $desiredSkillsOther->setDescription('The desiredSkillsOther of this participant');
+        $desiredSkillsOther->setNullable(true);
+        $manager->persist($desiredSkillsOther);
+        $manager->flush();
+
+        $hasTriedThisBefore = new Attribute();
+        $hasTriedThisBefore->setName('hasTriedThisBefore');
+        $hasTriedThisBefore->setType('boolean');
+        $hasTriedThisBefore->setFormat('boolean');
+        $hasTriedThisBefore->setDescription('The hasTriedThisBefore of this participant');
+        $hasTriedThisBefore->setNullable(true);
+        $manager->persist($hasTriedThisBefore);
+        $manager->flush();
+
+        $hasTriedThisBeforeExplanation = new Attribute();
+        $hasTriedThisBeforeExplanation->setName('hasTriedThisBeforeExplanation');
+        $hasTriedThisBeforeExplanation->setType('string');
+        $hasTriedThisBeforeExplanation->setFormat('string');
+        $hasTriedThisBeforeExplanation->setDescription('The hasTriedThisBeforeExplanation of this participant');
+        $hasTriedThisBeforeExplanation->setNullable(true);
+        $manager->persist($hasTriedThisBeforeExplanation);
+        $manager->flush();
+
+        $whyWantTheseSkills = new Attribute();
+        $whyWantTheseSkills->setName('whyWantTheseSkills');
+        $whyWantTheseSkills->setType('string');
+        $whyWantTheseSkills->setFormat('string');
+        $whyWantTheseSkills->setDescription('The whyWantTheseSkills of this participant');
+        $whyWantTheseSkills->setNullable(true);
+        $manager->persist($whyWantTheseSkills);
+        $manager->flush();
+
+        $whyWantThisNow = new Attribute();
+        $whyWantThisNow->setName('whyWantThisNow');
+        $whyWantThisNow->setType('string');
+        $whyWantThisNow->setFormat('string');
+        $whyWantThisNow->setDescription('The whyWantThisNow of this participant');
+        $whyWantThisNow->setNullable(true);
+        $manager->persist($whyWantThisNow);
+        $manager->flush();
+
+        $desiredLearningMethod = new Attribute();
+        $desiredLearningMethod->setName('desiredLearningMethod');
+        $desiredLearningMethod->setType('array');
+        $desiredLearningMethod->setFormat('array');
+        $desiredLearningMethod->setDescription('The desiredLearningMethods of this participant');
+        $desiredLearningMethod->setNullable(true);
+        $manager->persist($desiredLearningMethod);
+        $manager->flush();
+
         $participantEntity = new Entity();
         $participantEntity->setType('edu/participants');
         $participantEntity->setName('participant');
         $manager->persist($participantEntity);
         $manager->flush();
         $participantEntity->addAttribute($learningNeeds);
+        $participantEntity->addAttribute($readingTestResult);
+        $participantEntity->addAttribute($desiredSkills);
+        $participantEntity->addAttribute($desiredSkillsOther);
+        $participantEntity->addAttribute($hasTriedThisBefore);
+        $participantEntity->addAttribute($hasTriedThisBeforeExplanation);
+        $participantEntity->addAttribute($whyWantTheseSkills);
+        $participantEntity->addAttribute($whyWantThisNow);
+        $participantEntity->addAttribute($desiredLearningMethod);
         $manager->persist($participantEntity);
         $manager->flush();
 
@@ -716,6 +807,16 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($dayTimeActivitiesOther);
         $manager->flush();
 
+        $speakingLevel = new Attribute();
+        $speakingLevel->setName('speakingLevel');
+        $speakingLevel->setType('string');
+        $speakingLevel->setFormat('string');
+        $speakingLevel->setDescription('The speakingLevel of the employee');
+        $speakingLevel->setEnum(['BEGINNER','REASONABLE','ADVANCED']);
+        $speakingLevel->setNullable(true);
+        $manager->persist($speakingLevel);
+        $manager->flush();
+
         $employeeEntity = new Entity();
         $employeeEntity->setType('mrc/employees');
         $employeeEntity->setName('employee');
@@ -729,6 +830,7 @@ class TaalhuizenFixtures extends Fixture
         $employeeEntity->addAttribute($lastJob);
         $employeeEntity->addAttribute($dayTimeActivities);
         $employeeEntity->addAttribute($dayTimeActivitiesOther);
+        $employeeEntity->addAttribute($speakingLevel);
         $manager->persist($employeeEntity);
         $manager->flush();
 
