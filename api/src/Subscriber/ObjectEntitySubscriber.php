@@ -198,9 +198,13 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                 $this->em->remove($resource);
                 $this->em->flush();
                 try {
-                    if ($doGet) {
+                    if ($doGet && (isset($uuid) || (isset($body['@self']) && $body['@self']))) {
                         $result = $this->objectEntityService->handleGet();
                         $responseType = Response::HTTP_OK;
+                    } elseif($doGet) {
+                        $result['@type'] = 'hydra:Collection';
+                        $result['hydra:member'] = $this->objectEntityService->handleGetCollection();
+                        $result['hydra:totalItems'] = count($result['hydra:member']);
                     } elseif (isset($uuid)) {
                         // Put for objectEntity with this id^
                         $result = $this->objectEntityService->handlePut();
