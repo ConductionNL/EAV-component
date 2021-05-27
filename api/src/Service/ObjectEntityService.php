@@ -308,8 +308,6 @@ class ObjectEntityService
             $result['@eavType'] = ucfirst($this->entityName);
             $result['eavId'] = $id;
             $values =  $this->getAllValues($uri, $attributes);
-//            var_dump(count($attributes));
-//            var_dump($values);
             $result = array_merge($result,$values);
         }
 
@@ -338,7 +336,7 @@ class ObjectEntityService
     {
         $results = [];
         foreach($resources as $key => $resource){
-            if(in_array($attributeKey, $resource) && $resource[$attributeKey] == $value){
+            if(key_exists($attributeKey, $resource) && $resource[$attributeKey] == $value){
                 $results[] = $resource;
             }
         }
