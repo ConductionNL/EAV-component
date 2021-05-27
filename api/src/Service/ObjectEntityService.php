@@ -351,7 +351,10 @@ class ObjectEntityService
         foreach($query as $attribute => $value){
             $intermediateResults[] = $this->filterResultsOnAttribute($resources, $attribute, $value);
         }
-        return array_intersect(...$intermediateResults);
+        if(count($intermediateResults) > 1)
+            return array_intersect(...$intermediateResults);
+        else
+            return $intermediateResults;
     }
 
     public function expandExternalResults(array $results, array $attributes, array $query): array
