@@ -349,7 +349,7 @@ class ObjectEntityService
             return $resources;
         $intermediateResults = [];
         foreach($query as $attribute => $value){
-            $intermediateResults[$attribute] = $this->filterResultsOnAttribute($resources, $attribute, $value);
+            $intermediateResults[] = $this->filterResultsOnAttribute($resources, $attribute, $value);
         }
         return array_intersect(...$intermediateResults);
     }
