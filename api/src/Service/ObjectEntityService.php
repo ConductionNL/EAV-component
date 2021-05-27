@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Entity\Attribute;
+use App\Entity\Entity;
 use App\Entity\ObjectEntity;
 use App\Entity\Value;
 use Conduction\CommonGroundBundle\Service\CommonGroundService;
@@ -13,6 +14,7 @@ use SensioLabs\Security\Exception\HttpException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Paginator;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Component\String\Inflector\EnglishInflector;
 
 class ObjectEntityService
 {
@@ -47,7 +49,7 @@ class ObjectEntityService
 
         // Check if entity exists
         $entity = $this->em->getRepository("App\Entity\Entity")->findOneBy(['type' => $this->componentCode . '/' . $this->entityName]);
-        if(empty($entity)) {
+        if (empty($entity)) {
             throw new HttpException('No Entity with type ' . $this->componentCode . '/' . $this->entityName . ' exist!', 400);
         }
         $objectEntity->setEntity($entity);
@@ -55,7 +57,7 @@ class ObjectEntityService
         // First get the attributes of this Entity
         $attributes = $this->em->getRepository("App\Entity\Attribute")->findBy(['entity' => $entity]);
         if (empty($attributes)) {
-            throw new HttpException('This entity '.$this->componentCode . '/' . $this->entityName.' has no attributes!', 400);
+            throw new HttpException('This entity ' . $this->componentCode . '/' . $this->entityName . ' has no attributes!', 400);
         }
 
         if ($this->componentCode != 'eav' && isset($this->body['@self'])) {
@@ -103,7 +105,7 @@ class ObjectEntityService
         $bodyValues = array_keys($values);
         foreach ($attributes as $attribute) {
             // If the attribute is not set in the body
-            if (!in_array($attribute->getName(), $bodyValues)){
+            if (!in_array($attribute->getName(), $bodyValues)) {
                 // Check if it has a default value
                 if ($attribute->getDefaultValue()) {
                     $value = $this->saveValue($objectEntity, $attribute, $attribute->getDefaultValue(), $uri);
@@ -113,7 +115,7 @@ class ObjectEntityService
                     $value = $this->saveValue($objectEntity, $attribute, null, $uri);
 
                     $values[$attribute->getName()] = $this->getValue($attribute, $value);
-                } elseif ($attribute->getRequired()){
+                } elseif ($attribute->getRequired()) {
                     throw new HttpException('The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] that is required!', 400);
                 } else {
                     // also show not set values as null in the response
@@ -151,7 +153,8 @@ class ObjectEntityService
     }
 
     // TODO: needs a merge with handlePost function
-    public function handlePut() {
+    public function handlePut()
+    {
         // Check if there is a uuid set
         if (isset($this->uuid) && $this->isValidUuid($this->uuid)) {
             $id = $this->uuid;
@@ -161,28 +164,28 @@ class ObjectEntityService
 
         // Get entity using the entity name as type
         $entity = $this->em->getRepository("App\Entity\Entity")->findOneBy(['type' => $this->componentCode . '/' . $this->entityName]);
-        if(empty($entity)) {
+        if (empty($entity)) {
             throw new HttpException('No Entity with type ' . $this->componentCode . '/' . $this->entityName . ' exist!', 400);
         }
 
         // Get attributes
         $attributes = $this->em->getRepository("App\Entity\Attribute")->findBy(['entity' => $entity]);
         if (empty($attributes)) {
-            throw new HttpException('This entity '.$this->componentCode . '/' . $this->entityName.' has no attributes!', 400);
+            throw new HttpException('This entity ' . $this->componentCode . '/' . $this->entityName . ' has no attributes!', 400);
         }
 
         if (isset($this->body['@self'])) {
             // Get existing object with @self
             $object = $this->em->getRepository("App\Entity\ObjectEntity")->findOneBy(['uri' => $this->body['@self']]);
             if (empty($object)) {
-                throw new HttpException('No object found with this @self: '.$this->body['@self'].' !', 400);
+                throw new HttpException('No object found with this @self: ' . $this->body['@self'] . ' !', 400);
             }
             $objectEntity = $object;
         } else {
             // Get existing object with id
             $object = $this->em->getRepository("App\Entity\ObjectEntity")->findOneBy(['id' => $id]);
             if (empty($object)) {
-                throw new HttpException('No object found with this uuid: '.$id.' !', 400);
+                throw new HttpException('No object found with this uuid: ' . $id . ' !', 400);
             }
             $objectEntity = $object;
         }
@@ -233,7 +236,7 @@ class ObjectEntityService
         $bodyValues = array_keys($values);
         foreach ($attributes as $attribute) {
             // If the attribute is not set in the body
-            if (!in_array($attribute->getName(), $bodyValues)){
+            if (!in_array($attribute->getName(), $bodyValues)) {
                 foreach ($attribute->getAttributeValues() as $value) {
                     if ($value->getUri() == $uri) {
                         $values[$attribute->getName()] = $this->getValue($attribute, $value);
@@ -263,6 +266,128 @@ class ObjectEntityService
         $response = array_merge($response, $values);
 
         return $response;
+    }
+
+    public function getResourceList(array $query): array
+    {
+//        $inflector = new EnglishInflector();
+        $type = $this->entityName;
+        return $this->commonGroundService->getResourceList(['component' => $this->componentCode, 'type' => $type], $query)['hydra:member'];
+    }
+
+    public function getValues(string $uri, Attribute $attribute, array $values): array
+    {
+        foreach ($attribute->getAttributeValues() as $value) {
+            if ($value->getUri() == $uri) {
+                $values[$attribute->getName()] = $this->getValue($attribute, $value);
+            }
+        }
+        return $values;
+    }
+
+    public function getAllValues(string $uri, array $attributes): array
+    {
+        $values = [];
+        foreach ($attributes as $attribute) {
+            if($attribute instanceof Attribute){
+                $values = $this->getValues($uri, $attribute, $values);
+            }
+        }
+        return $values;
+    }
+
+    public function expandExternalResult(array $result, array $attributes): array
+    {
+        $object = $this->em->getRepository("App\Entity\ObjectEntity")->findOneBy(['uri' => $result['@id']]);
+        // Check component code and if it is not EAV also get the normal object.
+        if ($object && $object instanceof ObjectEntity) {
+            $uri = $object->getUri();
+            $id = $object->getId();
+            $result['@self'] = $result['@id'];
+            $result['@eav'] = $uri;
+            $result['@eavType'] = ucfirst($this->entityName);
+            $result['eavId'] = $id;
+            $result = array_merge($result, $this->getAllValues($uri, $attributes));
+        }
+
+        return $result;
+    }
+
+    public function expandLocalResult(ObjectEntity $object, array $attributes): array
+    {
+        $uri = $object->getUri();
+        $id = $object->getId();
+        $result['@context'] = '/contexts/' . ucfirst($this->entityName);
+        $result['@id'] = $uri;
+        $result['@type'] = ucfirst($this->entityName);
+        $result['id'] = $id;
+        $result['@self'] = $uri;
+        $result['@eav'] = $result['@id'];
+        $result['@eavType'] = $result['@type'];
+        $result['eavId'] = $result['id'];
+
+        $result = array_merge($result, $this->getAllValues($uri, $attributes));
+
+        return $result;
+    }
+
+    public function filterResultsOnAttribute(array $resources, $attributeKey, $value): array
+    {
+        $results = [];
+        foreach($resources as $key => $resource){
+            if(in_array($attributeKey, $resource) && $resource[$attributeKey] == $value){
+                $results[] = $resource;
+            }
+        }
+        return $results;
+    }
+
+    public function filterResults(array $resources, array $query): array
+    {
+        if(!$query)
+            return $resources;
+        $intermediateResults = [];
+        foreach($query as $attribute => $value){
+            $intermediateResults[$attribute] = $this->filterResultsOnAttribute($resources, $attribute, $value);
+        }
+        return array_intersect(...$intermediateResults);
+    }
+
+    public function expandExternalResults(array $results, array $attributes, array $query): array
+    {
+        foreach($results as $key=>$result){
+            $results[$key] = $this->expandExternalResult($result, $attributes);
+        }
+        $results = $this->filterResults($results, $query);
+        return $results;
+    }
+
+    public function expandLocalResults(array $objects, array $attributes, array $query): array
+    {
+        $results = [];
+        foreach($objects as $key=>$object){
+            $results[] = $this->expandLocalResult($object, $attributes);
+        }
+        $results = $this->filterResults($results, $query);
+        return $results;
+    }
+
+    public function handleGetCollection(array $query = []): array
+    {
+        $results = [];
+        if(!isset($this->componentCode) || !isset($this->entityName)){
+            throw new \Symfony\Component\HttpKernel\Exception\HttpException(400,'ComponentCode or EnitityName is not provided');
+        }
+        $entity = $this->em->getRepository("App\Entity\Entity")->findOneBy(['type' => $this->componentCode . '/' . $this->entityName]);
+        $attributes = $this->em->getRepository("App\Entity\Attribute")->findBy(['entity' => $entity]);
+        if($this->componentCode != 'eav'){
+            $results = $this->getResourceList($query);
+            $results = $this->expandExternalResults($results, $attributes, $query);
+        } elseif($entity instanceof Entity) {
+            $objects = $this->em->getRepository("App\Entity\ObjectEntity")->findBy(['entity' => $entity->getId()]);
+            $results = $this->expandLocalResults($objects, $attributes, $query);
+        }
+        return $results;
     }
 
     public function handleGet()
