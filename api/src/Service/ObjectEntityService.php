@@ -354,7 +354,7 @@ class ObjectEntityService
         if(count($intermediateResults) > 1)
             return array_intersect(...$intermediateResults);
         else
-            return $intermediateResults;
+            return $intermediateResults[0];
     }
 
     public function expandExternalResults(array $results, array $attributes, array $query): array
