@@ -203,7 +203,7 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                         $responseType = Response::HTTP_OK;
                     } elseif($doGet) {
                         $result['@type'] = 'hydra:Collection';
-                        $result['hydra:member'] = $this->objectEntityService->handleGetCollection();
+                        $result['hydra:member'] = $this->objectEntityService->handleGetCollection(isset($body['query']) ? $body['query'] : []);
                         $result['hydra:totalItems'] = count($result['hydra:member']);
                         $responseType = Response::HTTP_OK;
                     } elseif (isset($uuid)) {
