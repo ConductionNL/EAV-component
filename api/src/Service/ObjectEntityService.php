@@ -308,8 +308,8 @@ class ObjectEntityService
             $result['@eavType'] = ucfirst($this->entityName);
             $result['eavId'] = $id;
             $values =  $this->getAllValues($uri, $attributes);
-            var_dump(count($attributes));
-            var_dump($values);
+//            var_dump(count($attributes));
+//            var_dump($values);
             $result = array_merge($result,$values);
         }
 
