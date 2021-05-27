@@ -301,13 +301,14 @@ class ObjectEntityService
         $object = $this->em->getRepository("App\Entity\ObjectEntity")->findOneBy(['uri' => $result['@id']]);
         // Check component code and if it is not EAV also get the normal object.
         if ($object && $object instanceof ObjectEntity) {
-            $uri = $object->getUri();
             $id = $object->getId();
+            $uri = $this->createUri($id);
             $result['@self'] = $result['@id'];
             $result['@eav'] = $uri;
             $result['@eavType'] = ucfirst($this->entityName);
             $result['eavId'] = $id;
             $values =  $this->getAllValues($uri, $attributes);
+            var_dump(count($attributes));
             var_dump($values);
             $result = array_merge($result,$values);
         }
