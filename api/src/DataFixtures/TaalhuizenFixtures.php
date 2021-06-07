@@ -362,6 +362,7 @@ class TaalhuizenFixtures extends Fixture
         $aanbiederId->setName('aanbiederId');
         $aanbiederId->setType('string');
         $aanbiederId->setFormat('string');
+        $aanbiederId->setNullable(true);
         $manager->persist($aanbiederId);
         $manager->flush();
 
@@ -369,6 +370,7 @@ class TaalhuizenFixtures extends Fixture
         $aanbiederName->setName('aanbiederName');
         $aanbiederName->setType('string');
         $aanbiederName->setFormat('string');
+        $aanbiederName->setNullable(true);
         $manager->persist($aanbiederName);
         $manager->flush();
 
@@ -376,6 +378,7 @@ class TaalhuizenFixtures extends Fixture
         $aanbiederNote->setName('aanbiederNote');
         $aanbiederNote->setType('string');
         $aanbiederNote->setFormat('string');
+        $aanbiederNote->setNullable(true);
         $manager->persist($aanbiederNote);
         $manager->flush();
 
