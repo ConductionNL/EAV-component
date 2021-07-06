@@ -362,6 +362,7 @@ class TaalhuizenFixtures extends Fixture
         $aanbiederId->setName('aanbiederId');
         $aanbiederId->setType('string');
         $aanbiederId->setFormat('string');
+        $aanbiederId->setNullable(true);
         $manager->persist($aanbiederId);
         $manager->flush();
 
@@ -369,6 +370,7 @@ class TaalhuizenFixtures extends Fixture
         $aanbiederName->setName('aanbiederName');
         $aanbiederName->setType('string');
         $aanbiederName->setFormat('string');
+        $aanbiederName->setNullable(true);
         $manager->persist($aanbiederName);
         $manager->flush();
 
@@ -376,6 +378,7 @@ class TaalhuizenFixtures extends Fixture
         $aanbiederNote->setName('aanbiederNote');
         $aanbiederNote->setType('string');
         $aanbiederNote->setFormat('string');
+        $aanbiederNote->setNullable(true);
         $manager->persist($aanbiederNote);
         $manager->flush();
 
@@ -699,6 +702,20 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($certificateWillBeAwarded);
         $manager->flush();
 
+        $startDate = new Attribute();
+        $startDate->setName('startDate');
+        $startDate->setType('datetime');
+        $startDate->setFormat('datetime');
+        $manager->persist($startDate);
+        $manager->flush();
+
+        $endDate = new Attribute();
+        $endDate->setName('endDate');
+        $endDate->setType('datetime');
+        $endDate->setFormat('datetime');
+        $manager->persist($endDate);
+        $manager->flush();
+
         $generalLocation = new Attribute();
         $generalLocation->setName('location');
         $generalLocation->setType('string');
@@ -730,6 +747,8 @@ class TaalhuizenFixtures extends Fixture
         $groupEntity->addAttribute($outComesLevelOther);
         $groupEntity->addAttribute($detailsIsFormal);
         $groupEntity->addAttribute($detailsCertificateWillBeAwarded);
+        $groupEntity->addAttribute($startDate);
+        $groupEntity->addAttribute($endDate);
         $groupEntity->addAttribute($generalLocation);
         $groupEntity->addAttribute($generalEvaluation);
         $manager->persist($groupEntity);
