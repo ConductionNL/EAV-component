@@ -967,31 +967,31 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($foundVia);
         $manager->flush();
 
-        // CC personEntity/wentToTaalhuisBefore
-        $wentToTaalhuisBefore = new Attribute();
-        $wentToTaalhuisBefore->setName('wentToTaalhuisBefore');
-        $wentToTaalhuisBefore->setType('boolean');
-        $wentToTaalhuisBefore->setFormat('boolean');
-        $wentToTaalhuisBefore->setDescription('A bool that holds if the person went to taalhuis before');
-        $manager->persist($wentToTaalhuisBefore);
+        // CC personEntity/wentToLanguageHouseBefore
+        $wentToLanguageHouseBefore = new Attribute();
+        $wentToLanguageHouseBefore->setName('wentToLanguageHouseBefore');
+        $wentToLanguageHouseBefore->setType('boolean');
+        $wentToLanguageHouseBefore->setFormat('boolean');
+        $wentToLanguageHouseBefore->setDescription('A bool that holds if the person went to languageHouse before');
+        $manager->persist($wentToLanguageHouseBefore);
         $manager->flush();
 
-        // CC personEntity/wentToTaalhuisBeforeReason
-        $wentToTaalhuisBeforeReason = new Attribute();
-        $wentToTaalhuisBeforeReason->setName('wentToTaalhuisBeforeReason');
-        $wentToTaalhuisBeforeReason->setType('string');
-        $wentToTaalhuisBeforeReason->setFormat('string');
-        $wentToTaalhuisBeforeReason->setDescription('A boolean that holds the reason this person went to taalhuis before');
-        $manager->persist($wentToTaalhuisBeforeReason);
+        // CC personEntity/wentToLanguageHouseBeforeReason
+        $wentToLanguageHouseBeforeReason = new Attribute();
+        $wentToLanguageHouseBeforeReason->setName('wentToLanguageHouseBeforeReason');
+        $wentToLanguageHouseBeforeReason->setType('string');
+        $wentToLanguageHouseBeforeReason->setFormat('string');
+        $wentToLanguageHouseBeforeReason->setDescription('A boolean that holds the reason this person went to languageHouse before');
+        $manager->persist($wentToLanguageHouseBeforeReason);
         $manager->flush();
 
-        // CC personEntity/wentToTaalhuisBeforeYear
-        $wentToTaalhuisBeforeYear = new Attribute();
-        $wentToTaalhuisBeforeYear->setName('wentToTaalhuisBeforeYear');
-        $wentToTaalhuisBeforeYear->setType('number');
-        $wentToTaalhuisBeforeYear->setFormat('number');
-        $wentToTaalhuisBeforeYear->setDescription('A float number that holds the year this person went to taalhuis before');
-        $manager->persist($wentToTaalhuisBeforeYear);
+        // CC personEntity/wentToLanguageHouseBeforeYear
+        $wentToLanguageHouseBeforeYear = new Attribute();
+        $wentToLanguageHouseBeforeYear->setName('wentToLanguageHouseBeforeYear');
+        $wentToLanguageHouseBeforeYear->setType('number');
+        $wentToLanguageHouseBeforeYear->setFormat('number');
+        $wentToLanguageHouseBeforeYear->setDescription('A float number that holds the year this person went to languageHouse before');
+        $manager->persist($wentToLanguageHouseBeforeYear);
         $manager->flush();
 
         // CC personEntity/network
@@ -1131,9 +1131,9 @@ class TaalhuizenFixtures extends Fixture
         $manager->flush();
         $personEntity->addAttribute($availability);
         $personEntity->addAttribute($foundVia);
-        $personEntity->addAttribute($wentToTaalhuisBefore);
-        $personEntity->addAttribute($wentToTaalhuisBeforeReason);
-        $personEntity->addAttribute($wentToTaalhuisBeforeYear);
+        $personEntity->addAttribute($wentToLanguageHouseBefore);
+        $personEntity->addAttribute($wentToLanguageHouseBeforeReason);
+        $personEntity->addAttribute($wentToLanguageHouseBeforeYear);
         $personEntity->addAttribute($network);
         $personEntity->addAttribute($participationLadder);
         $personEntity->addAttribute($dutchNTLevel);
