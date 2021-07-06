@@ -297,8 +297,8 @@ class TaalhuizenFixtures extends Fixture
 
         $hasTriedThisBeforeExplanation = new Attribute();
         $hasTriedThisBeforeExplanation->setName('hasTriedThisBeforeExplanation');
-        $hasTriedThisBeforeExplanation->setType('boolean');
-        $hasTriedThisBeforeExplanation->setFormat('boolean');
+        $hasTriedThisBeforeExplanation->setType('string');
+        $hasTriedThisBeforeExplanation->setFormat('string');
         $hasTriedThisBeforeExplanation->setDescription('The hasTriedThisBeforeExplanation of this participant');
         $hasTriedThisBeforeExplanation->setNullable(true);
         $manager->persist($hasTriedThisBeforeExplanation);
