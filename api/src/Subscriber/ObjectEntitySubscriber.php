@@ -116,7 +116,13 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                 $notificationAction = 'Update';
                 $responseType = Response::HTTP_CREATED;
             } elseif ($route == 'api_object_entities_get_objectentity_collection' || $route == 'api_object_entities_get_uriobjectentity_collection') {
-                $result = $this->objectEntityService->handleGet();
+                if($uuid || (isset($body['@self']) && $body['@self'])){
+                    $result = $this->objectEntityService->handleGet();
+                } else {
+                    $result['@type'] = 'hydra:Collection';
+                    $result['hydra:member'] = $this->objectEntityService->handleGetCollection();
+                    $result['hydra:totalItems'] = count($result['hydra:member']);
+                }
                 $responseType = Response::HTTP_OK;
             }
 
@@ -192,8 +198,15 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
                 $this->em->remove($resource);
                 $this->em->flush();
                 try {
-                    if ($doGet) {
+                    if ($doGet && (isset($uuid) || (isset($body['@self']) && $body['@self']))) {
                         $result = $this->objectEntityService->handleGet();
+                        $responseType = Response::HTTP_OK;
+                    } elseif($doGet) {
+                        $result['@type'] = 'hydra:Collection';
+                        $result['hydra:member'] = $this->objectEntityService->handleGetCollection(isset($body['query']) ? $body['query'] : []);
+                        $result['hydra:totalItems'] = count($result['hydra:member']);
+                        $result['id'] = '0';
+                        $result['@id'] = '/object_entities';
                         $responseType = Response::HTTP_OK;
                     } elseif (isset($uuid)) {
                         // Put for objectEntity with this id^
