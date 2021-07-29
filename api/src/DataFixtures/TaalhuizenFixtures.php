@@ -1107,6 +1107,15 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($civicIntegrationRequirementFinishDate);
         $manager->flush();
 
+        $contactPreferenceOther = new Attribute();
+        $contactPreferenceOther->setName('contactPreferenceOther');
+        $contactPreferenceOther->setType('string');
+        $contactPreferenceOther->setFormat('string');
+        $contactPreferenceOther->setDescription('The contactPreferenceOther of this person');
+        $contactPreferenceOther->setNullable(true);
+        $manager->persist($contactPreferenceOther);
+        $manager->flush();
+
         // CC personEntity
         $personEntity = new Entity();
         $personEntity->setType('cc/people');
@@ -1132,6 +1141,7 @@ class TaalhuizenFixtures extends Fixture
         $personEntity->addAttribute($civicIntegrationRequirement);
         $personEntity->addAttribute($civicIntegrationRequirementReason);
         $personEntity->addAttribute($civicIntegrationRequirementFinishDate);
+        $personEntity->addAttribute($contactPreferenceOther);
         $manager->persist($personEntity);
         $manager->flush();
 
