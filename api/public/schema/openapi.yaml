@@ -8747,32 +8747,6 @@ definitions:
     required:
       - type
       - name
-  ObjectCommunication-read:
-    properties:
-      id:
-        description: 'UUID of this person'
-        type: \UuidInterface
-      componentCode:
-        description: '(get, post and put) The component code for the objectEntity we are getting, creating or updating'
-        type: string
-      entityName:
-        description: '(get, post and put) The entity name for the objectEntity we are getting, creating or updating. (this actually needs to be the second value of the entity type, so in case of entity type: cc/people, this would/should be people)'
-        type: string
-      objectEntityId:
-        description: '(get or put) The uuid of the objectEntity we are getting or updating'
-        type: string
-      self:
-        description: '(get, post or put) The url of the extern object that has an Entity with Attributes in EAV. That we are getting, updating or creating a new EAV objectEntity for'
-        type: string
-        format: url
-      body:
-        description: '(post or put) The values for creating or updating an extern object and the values for the Entity with Attributes in EAV for this extern object.'
-        type: array
-      doGet:
-        description: 'If you want to do a get call through a post for some weird reason, use this boolean and set it to True'
-        type: bool
-        example: 'false'
-    required: []
   ObjectEntity-read:
     properties:
       id:
@@ -8850,6 +8824,32 @@ definitions:
       attribute: []
       objectEntity: []
     required: []
+  ObjectCommunication-read:
+    properties:
+      id:
+        description: 'UUID of this person'
+        type: \UuidInterface
+      componentCode:
+        description: '(get, post and put) The component code for the objectEntity we are getting, creating or updating'
+        type: string
+      entityName:
+        description: '(get, post and put) The entity name for the objectEntity we are getting, creating or updating. (this actually needs to be the second value of the entity type, so in case of entity type: cc/people, this would/should be people)'
+        type: string
+      objectEntityId:
+        description: '(get or put) The uuid of the objectEntity we are getting or updating'
+        type: string
+      self:
+        description: '(get, post or put) The url of the extern object that has an Entity with Attributes in EAV. That we are getting, updating or creating a new EAV objectEntity for'
+        type: string
+        format: url
+      body:
+        description: '(post or put) The values for creating or updating an extern object and the values for the Entity with Attributes in EAV for this extern object.'
+        type: array
+      doGet:
+        description: 'If you want to do a get call through a post for some weird reason, use this boolean and set it to True'
+        type: bool
+        example: 'false'
+    required: []
   ChangeLog-read:
     properties:
       id:
@@ -8888,12 +8888,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-08-05 08:08:27'
+        example: '2021-08-05 08:18:32'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-08-05 08:08:27'
+        example: '2021-08-05 08:18:32'
     required: []
   ChangeLog-write:
     properties:
@@ -9007,12 +9007,12 @@ definitions:
         description: 'The moment this request was created'
         type: string
         format: date-time
-        example: '2021-08-05 08:08:27'
+        example: '2021-08-05 08:18:32'
       dateModified:
         description: 'The moment this request last Modified'
         type: string
         format: date-time
-        example: '2021-08-05 08:08:27'
+        example: '2021-08-05 08:18:32'
     required: []
   AuditTrail-write:
     properties:
@@ -9034,11 +9034,6 @@ tags:
 
 
   -
-    name: ObjectCommunication
-    description: |+
-      Description
-
-  -
     name: ObjectEntity
     description: |+
       Description
@@ -9047,6 +9042,11 @@ tags:
     name: Value
     description: |+
       Description.
+
+  -
+    name: ObjectCommunication
+    description: |+
+      Description
 
   -
     name: ChangeLog
