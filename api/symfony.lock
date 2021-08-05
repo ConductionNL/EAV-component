@@ -25,6 +25,9 @@
     "behat/transliterator": {
         "version": "v1.2.0"
     },
+    "brick/math": {
+        "version": "0.9.2"
+    },
     "composer/ca-bundle": {
         "version": "1.2.6"
     },
@@ -140,6 +143,9 @@
     "easyrdf/easyrdf": {
         "version": "0.9.1"
     },
+    "fgrosse/phpasn1": {
+        "version": "v2.3.0"
+    },
     "fig/link-util": {
         "version": "1.0.0"
     },
@@ -181,6 +187,12 @@
     },
     "laminas/laminas-zendframework-bridge": {
         "version": "1.1.1"
+    },
+    "lcobucci/clock": {
+        "version": "2.0.0"
+    },
+    "lcobucci/jwt": {
+        "version": "4.1.4"
     },
     "league/html-to-markdown": {
         "version": "4.8.1"
@@ -257,9 +269,6 @@
     "phpunit/php-timer": {
         "version": "5.0.3"
     },
-    "phpunit/php-token-stream": {
-        "version": "4.0.4"
-    },
     "phpunit/phpunit": {
         "version": "4.7",
         "recipe": {
@@ -282,6 +291,12 @@
     },
     "psr/event-dispatcher": {
         "version": "1.0.0"
+    },
+    "psr/http-client": {
+        "version": "1.0.1"
+    },
+    "psr/http-factory": {
+        "version": "1.0.1"
     },
     "psr/http-message": {
         "version": "1.0.1"
@@ -310,6 +325,9 @@
             "config/packages/ramsey_uuid_doctrine.yaml"
         ]
     },
+    "sebastian/cli-parser": {
+        "version": "1.0.1"
+    },
     "sebastian/code-unit": {
         "version": "1.0.8"
     },
@@ -318,6 +336,9 @@
     },
     "sebastian/comparator": {
         "version": "4.0.6"
+    },
+    "sebastian/complexity": {
+        "version": "2.0.2"
     },
     "sebastian/diff": {
         "version": "4.0.4"
@@ -330,6 +351,9 @@
     },
     "sebastian/global-state": {
         "version": "4.0.0"
+    },
+    "sebastian/lines-of-code": {
+        "version": "1.0.3"
     },
     "sebastian/object-enumerator": {
         "version": "4.0.4"
@@ -372,6 +396,12 @@
         "files": [
             "config/packages/security_checker.yaml"
         ]
+    },
+    "spomky-labs/aes-key-wrap": {
+        "version": "v6.0.0"
+    },
+    "spomky-labs/base64url": {
+        "version": "v2.0.4"
     },
     "stof/doctrine-extensions-bundle": {
         "version": "1.2",
@@ -531,6 +561,24 @@
     "symfony/orm-pack": {
         "version": "v2.0.0"
     },
+    "symfony/password-hasher": {
+        "version": "v5.3.4"
+    },
+    "symfony/phpunit-bridge": {
+        "version": "5.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.3",
+            "ref": "905679249e7b10f06c572917a9022a72cbfedc04"
+        },
+        "files": [
+            ".env.test",
+            "bin/phpunit",
+            "phpunit.xml.dist",
+            "tests/bootstrap.php"
+        ]
+    },
     "symfony/polyfill-intl-grapheme": {
         "version": "v1.18.1"
     },
@@ -554,6 +602,9 @@
     },
     "symfony/polyfill-php80": {
         "version": "v1.18.1"
+    },
+    "symfony/polyfill-php81": {
+        "version": "v1.23.0"
     },
     "symfony/process": {
         "version": "v4.3.1"
@@ -699,6 +750,9 @@
     "tbbc/money-bundle": {
         "version": "v3.1.9"
     },
+    "thecodingmachine/safe": {
+        "version": "v1.3.3"
+    },
     "theseer/tokenizer": {
         "version": "1.2.0"
     },
@@ -716,6 +770,9 @@
     },
     "twig/twig": {
         "version": "v2.11.3"
+    },
+    "web-token/jwt-framework": {
+        "version": "v2.2.10"
     },
     "webimpress/safe-writer": {
         "version": "2.1.0"
