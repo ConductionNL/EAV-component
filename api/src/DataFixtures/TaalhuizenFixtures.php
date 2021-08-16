@@ -331,6 +331,14 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($desiredLearningMethod);
         $manager->flush();
 
+        $desiredLearningMethod->setName('registrar');
+        $desiredLearningMethod->setType('string');
+        $desiredLearningMethod->setFormat('string');
+        $desiredLearningMethod->setDescription('Registrar of the participant');
+        $desiredLearningMethod->setNullable(true);
+        $manager->persist($desiredLearningMethod);
+        $manager->flush();
+
         $participantEntity = new Entity();
         $participantEntity->setType('edu/participants');
         $participantEntity->setName('participant');
