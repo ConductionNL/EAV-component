@@ -916,6 +916,33 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($outComesLevelOther);
         $manager->flush();
 
+        $usedExam = new Attribute();
+        $usedExam->setName('usedExam');
+        $usedExam->setType('string');
+        $usedExam->setFormat('string');
+        $usedExam->setDescription('The used exam for this Result');
+        $usedExam->setNullable(false);
+        $manager->persist($usedExam);
+        $manager->flush();
+
+        $examDate = new Attribute();
+        $examDate->setName('examDate');
+        $examDate->setType('datetime');
+        $examDate->setFormat('datetime');
+        $examDate->setDescription('The date of the exam that this result is of');
+        $examDate->setNullable(false);
+        $manager->persist($examDate);
+        $manager->flush();
+
+        $examMemo = new Attribute();
+        $examMemo->setName('memo');
+        $examMemo->setType('string');
+        $examMemo->setFormat('string');
+        $examMemo->setDescription('A memo/note for this result');
+        $examMemo->setNullable(true);
+        $manager->persist($examMemo);
+        $manager->flush();
+
         $resultEntity = new Entity();
         $resultEntity->setType('edu/results');
         $resultEntity->setName('result');
@@ -929,6 +956,9 @@ class TaalhuizenFixtures extends Fixture
         $resultEntity->addAttribute($outComesApplicationOther);
         $resultEntity->addAttribute($outComesLevel);
         $resultEntity->addAttribute($outComesLevelOther);
+        $resultEntity->addAttribute($usedExam);
+        $resultEntity->addAttribute($examDate);
+        $resultEntity->addAttribute($examMemo);
         $manager->persist($resultEntity);
         $manager->flush();
 
