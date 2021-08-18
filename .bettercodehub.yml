@@ -17,4 +17,4 @@ exclude:
 - /api/var/.*
 - /api/vendor/.*
 - /api/src/Entity/.*
-- /api/src/Datafixtures/.*
+- /api/src/DataFixtures/.*
