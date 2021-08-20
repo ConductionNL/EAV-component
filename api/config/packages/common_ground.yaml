@@ -161,6 +161,8 @@ parameters:
     env(APP_COMMONGROUND_STUF_LOCATION): "https://stuf.%env(APP_DOMAIN)%"
     env(APP_COMMONGROUND_STUF_APIKEY): "%env(APP_COMMONGROUND_KEY)%"
 
+    components: []
+
     # Organisatie details
     env(GOOGLE_TAG_MANAGER_ID): ""
     env(HUBSPOT_EMBED_CODE): ""
