@@ -104,6 +104,11 @@ spec:
                 configMapKeyRef:
                   key: url
                   name: {{ template "fullname" . }}
+            - name: NOTIFICATION_ENABLED
+              valueFrom:
+                configMapKeyRef:
+                  key: notification-enabled
+                  name: {{ template "fullname" . }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
     {{- if .Values.nodeSelector }}

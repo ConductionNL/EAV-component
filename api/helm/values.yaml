@@ -7,6 +7,7 @@ config:
   debug: 0
   cache: true
   internal: false
+  notificationEnabled: false
 
 security:
   applicationKey: "b820b925-b4c3-4d48-8035-248ccc628ea7"
