@@ -26,12 +26,12 @@ class TaalhuizenFixtures extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        if (
-            !$this->params->get('app_build_all_fixtures') &&
-            $this->params->get('app_domain') != 'taalhuizen-bisc.commonground.nu' && strpos($this->params->get('app_domain'), 'taalhuizen-bisc.commonground.nu') == false
-        ) {
-            return false;
-        }
+//         if (
+//             !$this->params->get('app_build_all_fixtures') &&
+//             $this->params->get('app_domain') != 'taalhuizen-bisc.commonground.nu' && strpos($this->params->get('app_domain'), 'taalhuizen-bisc.commonground.nu') == false
+//         ) {
+//             return false;
+//         }
 
         // EAV learningNeedEntity
         $description = new Attribute();
@@ -327,6 +327,14 @@ class TaalhuizenFixtures extends Fixture
         $desiredLearningMethod->setType('array');
         $desiredLearningMethod->setFormat('array');
         $desiredLearningMethod->setDescription('The desiredLearningMethods of this participant');
+        $desiredLearningMethod->setNullable(true);
+        $manager->persist($desiredLearningMethod);
+        $manager->flush();
+
+        $desiredLearningMethod->setName('registrar');
+        $desiredLearningMethod->setType('string');
+        $desiredLearningMethod->setFormat('string');
+        $desiredLearningMethod->setDescription('Registrar of the participant');
         $desiredLearningMethod->setNullable(true);
         $manager->persist($desiredLearningMethod);
         $manager->flush();
@@ -908,6 +916,33 @@ class TaalhuizenFixtures extends Fixture
         $manager->persist($outComesLevelOther);
         $manager->flush();
 
+        $usedExam = new Attribute();
+        $usedExam->setName('usedExam');
+        $usedExam->setType('string');
+        $usedExam->setFormat('string');
+        $usedExam->setDescription('The used exam for this Result');
+        $usedExam->setNullable(false);
+        $manager->persist($usedExam);
+        $manager->flush();
+
+        $examDate = new Attribute();
+        $examDate->setName('examDate');
+        $examDate->setType('datetime');
+        $examDate->setFormat('datetime');
+        $examDate->setDescription('The date of the exam that this result is of');
+        $examDate->setNullable(false);
+        $manager->persist($examDate);
+        $manager->flush();
+
+        $examMemo = new Attribute();
+        $examMemo->setName('memo');
+        $examMemo->setType('string');
+        $examMemo->setFormat('string');
+        $examMemo->setDescription('A memo/note for this result');
+        $examMemo->setNullable(true);
+        $manager->persist($examMemo);
+        $manager->flush();
+
         $resultEntity = new Entity();
         $resultEntity->setType('edu/results');
         $resultEntity->setName('result');
@@ -921,6 +956,9 @@ class TaalhuizenFixtures extends Fixture
         $resultEntity->addAttribute($outComesApplicationOther);
         $resultEntity->addAttribute($outComesLevel);
         $resultEntity->addAttribute($outComesLevelOther);
+        $resultEntity->addAttribute($usedExam);
+        $resultEntity->addAttribute($examDate);
+        $resultEntity->addAttribute($examMemo);
         $manager->persist($resultEntity);
         $manager->flush();
 
