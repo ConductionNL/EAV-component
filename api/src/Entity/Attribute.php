@@ -117,7 +117,7 @@ class Attribute
 
     /**
      * @Groups({"read","write"})
-     * @ORM\ManyToOne(targetEntity=Entity::class, inversedBy="usedIn")
+     * @ORM\ManyToOne(targetEntity=Entity::class, inversedBy="usedIn", fetch="EAGER")
      * @ORM\JoinColumn(nullable=true)
      * @MaxDepth(1)
      */

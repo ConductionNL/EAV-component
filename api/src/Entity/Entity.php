@@ -95,7 +95,7 @@ class Entity
 
     /**
      * @Groups({"read","write"})
-     * @ORM\OneToMany(targetEntity=Attribute::class, mappedBy="entity", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity=Attribute::class, mappedBy="entity", cascade={"persist", "remove"}, fetch="EAGER")
      * @MaxDepth(1)
      */
     private Collection $attributes;
