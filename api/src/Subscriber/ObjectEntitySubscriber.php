@@ -49,6 +49,11 @@ class ObjectEntitySubscriber implements EventSubscriberInterface
         $route = $event->getRequest()->attributes->get('_route');
         $resource = $event->getControllerResult();
 
+        // TODO: DISABLED THIS SUBSCRIBER SEE OBJECTSUBSCRIBER!!!
+        if ($route != '') {
+            return;
+        }
+
         if ($route == 'api_object_entities_post_objectentity_collection'
             || $route == 'api_object_entities_post_putobjectentity_collection'
             || $route == 'api_object_entities_get_objectentity_collection'
