@@ -22,6 +22,9 @@ class ObjectService
     private CommonGroundService $commonGroundService;
     private ParameterBagInterface $params;
     private ValidationService $validationService;
+    private CallService $callService;
+    private SaveService $saveService;
+    private GetService $getService;
     private string $componentCode;
     private string $entityName;
     private ?string $uuid;
@@ -29,12 +32,15 @@ class ObjectService
     private array $validationResults;
     private array $apiResults;
 
-    public function __construct(EntityManagerInterface $em, CommonGroundService $commonGroundService, ParameterBagInterface $params, ValidationService $validationService)
+    public function __construct(EntityManagerInterface $em, CommonGroundService $commonGroundService, ParameterBagInterface $params, ValidationService $validationService, CallService $callService, SaveService $saveService, GetService $getService)
     {
         $this->em = $em;
         $this->commonGroundService = $commonGroundService;
         $this->params = $params;
         $this->validationService = $validationService;
+        $this->callService = $callService;
+        $this->saveService = $saveService;
+        $this->getService = $getService;
         $this->validationResults = [];
         $this->apiResults = [];
     }
@@ -54,15 +60,24 @@ class ObjectService
         if (empty($entity)) {
             return'No Entity with type ' . $this->componentCode . '/' . $this->entityName . ' exist!';
         }
+        $objectEntity->setEntity($entity);
 
         $this->validationResults = $this->validationService->validateEntity($entity, $this->body);
 
         if (empty($this->validationResults)) {
-            var_dump('no errors, now we should post');
-            // TODO actually post with new post service
+            $this->callService->postEntity($entity, $this->body);
+        } else {
+            return [
+                "message" => "validation error",
+                "type" => "error",
+                "path" => $entity->getName(),
+                "data" => $this->validationResults,
+            ];
         }
 
-        return $this->validationResults;
+        $this->em->persist($objectEntity);
+        $this->em->flush();
+        return $this->apiResults;
     }
 
 }

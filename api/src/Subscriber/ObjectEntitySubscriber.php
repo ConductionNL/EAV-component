@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Serializer\SerializerInterface;
 use function GuzzleHttp\json_decode;
 
+//TODO: After objectSubscriber is finished remove this file
 class ObjectEntitySubscriber implements EventSubscriberInterface
 {
     private $em;

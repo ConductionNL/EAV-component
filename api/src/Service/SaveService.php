@@ -27,14 +27,15 @@ class SaveService
 
         // Does the entity already exist?
         if($postValues['id']){
-            $object = $em->getentitn bla bla
+//            $object = $em->getentitn bla bla
         }
         // If not create it
         else{
             $object = New ObjectEntity();
+            $object->setEntity($entity);
         }
 
-        $object = $this->prepareEntity( $entity,  $object, $postvalues);
+//        $object = $this->prepareEntity( $entity,  $object, $postvalues);
 
         // Save the object
         $this->em->persist($object);

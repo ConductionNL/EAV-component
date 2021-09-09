@@ -26,7 +26,7 @@ class GetService
 
         // Does the entity already exist?
         if($post['id']){
-            $object = $em->getentitn bla bla
+//            $object = $em->getentitn bla bla
         }
         else{
             // lets throw an error

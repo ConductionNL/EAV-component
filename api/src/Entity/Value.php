@@ -68,12 +68,12 @@ class Value
 
     // TODO:indexeren
     /**
-     * @var string The actual value
+     * @var string The actual value if is of type string
      *
      * @Groups({"read", "write"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $value;
+    private $stringValue;
 
     /**
      * @var integer Integer if the value is type integer
@@ -116,6 +116,14 @@ class Value
     private $dateTimeValue;
 
     /**
+     * @Groups({"read", "write"})
+     * @ORM\OneToOne(targetEntity=ObjectEntity::class, fetch="EAGER", mappedBy="subresourceOf")
+     * @ORM\JoinColumn(nullable=true)
+     * @MaxDepth(1)
+     */
+    private $object;
+
+    /**
      * @Groups({"read","write"})
      * @ORM\ManyToOne(targetEntity=Attribute::class, inversedBy="attributeValues")
      * @ORM\JoinColumn(nullable=false)
@@ -155,14 +163,14 @@ class Value
         return $this;
     }
 
-    public function getValue(): ?string
+    public function getStringValue(): ?string
     {
-        return $this->value;
+        return $this->stringValue;
     }
 
-    public function setValue(?string $value): self
+    public function setStringValue(?string $stringValue): self
     {
-        $this->value = $value;
+        $this->stringValue = $stringValue;
 
         return $this;
     }
@@ -227,6 +235,18 @@ class Value
         return $this;
     }
 
+    public function getObject(): ?ObjectEntity
+    {
+        return $this->object;
+    }
+
+    public function setObject(?ObjectEntity $object): self
+    {
+        $this->object = $object;
+
+        return $this;
+    }
+
     public function getAttribute(): ?Attribute
     {
         return $this->attribute;
@@ -249,5 +269,62 @@ class Value
         $this->objectEntity = $objectEntity;
 
         return $this;
+    }
+
+    public function setValue($value)
+    {
+        if ($this->getAttribute()) {
+            switch ($this->getAttribute()->getType()) {
+                case 'string':
+                    $this->setStringValue($value);
+                    break;
+                case 'integer':
+                    $this->setIntegerValue($value);
+                    break;
+                case 'boolean':
+                    $this->setBooleanValue($value);
+                    break;
+                case 'number':
+                    $this->setNumberValue($value);
+                    break;
+                case 'array':
+                    $this->setArrayValue($value);
+                    break;
+                case 'datetime':
+                    $this->setDateTimeValue($value);
+                    break;
+                case 'object':
+                    $this->setObject($value);
+                    break;
+            }
+        } else {
+            //TODO: correct error handling
+            return false;
+        }
+    }
+
+    public function getValue()
+    {
+        if ($this->getAttribute()) {
+            switch ($this->getAttribute()->getType()) {
+                case 'string':
+                    return $this->getStringValue();
+                case 'integer':
+                    return $this->getIntegerValue();
+                case 'boolean':
+                    return $this->getBooleanValue();
+                case 'number':
+                    return $this->getNumberValue();
+                case 'array':
+                    return $this->getArrayValue();
+                case 'datetime':
+                    return $this->getDateTimeValue();
+                case 'object':
+                    return $this->getObject();
+            }
+        } else {
+            //TODO: correct error handling
+            return false;
+        }
     }
 }

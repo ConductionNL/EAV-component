@@ -114,6 +114,14 @@ class ObjectEntity
      */
     private $objectValues;
 
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\OneToOne(targetEntity=Value::class, fetch="EAGER", inversedBy="object")
+     * @ORM\JoinColumn(nullable=true)
+     * @MaxDepth(1)
+     */
+    private ?Value $subresourceOf;
+
     public function __construct()
     {
         $this->objectValues = new ArrayCollection();
@@ -183,5 +191,36 @@ class ObjectEntity
         }
 
         return $this;
+    }
+
+    public function getSubresourceOf(): ?Value
+    {
+        return $this->subresourceOf;
+    }
+
+    public function setSubresourceOf(?Value $subresourceOf): self
+    {
+        $this->subresourceOf = $subresourceOf;
+
+        return $this;
+    }
+
+    public function getValueByAttribute(Attribute $attribute): Value
+    {
+        // Check if value with this attribute exists for this ObjectEntity
+        $value = $this->getObjectValues()->filter(function (Value $value) use ($attribute) {
+            return $value->getAttribute() === $attribute;
+        });
+
+        // If no value with this attribute was found
+        if (!$value) {
+            // Create a new value and return that one
+            $value = new Value();
+            $value->setAttribute($attribute);
+            $value->setObjectEntity($this);
+            $this->addObjectValue($value);
+        }
+
+        return $value;
     }
 }

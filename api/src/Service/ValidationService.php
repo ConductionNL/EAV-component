@@ -30,9 +30,22 @@ class ValidationService
                 $result = $this->validateAttribute($attribute, $post[$attribute->getName()]);
                 // is we actuely get a result we need to stick it to the result array
                 if($result && !empty($result)){
-                    $results[str_replace('/','.',$entity->getType()).'.'.$attribute->getName()] = $result;
+                    if (is_array($result)) {
+                        // TODO: put $entity->getName() before every string key in this result array
+                        $results = array_merge($results, $result);
+                    } else {
+                        $results[$entity->getName().'.'.$attribute->getName()] = $result;
+                    }
                 }
             }
+            // TODO: something with defaultValue, maybe not here? (but do check if defaultValue is set before returning this is required!)
+//            elseif ($attribute->getDefaultValue()) {
+//                $post[$attribute->getName()] = $attribute->getDefaultValue();
+//            }
+            // TODO: something with nullable, maybe not here? (but do check if nullable is set before returning this is required!)
+//            elseif ($attribute->getNullable()) {
+//                $post[$attribute->getName()] = null;
+//            }
             // its not there but should it be?
             elseif($attribute->getRequired()){
                 $results[$attribute->getName()] = 'this attribute is required';
@@ -40,7 +53,8 @@ class ValidationService
 
             /* @todo handling the setting to null of exisiting variables */
         }
-        return $results ;
+
+        return $results;
     }
 
     /*@todo docs */
@@ -58,56 +72,56 @@ class ValidationService
                 break;
             case 'string':
                 if (!is_string($value)) {
-                    $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($value) . ' given!';
+                    $result = 'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.';
                 }
                 if ($attribute->getMinLength() && strlen($value) < $attribute->getMinLength()) {
-                    $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] is to short, minimum length is ' . $attribute->getMinLength() . ' !';
+                    $result = 'Is to short, minimum length is ' . $attribute->getMinLength() . '.';
                 }
                 if ($attribute->getMaxLength() && strlen($value) > $attribute->getMaxLength()) {
-                    $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] is to long, maximum length is ' . $attribute->getMaxLength() . ' !';
+                    $result = 'Is to long, maximum length is ' . $attribute->getMaxLength() . '.';
                 }
                 break;
             case 'number':
                 if (!is_integer($value) && !is_float($value) && gettype($value) != 'float' && gettype($value) != 'double') {
-                    $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($value) . ' given!';
+                    $result = 'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.';
                 }
                 break;
             case 'integer':
                 if (!is_integer($value)) {
-                    $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($value) . ' given!';
+                    $result = 'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.';
                 }
                 if ($attribute->getMinimum()) {
                     if ($attribute->getExclusiveMinimum() && $value <= $attribute->getMinimum()) {
-                        $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] must be higher than ' . $attribute->getMinimum() . ' !';
+                        $result = 'Must be higher than ' . $attribute->getMinimum() . '.';
                     } elseif ($value < $attribute->getMinimum()) {
-                        $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] must be ' . $attribute->getMinimum() . ' or higher!';
+                        $result = 'Must be ' . $attribute->getMinimum() . ' or higher.';
                     }
                 }
                 if ($attribute->getMaximum()) {
                     if ($attribute->getExclusiveMaximum() && $value >= $attribute->getMaximum()) {
-                        $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] must be lower than ' . $attribute->getMaximum() . ' !';
+                        $result = 'Must be lower than ' . $attribute->getMaximum() . '.';
                     } elseif ($value > $attribute->getMaximum()) {
-                        $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] must be ' . $attribute->getMaximum() . ' or lower!';
+                        $result = 'Must be ' . $attribute->getMaximum() . ' or lower.';
                     }
                 }
                 if ($attribute->getMultipleOf() && $value % $attribute->getMultipleOf() != 0) {
-                    $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] must be a multiple of ' . $attribute->getMultipleOf() . ', ' . $value . ' is not a multiple of ' . $attribute->getMultipleOf() . ' !';
+                    $result = 'Must be a multiple of ' . $attribute->getMultipleOf() . ', ' . $value . ' is not a multiple of ' . $attribute->getMultipleOf() . '.';
                 }
                 break;
             case 'boolean':
                 if (!is_bool($value)) {
-                    $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($value) . ' given!';
+                    $result = 'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.';
                 }
                 break;
             case 'array':
                 if (!is_array($value)) {
-                    $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', ' . gettype($value) . ' given!';
+                    $result = 'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.';
                 }
                 if ($attribute->getMinItems() && count($value) < $attribute->getMinItems()) {
-                    $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] has to few items ( ' . count($value) . ' ), the minimum array length of this attribute is ' . $attribute->getMinItems() . ' !';
+                    $result = 'Has to few items ( ' . count($value) . ' ), the minimum array length of this attribute is ' . $attribute->getMinItems() . '.';
                 }
                 if ($attribute->getMaxItems() && count($value) > $attribute->getMaxItems()) {
-                    $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] has to many items ( ' . count($value) . ' ), the maximum array length of this attribute is ' . $attribute->getMaxItems() . ' !';
+                    $result = 'Has to many items ( ' . count($value) . ' ), the maximum array length of this attribute is ' . $attribute->getMaxItems() . '.';
                 }
                 if ($attribute->getUniqueItems() && count(array_filter(array_keys($value), 'is_string')) == 0) {
                     // TODO:check this in another way so all kinds of arrays work with it.
@@ -118,7 +132,7 @@ class ValidationService
                         }
                     }
                     if (!$containsStringKey && count($value) !== count(array_unique($value))) {
-                        $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] must be an array of unique items!';
+                        $result = 'Must be an array of unique items!';
                     }
                 }
                 break;
@@ -126,7 +140,7 @@ class ValidationService
                 try {
                     new \DateTime($value);
                 } catch (HttpException $e) {
-                    $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] Attribute: [' . $attribute->getName() . '] expects ' . $attribute->getType() . ', failed to parse string to DateTime!';
+                    $result = 'Expects ' . $attribute->getType() . ', failed to parse string to DateTime.';
                 }
                 break;
             default:
