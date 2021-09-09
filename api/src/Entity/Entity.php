@@ -95,7 +95,7 @@ class Entity
 
     /**
      * @Groups({"read","write"})
-     * @ORM\OneToMany(targetEntity=Attribute::class, mappedBy="entity", cascade={"persist", "remove"})
+     * @ORM\OneToMany(targetEntity=Attribute::class, mappedBy="entity", cascade={"persist", "remove"}, fetch="EAGER")
      * @MaxDepth(1)
      */
     private Collection $attributes;
@@ -106,6 +106,13 @@ class Entity
      * @MaxDepth(1)
      */
     private Collection $objectEntities;
+
+    /**
+     * @Groups({"write"})
+     * @ORM\OneToMany(targetEntity=Attribute::class, mappedBy="object")
+     * @MaxDepth(1)
+     */
+    private Collection $usedIn;
 
     /**
      * @var Datetime The moment this request was created
@@ -129,6 +136,7 @@ class Entity
     {
         $this->attributes = new ArrayCollection();
         $this->objectEntities = new ArrayCollection();
+        $this->usedIn = new ArrayCollection();
     }
 
     public function getId()
@@ -231,6 +239,36 @@ class Entity
             // set the owning side to null (unless already changed)
             if ($objectEntity->getEntity() === $this) {
                 $objectEntity->setEntity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Attribute[]
+     */
+    public function getUsedIn(): Collection
+    {
+        return $this->usedIn;
+    }
+
+    public function addUsedIn(Attribute $attribute): self
+    {
+        if (!$this->usedIn->contains($attribute)) {
+            $this->usedIn[] = $attribute;
+            $attribute->setObject($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUsedIn(Attribute $attribute): self
+    {
+        if ($this->usedIn->removeElement($attribute)) {
+            // set the owning side to null (unless already changed)
+            if ($attribute->getObject() === $this) {
+                $attribute->setObject(null);
             }
         }
 

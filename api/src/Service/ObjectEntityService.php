@@ -16,6 +16,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Paginator;
 use Doctrine\Common\Collections\Collection;
 use Symfony\Component\String\Inflector\EnglishInflector;
 
+//TODO: After objectService is finished remove this file
 class ObjectEntityService
 {
     private $em;
