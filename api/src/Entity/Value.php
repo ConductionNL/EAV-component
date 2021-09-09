@@ -8,6 +8,7 @@ use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\BooleanFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\DateFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\OrderFilter;
 use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -271,6 +272,9 @@ class Value
         return $this;
     }
 
+    /**
+     * @throws \Exception
+     */
     public function setValue($value)
     {
         if ($this->getAttribute()) {
@@ -291,7 +295,7 @@ class Value
                     $this->setArrayValue($value);
                     break;
                 case 'datetime':
-                    $this->setDateTimeValue($value);
+                    $this->setDateTimeValue(new DateTime($value));
                     break;
                 case 'object':
                     $this->setObject($value);
@@ -318,7 +322,8 @@ class Value
                 case 'array':
                     return $this->getArrayValue();
                 case 'datetime':
-                    return $this->getDateTimeValue();
+                    $datetime = $this->getDateTimeValue();
+                    return $datetime->format('Y-m-d\TH:i:sP');;
                 case 'object':
                     return $this->getObject();
             }

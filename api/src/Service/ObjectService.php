@@ -58,14 +58,19 @@ class ObjectService
         // Check if entity exists
         $entity = $this->em->getRepository("App\Entity\Entity")->findOneBy(['type' => $this->componentCode . '/' . $this->entityName]);
         if (empty($entity)) {
-            return'No Entity with type ' . $this->componentCode . '/' . $this->entityName . ' exist!';
+            return [
+                "message" => 'No Entity with this type exist.',
+                "type" => "error",
+                "path" => "url",
+                "data" => ["type" => $this->componentCode . '/' . $this->entityName],
+            ];
         }
-        $objectEntity->setEntity($entity);
 
         $this->validationResults = $this->validationService->validateEntity($entity, $this->body);
 
         if (empty($this->validationResults)) {
-            $this->callService->postEntity($entity, $this->body);
+            $result = $this->saveService->saveEntity($entity, $this->body);
+            return $this->saveService->renderResult($result);
         } else {
             return [
                 "message" => "validation error",
@@ -74,10 +79,6 @@ class ObjectService
                 "data" => $this->validationResults,
             ];
         }
-
-        $this->em->persist($objectEntity);
-        $this->em->flush();
-        return $this->apiResults;
     }
 
 }

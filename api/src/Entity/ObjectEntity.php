@@ -211,9 +211,11 @@ class ObjectEntity
         $value = $this->getObjectValues()->filter(function (Value $value) use ($attribute) {
             return $value->getAttribute() === $attribute;
         });
-
+        if (count($value) == 1) {
+            $value = $value[0];
+        }
         // If no value with this attribute was found
-        if (!$value) {
+        else {
             // Create a new value and return that one
             $value = new Value();
             $value->setAttribute($attribute);

@@ -77,13 +77,17 @@ class ObjectSubscriber implements EventSubscriberInterface
             $this->objectService->setEventVariables($body, $entityName, $uuid, $componentCode);
             $notificationTopic = $componentCode . '/' . $entityName;
 
-            // TODO: COPY PASTE OLD CODE^ (might change)
+            // TODO: COPY PASTE OLD CODE^ (might change, but lets use this for now)
 
 
             // TODO: NEW CODE ...
 
             // Validate the post data for this entity
             if ($route == 'api_object_entities_post_objectentity_collection' && $resource instanceof ObjectEntity) {
+                // Make sure we do not create and leave behind empty ObjectEntity objects
+                $this->em->remove($resource);
+                $this->em->flush();
+
                 $result = $this->objectService->handlePost($resource);
             } else {
                 $result = 'stop for now';
