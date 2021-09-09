@@ -30,7 +30,7 @@ class ValidationService
                 $result = $this->validateAttribute($attribute, $post[$attribute->getName()]);
                 // is we actuely get a result we need to stick it to the result array
                 if($result && !empty($result)){
-                    $results[$attribute->getName()] = $result;
+                    $results[str_replace('/','.',$entity->getType()).'.'.$attribute->getName()] = $result;
                 }
             }
             // its not there but should it be?
