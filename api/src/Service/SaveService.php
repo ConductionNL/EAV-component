@@ -39,14 +39,16 @@ class SaveService
             // Get existing object with @self
             $object = $this->em->getRepository("App\Entity\ObjectEntity")->findOneBy(['uri' => $postValues['@self']]);
             if (empty($object)) {
-                //TODO: change error handling
+                //TODO: change error handling so we do not generate 500's
                 throw new HttpException('No object found with this @self: ' . $postValues['@self'] . ' !', 400);
             }
-        } elseif (isset($postValues['id'])) {
+        }
+        // TODO: this id could be the id of an object not saved in EAV?
+        elseif (isset($postValues['id'])) {
             // Get existing object with id
             $object = $this->em->getRepository("App\Entity\ObjectEntity")->findOneBy(['id' => $postValues['id']]);
             if (empty($object)) {
-                //TODO: change error handling
+                //TODO: change error handling so we do not generate 500's
                 throw new HttpException('No eav/ObjectEntity object found with this uuid: ' . $postValues['id'] . ' !', 400);
             }
         }
@@ -102,7 +104,7 @@ class SaveService
         return $object;
     }
 
-    //TODO: make this better? and use it to generate the @id for eav objects.
+    //TODO: change this to work better? (known to cause problems) used it to generate the @id / @eav for eav objects (intern and extern objects).
     private function createUri($type, $id)
     {
         if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
@@ -118,9 +120,20 @@ class SaveService
         return $uri . '/object_entities/' . $type . '/' . $id;
     }
 
+    // TODO: Change this to be more efficient? (same foreach as in prepareEntity) or even move it to a different service?
     public function renderResult(ObjectEntity $result): array
     {
         $response = [];
+
+        //TODO: for extern objects
+//        // Check component code and if it is not EAV also get the normal object.
+//        if ($this->componentCode != 'eav') {
+//            $response = $this->commonGroundService->getResource($objectEntity->getUri(), [], false, false, true, false);
+//            $response['@self'] = $response['@id'];
+//            $response['@eav'] = $uri;
+//            $response['@eavType'] = ucfirst($this->entityName);
+//            $response['eavId'] = $id;
+//        }
 
         $response['@context'] = '/contexts/' . ucfirst($result->getEntity()->getName());
         $response['@id'] = $result->getUri();
