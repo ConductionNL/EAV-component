@@ -18,14 +18,16 @@ use Symfony\Component\String\Inflector\EnglishInflector;
 
 class ObjectService
 {
-    private $em;
-    private $commonGroundService;
-    private $params;
-    private $componentCode;
-    private $entityName;
-    private $uuid;
-    private $body;
+    private EntityManagerInterface $em;
+    private CommonGroundService $commonGroundService;
+    private ParameterBagInterface $params;
     private ValidationService $validationService;
+    private string $componentCode;
+    private string $entityName;
+    private ?string $uuid;
+    private array $body;
+    private array $validationResults;
+    private array $apiResults;
 
     public function __construct(EntityManagerInterface $em, CommonGroundService $commonGroundService, ParameterBagInterface $params, ValidationService $validationService)
     {
@@ -33,9 +35,11 @@ class ObjectService
         $this->commonGroundService = $commonGroundService;
         $this->params = $params;
         $this->validationService = $validationService;
+        $this->validationResults = [];
+        $this->apiResults = [];
     }
 
-    public function setEventVariables($body, $entityName, $uuid, $componentCode)
+    public function setEventVariables(array $body, string $entityName, ?string $uuid, string $componentCode)
     {
         $this->body = $body;
         $this->entityName = $entityName;
@@ -43,7 +47,6 @@ class ObjectService
         $this->componentCode = $componentCode;
     }
 
-    // TODO: needs a merge with handlePut function
     public function handlePost(ObjectEntity $objectEntity)
     {
         // Check if entity exists
@@ -52,14 +55,14 @@ class ObjectService
             return'No Entity with type ' . $this->componentCode . '/' . $this->entityName . ' exist!';
         }
 
-        $result = $this->validationService->validateEntity($entity, $this->body);
+        $this->validationResults = $this->validationService->validateEntity($entity, $this->body);
 
-        if (empty($result)) {
+        if (empty($this->validationResults)) {
             var_dump('no errors, now we should post');
             // TODO actually post with new post service
         }
 
-        return $result;
+        return $this->validationResults;
     }
 
 }

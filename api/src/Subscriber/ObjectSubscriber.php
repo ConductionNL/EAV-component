@@ -97,7 +97,7 @@ class ObjectSubscriber implements EventSubscriberInterface
             );
             $event->setResponse($response);
 
-            return;
+
             // TODO: OLD COPY PASTE CODE FROM ObjectEntityservice... (here for easy re-use if needed, could also just be removed!)
 
             // oldTODO: post_objectentity and post_putobjectentity should use the same 'handlePost' function (this should make this code look a lot cleaner as well)

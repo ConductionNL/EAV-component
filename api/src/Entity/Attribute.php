@@ -83,7 +83,7 @@ class Attribute
      *
      * @Assert\NotBlank
      * @Assert\Length(max = 255)
-     * @Assert\Choice({"string", "integer", "boolean", "number", "array", "datetime","object"})
+     * @Assert\Choice({"string", "integer", "boolean", "number", "array", "datetime", "object"})
      * @Groups({"read", "write"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
@@ -106,14 +106,22 @@ class Attribute
      * @ORM\ManyToOne(targetEntity=Entity::class, inversedBy="attributes")
      * @MaxDepth(1)
      */
-    private $entity;
+    private Entity $entity;
 
     /**
      * @Groups({"write"})
      * @ORM\OneToMany(targetEntity=Value::class, mappedBy="attribute", cascade={"remove"}, fetch="EXTRA_LAZY")
      * @MaxDepth(1)
      */
-    private $attributeValues;
+    private Collection $attributeValues;
+
+    /**
+     * @Groups({"read","write"})
+     * @ORM\ManyToOne(targetEntity=Entity::class, inversedBy="usedIn")
+     * @ORM\JoinColumn(nullable=true)
+     * @MaxDepth(1)
+     */
+    private ?Entity $object = null;
 
     /**
      * @var string *Can only be used in combination with type integer* Specifies a number where the value should be a multiple of, e.g. a multiple of 2 would validate 2,4 and 6 but would prevent 5
@@ -433,6 +441,18 @@ class Attribute
         return $this;
     }
 
+    public function getEntity(): ?Entity
+    {
+        return $this->entity;
+    }
+
+    public function setEntity(?Entity $entity): self
+    {
+        $this->entity = $entity;
+
+        return $this;
+    }
+
     /**
      * @return Collection|Value[]
      */
@@ -463,14 +483,14 @@ class Attribute
         return $this;
     }
 
-    public function getEntity(): ?Entity
+    public function getObject(): ?Entity
     {
-        return $this->entity;
+        return $this->object;
     }
 
-    public function setEntity(?Entity $entity): self
+    public function setObject(?Entity $object): self
     {
-        $this->entity = $entity;
+        $this->object = $object;
 
         return $this;
     }
