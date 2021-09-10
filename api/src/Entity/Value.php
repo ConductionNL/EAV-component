@@ -118,11 +118,11 @@ class Value
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\OneToOne(targetEntity=ObjectEntity::class, fetch="EAGER", mappedBy="subresourceOf")
+     * @ORM\OneToMany(targetEntity=ObjectEntity::class, fetch="EAGER", mappedBy="subresourceOf", cascade={"remove"})
      * @ORM\JoinColumn(nullable=true)
      * @MaxDepth(1)
      */
-    private $object;
+    private ?Collection $objects;
 
     /**
      * @Groups({"read","write"})
@@ -139,6 +139,11 @@ class Value
      * @MaxDepth(1)
      */
     private $objectEntity;
+
+    public function __construct()
+    {
+        $this->objects = new ArrayCollection();
+    }
 
     public function getId(): Uuid
     {
@@ -236,14 +241,32 @@ class Value
         return $this;
     }
 
-    public function getObject(): ?ObjectEntity
+    /**
+     * @return Collection|Value[]
+     */
+    public function getObjects(): ?Collection
     {
-        return $this->object;
+        return $this->objects;
     }
 
-    public function setObject(?ObjectEntity $object): self
+    public function addObject(ObjectEntity $object): self
     {
-        $this->object = $object;
+        if (!$this->objects->contains($object)) {
+            $this->objects[] = $object;
+            $object->setSubresourceOf($this);
+        }
+
+        return $this;
+    }
+
+    public function removeObject(ObjectEntity $object): self
+    {
+        if ($this->objects->removeElement($object)) {
+            // set the owning side to null (unless already changed)
+            if ($object->getSubresourceOf() === $this) {
+                $object->setSubresourceOf(null);
+            }
+        }
 
         return $this;
     }
@@ -298,7 +321,13 @@ class Value
                     $this->setDateTimeValue(new DateTime($value));
                     break;
                 case 'object':
-                    $this->setObject($value);
+                    if (is_array($value)) {
+                        foreach ($value as $object) {
+                            $this->addObject($object);
+                        }
+                        break;
+                    }
+                    $this->addObject($value);
                     break;
             }
         } else {
@@ -325,7 +354,7 @@ class Value
                     $datetime = $this->getDateTimeValue();
                     return $datetime->format('Y-m-d\TH:i:sP');;
                 case 'object':
-                    return $this->getObject();
+                    return $this->getObjects();
             }
         } else {
             //TODO: correct error handling

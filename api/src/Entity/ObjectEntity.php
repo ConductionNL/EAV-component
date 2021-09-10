@@ -116,7 +116,7 @@ class ObjectEntity
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\OneToOne(targetEntity=Value::class, fetch="EAGER", inversedBy="object")
+     * @ORM\ManyToOne(targetEntity=Value::class, fetch="EAGER", inversedBy="objects")
      * @ORM\JoinColumn(nullable=true)
      * @MaxDepth(1)
      */
@@ -224,5 +224,13 @@ class ObjectEntity
         }
 
         return $value;
+    }
+
+    public function getSubresources()
+    {
+        // Check if value with this attribute exists for this ObjectEntity
+        $value = $this->getObjectValues()->filter(function (Value $value) use ($attribute) {
+            return $value->getAttribute() === $attribute;
+        });
     }
 }
