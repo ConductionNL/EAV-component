@@ -18,25 +18,17 @@ use Symfony\Component\String\Inflector\EnglishInflector;
 
 class ValidationService
 {
+
+
     /*@todo docs */
-    public function validateEntity (Entity $entity, array $post) {
+    public function validateEntity (ObjectEntity $objectEntity, array $post) {
 
-        $results = [];
-
+        $entity = $objectEntity->getEntity();
         foreach($entity->getAttributes() as $attribute){
 
             // check if we have a value to validate
             if(key_exists($attribute->getName(), $post)){
-                $result = $this->validateAttribute($attribute, $post[$attribute->getName()]);
-                // is we actuely get a result we need to stick it to the result array
-                if($result && !empty($result)){
-                    if (is_array($result)) {
-                        // TODO: put $entity->getName() before every string key in this result array
-                        $results = array_merge($results, $result);
-                    } else {
-                        $results[$entity->getName().'.'.$attribute->getName()] = $result;
-                    }
-                }
+                $objectEntity = $this->validateAttribute($objectEntity, $attribute, $post[$attribute->getName()]);
             }
             // TODO: something with defaultValue, maybe not here? (but do check if defaultValue is set before returning this is required!)
 //            elseif ($attribute->getDefaultValue()) {
@@ -46,19 +38,25 @@ class ValidationService
 //            elseif ($attribute->getNullable()) {
 //                $post[$attribute->getName()] = null;
 //            }
+
             // its not there but should it be?
             elseif($attribute->getRequired()){
-                $results[$attribute->getName()] = 'this attribute is required';
+                $objectEntity->addError($attribute->getName(),'this attribute is required');
             }
 
             /* @todo handling the setting to null of exisiting variables */
+
+            /* @todo dit is de plek waarop we weten of er een appi call moet worden gemaakt */
         }
 
-        return $results;
+        return $objectEntity;
     }
 
-    /*@todo docs */
-    private function validateAttribute(Attribute $attribute, $value) {
+    /*
+     *
+     * Returns a Value on succes or a false on failure
+     * @todo docs */
+    private function validateAttribute(ObjectEntity $objectEntity, Attribute $attribute, $value) {
 
         $attributeType = $attribute->getType();
 
@@ -67,61 +65,74 @@ class ValidationService
         // Do validation for attribute depending on its type
         switch ($attributeType) {
             case 'object':
+                // lets see if we already have an sub object
+                $valueObject = $objectEntity->getValueByAttribute($attribute);
+
+                // Lets see if the object already exisit
+                if(!$valueObject->getObject()){
+                    $subObject = New ObjectEntity();
+                    $subObject->setEntity($attribute->getObject());
+                    $valueObject->setObject($subObject);
+                }
+
                 // TODO: more validation for type object?
-                $result = $this->validateEntity($attribute->getObject(), $value);
+                $subObject = $this->validateEntity($valueObject->getObject(), $value);
+
+                // Push it into our object
+                $objectEntity->getValueByAttribute($attribute)->setObject($subObject);
                 break;
             case 'string':
                 if (!is_string($value)) {
-                    $result = 'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.';
+                    $objectEntity->addError($attribute->getName(),'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.');
                 }
                 if ($attribute->getMinLength() && strlen($value) < $attribute->getMinLength()) {
-                    $result = 'Is to short, minimum length is ' . $attribute->getMinLength() . '.';
+                    $objectEntity->addError($attribute->getName(),'Is to short, minimum length is ' . $attribute->getMinLength() . '.');
                 }
                 if ($attribute->getMaxLength() && strlen($value) > $attribute->getMaxLength()) {
-                    $result = 'Is to long, maximum length is ' . $attribute->getMaxLength() . '.';
+                    $objectEntity->addError($attribute->getName(),'Is to long, maximum length is ' . $attribute->getMaxLength() . '.');
                 }
                 break;
             case 'number':
                 if (!is_integer($value) && !is_float($value) && gettype($value) != 'float' && gettype($value) != 'double') {
-                    $result = 'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.';
+                    $objectEntity->addError($attribute->getName(),'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.');
                 }
                 break;
             case 'integer':
                 if (!is_integer($value)) {
-                    $result = 'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.';
+                    $objectEntity->addError($attribute->getName(),'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.');
                 }
                 if ($attribute->getMinimum()) {
                     if ($attribute->getExclusiveMinimum() && $value <= $attribute->getMinimum()) {
-                        $result = 'Must be higher than ' . $attribute->getMinimum() . '.';
+                        $objectEntity->addError($attribute->getName(),'Must be higher than ' . $attribute->getMinimum() . '.');
                     } elseif ($value < $attribute->getMinimum()) {
-                        $result = 'Must be ' . $attribute->getMinimum() . ' or higher.';
+                        $objectEntity->addError($attribute->getName(),'Must be ' . $attribute->getMinimum() . ' or higher.');
                     }
                 }
                 if ($attribute->getMaximum()) {
                     if ($attribute->getExclusiveMaximum() && $value >= $attribute->getMaximum()) {
-                        $result = 'Must be lower than ' . $attribute->getMaximum() . '.';
+                        $objectEntity->addError($attribute->getName(),'Must be lower than ' . $attribute->getMaximum() . '.');
                     } elseif ($value > $attribute->getMaximum()) {
-                        $result = 'Must be ' . $attribute->getMaximum() . ' or lower.';
+                        $objectEntity->addError($attribute->getName(),'Must be ' . $attribute->getMaximum() . ' or lower.');
                     }
                 }
                 if ($attribute->getMultipleOf() && $value % $attribute->getMultipleOf() != 0) {
-                    $result = 'Must be a multiple of ' . $attribute->getMultipleOf() . ', ' . $value . ' is not a multiple of ' . $attribute->getMultipleOf() . '.';
+                    $objectEntity->addError($attribute->getName(),'Must be a multiple of ' . $attribute->getMultipleOf() . ', ' . $value . ' is not a multiple of ' . $attribute->getMultipleOf() . '.');
                 }
                 break;
             case 'boolean':
                 if (!is_bool($value)) {
-                    $result = 'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.';
+                    $objectEntity->addError($attribute->getName(),'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.');
                 }
                 break;
             case 'array':
                 if (!is_array($value)) {
-                    $result = 'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.';
+                    $objectEntity->addError($attribute->getName(),'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.');
                 }
                 if ($attribute->getMinItems() && count($value) < $attribute->getMinItems()) {
-                    $result = 'Has to few items ( ' . count($value) . ' ), the minimum array length of this attribute is ' . $attribute->getMinItems() . '.';
+                    $objectEntity->addError($attribute->getName(),'The minimum array length of this attribute is ' . $attribute->getMinItems() . '.');
                 }
                 if ($attribute->getMaxItems() && count($value) > $attribute->getMaxItems()) {
-                    $result = 'Has to many items ( ' . count($value) . ' ), the maximum array length of this attribute is ' . $attribute->getMaxItems() . '.';
+                    $objectEntity->addError($attribute->getName(),'The maximum array length of this attribute is ' . $attribute->getMaxItems() . '.');
                 }
                 if ($attribute->getUniqueItems() && count(array_filter(array_keys($value), 'is_string')) == 0) {
                     // TODO:check this in another way so all kinds of arrays work with it.
@@ -132,7 +143,7 @@ class ValidationService
                         }
                     }
                     if (!$containsStringKey && count($value) !== count(array_unique($value))) {
-                        $result = 'Must be an array of unique items!';
+                        $objectEntity->addError($attribute->getName(),'Must be an array of unique items');
                     }
                 }
                 break;
@@ -140,15 +151,18 @@ class ValidationService
                 try {
                     new \DateTime($value);
                 } catch (HttpException $e) {
-                    $result = 'Expects ' . $attribute->getType() . ', failed to parse string to DateTime.';
+                    $objectEntity->addError($attribute->getName(),'Expects ' . $attribute->getType() . ', failed to parse string to DateTime.');
                 }
                 break;
             default:
-                $result = 'The entity type: [' . $attribute->getEntity()->getType() . '] has an attribute: [' . $attribute->getName() . '] with an unknown type: [' . $attributeType . '] !';
+                $objectEntity->addError($attribute->getName(),'has an an unknown type: [' . $attributeType . ']');
         }
 
-        return $result;
+        // if not we can set the value
+        if(!$objectEntity->hasErrors()){
+            $objectEntity->getValueByAttribute($attribute)->setValue($value);
+        }
+
+        return $objectEntity;
     }
-
-
 }

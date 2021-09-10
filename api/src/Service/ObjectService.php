@@ -29,20 +29,22 @@ class ObjectService
     private string $entityName;
     private ?string $uuid;
     private array $body;
-    private array $validationResults;
-    private array $apiResults;
+    //private array $validationResults;
+    //private array $apiResults;
 
     public function __construct(EntityManagerInterface $em, CommonGroundService $commonGroundService, ParameterBagInterface $params, ValidationService $validationService, CallService $callService, SaveService $saveService, GetService $getService)
     {
-        $this->em = $em;
-        $this->commonGroundService = $commonGroundService;
+        $this->em = $em; // Why
+        $this->commonGroundService = $commonGroundService; // hangt  van guzle af
         $this->params = $params;
+        // Je hebt deze nodig
         $this->validationService = $validationService;
         $this->callService = $callService;
         $this->saveService = $saveService;
+        // of deze, maar nooit bijde te gelijkertijd
         $this->getService = $getService;
-        $this->validationResults = [];
-        $this->apiResults = [];
+        //$this->validationResults = [];
+        //$this->apiResults = [];
     }
 
     public function setEventVariables(array $body, string $entityName, ?string $uuid, string $componentCode)
@@ -66,6 +68,39 @@ class ObjectService
             ];
         }
 
+        // Let get ourself our object
+        if($id){
+            $object =$entity = $this->em->getRepository("App\Entity\ObjectEntity")->get($id);
+        }
+        else{
+            $object = New ObjectEntity;
+            $object->setEntity($entity);
+        }
+
+        // Validation stap
+        $object = $this->validationService->validateEntity($object, $this->body);
+
+        // Let see if we have errors
+        if($object->hasErrors()){
+            return $this->returnErrors($object);
+        }
+
+        // Making the api calls
+
+        // Waiting for als the guzzle the results
+         Promise\Utils::settle($object->getAllPromisses)->wait();
+        if($object->hasErrors()){
+            return $this->returnErrors($object);
+        }
+
+        // Saving the data
+        $this->em->persist($object);
+        $this->em->flush();
+
+        return $object;
+
+
+        /*
         $this->validationResults = $this->validationService->validateEntity($entity, $this->body);
 
         if (empty($this->validationResults)) {
@@ -79,6 +114,18 @@ class ObjectService
                 "data" => $this->validationResults,
             ];
         }
+        */
+    }
+
+
+    public function returnErrors(ObjectEntity $objectEntity)
+    {
+        return [
+            "message" => "The where errors",
+            "type" => "error",
+            "path" => $objectEntity->getEntity()->getName(),
+            "data" => $objectEntity->getAllErrors,
+        ];
     }
 
 }
