@@ -57,6 +57,18 @@ class ValidationService
         return $results;
     }
 
+    /**
+     * Check if array is associative
+     *
+     * @param array $arr
+     * @return bool
+     */
+    function isAssoc(array $arr)
+    {
+        if (array() === $arr) return false;
+        return array_keys($arr) !== range(0, count($arr) - 1);
+    }
+
     /*@todo docs */
     private function validateAttribute(Attribute $attribute, $value) {
 
@@ -68,6 +80,14 @@ class ValidationService
         switch ($attributeType) {
             case 'object':
                 // TODO: more validation for type object?
+                if (!$this->isAssoc($value)) {
+                    $result = [];
+                    //TODO: make sure all error messages are returned for each subresource, now only the errors for the last one are returned
+                    foreach ($value as $key => $manyToOneSubresource) {
+                        $result = array_merge($result, $this->validateEntity($attribute->getObject(), $manyToOneSubresource));
+                    }
+                    break;
+                }
                 $result = $this->validateEntity($attribute->getObject(), $value);
                 break;
             case 'string':
