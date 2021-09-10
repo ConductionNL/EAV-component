@@ -107,7 +107,7 @@ class ObjectService
 
         // Saving the data
         $this->em->persist($object);
-        $object->setUri($this->createUri($entity->getType(), $object->getId()));
+        $object->setUri($this->validationService->createUri($entity->getType(), $object->getId()));
         $this->em->flush();
 
         return $this->renderResult($object);
@@ -135,22 +135,6 @@ class ObjectService
             "path" => $objectEntity->getEntity()->getName(),
             "data" => $objectEntity->getAllErrors(),
         ];
-    }
-
-    //TODO: change this to work better? (known to cause problems) used it to generate the @id / @eav for eav objects (intern and extern objects).
-    private function createUri($type, $id)
-    {
-        if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
-            $uri = "https://";
-        } else {
-            $uri = "http://";
-        }
-        $uri .= $_SERVER['HTTP_HOST'];
-        // if not localhost add /api/v1 ?
-        if ($_SERVER['HTTP_HOST'] != 'localhost') {
-            $uri .= '/api/v1/eav';
-        }
-        return $uri . '/object_entities/' . $type . '/' . $id;
     }
 
     // TODO: Change this to be more efficient? (same foreach as in prepareEntity) or even move it to a different service?

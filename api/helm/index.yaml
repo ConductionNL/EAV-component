@@ -5,7 +5,7 @@ entries:
       artifacthub.io/containsSecurityUpdates: "true"
     apiVersion: v2
     appVersion: V1.0
-    created: "2021-09-10T13:40:06.5353173Z"
+    created: "2021-09-10T14:25:24.2319424Z"
     dependencies:
     - condition: postgresql.enabled
       name: postgresql
@@ -17,7 +17,7 @@ entries:
       version: 12.7.7
     description: '&amp;amp;#039;Naast deze JSON rest API is er ook een [graphql](/graphql)
       interface beschikbaar.&amp;amp;#039;'
-    digest: dc826e24940aa8eb78fc52dad938924e9f2992e04ab6b00b446d1da48f7ed7b8
+    digest: ad30a8aa1b6c4a621fc26cbbe250f0f4ccb95c61d50e9d0818464a2e12cf21db
     home: https://www.conduction.nl
     icon: https://conductionnl.github.io/images/conduction_avatar_blue_on_transparant.svg
     keywords:
@@ -42,7 +42,7 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 11.10.0
-    created: "2021-09-10T13:40:06.5463251Z"
+    created: "2021-09-10T14:25:24.2449932Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -76,7 +76,7 @@ entries:
       category: Database
     apiVersion: v2
     appVersion: 6.0.11
-    created: "2021-09-10T13:40:06.5610481Z"
+    created: "2021-09-10T14:25:24.2643997Z"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -105,4 +105,4 @@ entries:
     urls:
     - charts/redis-12.7.7.tgz
     version: 12.7.7
-generated: "2021-09-10T13:40:06.5162099Z"
+generated: "2021-09-10T14:25:24.2121811Z"

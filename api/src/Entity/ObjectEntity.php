@@ -132,13 +132,13 @@ class ObjectEntity
      * @Groups({"read", "write"})
      * @ORM\Column(type="array", nullable=true)
      */
-    private ?array $errors;
+    private ?array $errors = [];
 
     /**
      * @Groups({"read", "write"})
      * @ORM\Column(type="array", nullable=true)
      */
-    private ?array $promises;
+    private ?array $promises = [];
 
     public function __construct()
     {
@@ -297,7 +297,7 @@ class ObjectEntity
                 }
             }
         }
-        return array_merge($allErrors, $this->errors);
+        return array_merge($allErrors, $this->getErrors());
     }
 
     public function getPromises(): ?array

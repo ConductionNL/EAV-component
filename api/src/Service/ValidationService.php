@@ -18,40 +18,52 @@ use Symfony\Component\String\Inflector\EnglishInflector;
 
 class ValidationService
 {
+    private EntityManagerInterface $em;
+
+    public function __construct(EntityManagerInterface $em)
+    {
+        $this->em = $em;
+    }
+
     /*@todo docs */
     public function validateEntity (ObjectEntity $objectEntity, array $post) {
 
         $entity = $objectEntity->getEntity();
-        foreach($entity->getAttributes() as $attribute){
+        foreach($entity->getAttributes() as $attribute) {
 
             // check if we have a value to validate
             if(key_exists($attribute->getName(), $post)){
                 // Lets see if it is an array of objects
                 if(!$attribute->getMultiple() || $attribute->getType() != 'object') {
-                    if (!$attribute->getMultiple() && is_array($post[$attribute->getName()])) {
-                        //TODO: ERROR, this should not be an array
+                    if (!$attribute->getMultiple() && is_array($post[$attribute->getName()]) && $attribute->getType() != 'object') {
                         $objectEntity->addError($attribute->getName(),'Multiple is not set for this value.');
                         continue;
-                    }
+                    } //TODO same thing the other way around, must be array if multiple. maybe move this to validateAttribute:
                     $objectEntity = $this->validateAttribute($objectEntity, $attribute, $post[$attribute->getName()]);
                 }
                 // Damnit, an array. We will need to loop :(
                 else {
-//                    var_dump($attribute->getName());
-//                    var_dump($post[$attribute->getName()]);
-                    foreach($post[$attribute->getName()] as $row){
-//                        var_dump('rowType: '.gettype($row));
-//                        var_dump($row);
+                    foreach($post[$attribute->getName()] as $row) {
+                        if ($attribute->getMultiple() && !is_array($row)) {
+                            $objectEntity->addError($attribute->getName(),'Multiple is set for this value. Expecting an array.');
+                            break;
+                        }
+                        $value = $objectEntity->getValueByAttribute($attribute);
                         if(array_key_exists('id', $row)) {
                             $subObject = $objectEntity->getValueByAttribute($attribute)->getObjects()->get($row['id']);
-                            $subObject = $this->validateAttribute($subObject, $attribute, $row);
                         }
-                        else{
-                            $value = $objectEntity->getValueByAttribute($attribute);
+                        else {
                             $subObject = New ObjectEntity();
                             $subObject->setSubresourceOf($value);
-                            $subObject->setEntity($attribute->getEntity());
-                            $subObject = $this->validateAttribute($subObject, $attribute, $row);
+                            $subObject->setEntity($attribute->getObject());
+                        }
+                        $subObject = $this->validateEntity($subObject, $row);
+                        // We need to persist if this is a new ObjectEntity in order to set and getId to generate the uri...
+                        $this->em->persist($subObject);
+                        $subObject->setUri($this->createUri($subObject->getEntity()->getType(), $subObject->getId()));
+                        // if not we can set the value
+                        if (!$subObject->getHasErrors()) {
+                            $subObject->getValueByAttribute($attribute)->setValue($subObject);
                             $value->addObject($subObject);
                         }
                     }
@@ -92,12 +104,6 @@ class ValidationService
 
         $attributeType = $attribute->getType();
 
-//        var_dump('startAttribute');
-//        var_dump('attributeName: '.$attribute->getName());
-//        var_dump('attributeType: '.$attributeType);
-//        var_dump($value);
-//        var_dump('endAttribute');
-
         // Do validation for attribute depending on its type
         switch ($attributeType) {
             case 'object':
@@ -116,8 +122,12 @@ class ValidationService
                 // TODO: more validation for type object?
                 $subObject = $this->validateEntity($subObject, $value);
 
+                // We need to persist if this is a new ObjectEntity in order to set and getId to generate the uri...
+                $this->em->persist($subObject);
+                $subObject->setUri($this->createUri($subObject->getEntity()->getType(), $subObject->getId()));
+
                 // Push it into our object
-                $objectEntity->getValueByAttribute($attribute)->setValue($subObject);
+                $value = $subObject;
                 break;
             case 'string':
                 if (!$attribute->getMultiple() && !is_string($value)) {
@@ -215,7 +225,7 @@ class ValidationService
         }
 
         // if not we can set the value
-        if(!$objectEntity->getHasErrors()){
+        if (!$objectEntity->getHasErrors()) {
             $objectEntity->getValueByAttribute($attribute)->setValue($value);
         }
 
@@ -241,5 +251,21 @@ class ValidationService
 //        );
 //
 //        return $promise;
+    }
+
+    //TODO: change this to work better? (known to cause problems) used it to generate the @id / @eav for eav objects (intern and extern objects).
+    public function createUri($type, $id)
+    {
+        if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') {
+            $uri = "https://";
+        } else {
+            $uri = "http://";
+        }
+        $uri .= $_SERVER['HTTP_HOST'];
+        // if not localhost add /api/v1 ?
+        if ($_SERVER['HTTP_HOST'] != 'localhost') {
+            $uri .= '/api/v1/eav';
+        }
+        return $uri . '/object_entities/' . $type . '/' . $id;
     }
 }

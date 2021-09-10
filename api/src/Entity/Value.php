@@ -119,7 +119,7 @@ class Value
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\OneToMany(targetEntity=ObjectEntity::class, fetch="EAGER", mappedBy="subresourceOf", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=ObjectEntity::class, fetch="EAGER", mappedBy="subresourceOf", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=true)
      * @MaxDepth(1)
      */
