@@ -28,7 +28,7 @@ class ValidationService
             if(key_exists($attribute->getName(), $post)){
                 // Lets see if it is an array of objects
                 if(!$attribute->getMultiple() || $attribute->getType() != 'object') {
-                    if (is_array($post[$attribute->getName()])) {
+                    if (!$attribute->getMultiple() && is_array($post[$attribute->getName()])) {
                         //TODO: ERROR, this should not be an array
                         $objectEntity->addError($attribute->getName(),'Multiple is not set for this value.');
                         continue;
@@ -120,8 +120,11 @@ class ValidationService
                 $objectEntity->getValueByAttribute($attribute)->setValue($subObject);
                 break;
             case 'string':
-                if (!is_string($value)) {
+                if (!$attribute->getMultiple() && !is_string($value)) {
                     $objectEntity->addError($attribute->getName(),'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.');
+                }
+                if ($attribute->getMultiple() && !is_array($value)) {
+                    $objectEntity->addError($attribute->getName(),'Expects array, ' . gettype($value) . ' given.');
                 }
                 if ($attribute->getMinLength() && strlen($value) < $attribute->getMinLength()) {
                     $objectEntity->addError($attribute->getName(),'Is to short, minimum length is ' . $attribute->getMinLength() . '.');
@@ -131,13 +134,19 @@ class ValidationService
                 }
                 break;
             case 'number':
-                if (!is_integer($value) && !is_float($value) && gettype($value) != 'float' && gettype($value) != 'double') {
+                if (!$attribute->getMultiple() && !is_integer($value) && !is_float($value) && gettype($value) != 'float' && gettype($value) != 'double') {
                     $objectEntity->addError($attribute->getName(),'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.');
+                }
+                if (!is_array($value) && $attribute->getMultiple()) {
+                    $objectEntity->addError($attribute->getName(),'Expects array, ' . gettype($value) . ' given.');
                 }
                 break;
             case 'integer':
-                if (!is_integer($value)) {
+                if (!$attribute->getMultiple() && !is_integer($value)) {
                     $objectEntity->addError($attribute->getName(),'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.');
+                }
+                if ($attribute->getMultiple() && !is_array($value)) {
+                    $objectEntity->addError($attribute->getName(),'Expects array, ' . gettype($value) . ' given.');
                 }
                 if ($attribute->getMinimum()) {
                     if ($attribute->getExclusiveMinimum() && $value <= $attribute->getMinimum()) {
@@ -158,8 +167,11 @@ class ValidationService
                 }
                 break;
             case 'boolean':
-                if (!is_bool($value)) {
+                if (!$attribute->getMultiple() && !is_bool($value)) {
                     $objectEntity->addError($attribute->getName(),'Expects ' . $attribute->getType() . ', ' . gettype($value) . ' given.');
+                }
+                if ($attribute->getMultiple() && !is_array($value)) {
+                    $objectEntity->addError($attribute->getName(),'Expects array, ' . gettype($value) . ' given.');
                 }
                 break;
             // TODO: move these validations to validateEntity where array/multiple is checked
@@ -187,10 +199,15 @@ class ValidationService
 //                }
 //                break;
             case 'datetime':
-                try {
-                    new \DateTime($value);
-                } catch (HttpException $e) {
-                    $objectEntity->addError($attribute->getName(),'Expects ' . $attribute->getType() . ', failed to parse string to DateTime.');
+                if (!$attribute->getMultiple()) {
+                    try {
+                        new \DateTime($value);
+                    } catch (HttpException $e) {
+                        $objectEntity->addError($attribute->getName(),'Expects ' . $attribute->getType() . ', failed to parse string to DateTime.');
+                    }
+                }
+                if ($attribute->getMultiple() && !is_array($value)) {
+                    $objectEntity->addError($attribute->getName(),'Expects array, ' . gettype($value) . ' given.');
                 }
                 break;
             default:

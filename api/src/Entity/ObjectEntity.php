@@ -283,6 +283,7 @@ class ObjectEntity
         $allErrors = [];
         $subResources = $this->getSubresources();
         foreach ($subResources as $subresource) {
+            if (!$subresource) continue; // can be null because of subresource/object fields being set to null
             if (get_class($subresource) == ObjectEntity::class) {
                 if ($subresource->hasErrors) {
                     $allErrors = $subresource->getAllErrors();
