@@ -28,7 +28,29 @@ class ValidationService
 
             // check if we have a value to validate
             if(key_exists($attribute->getName(), $post)){
-                $objectEntity = $this->validateAttribute($objectEntity, $attribute, $post[$attribute->getName()]);
+
+                // Lets see if it is an array of objects
+                if(!$attribute->getMultiple() || $attribute->getType() != 'object'){
+                    $objectEntity = $this->validateAttribute($objectEntity, $attribute, $post[$attribute->getName()]);
+                }
+                // Damnit, an array. We will need to loop :(
+                else{
+                    foreach($post[$attribute->getName()] as $row){
+                        if(array_key_exists('id', $row)){
+                            $subObject = $objectEntity->getValueByAttribute($attribute)->getObjects()->get($row['id']);
+                            $subObject = $this->validateAttribute($subObject, $attribute, $row);
+                        }
+                        else{
+                            $value = $objectEntity->getValueByAttribute($attribute);
+                            $subObject = New ObjectEntity();
+                            $subObject->setSubresourceOf($value);
+                            $subObject->setEntity($attribute->getEntity());
+                            $subObject = $this->validateAttribute($subObject, $attribute, $row);
+                            $value->addObject($value);
+                        }
+                    }
+                }
+
             }
             // TODO: something with defaultValue, maybe not here? (but do check if defaultValue is set before returning this is required!)
 //            elseif ($attribute->getDefaultValue()) {
@@ -63,6 +85,8 @@ class ValidationService
      * Returns a Value on succes or a false on failure
      * @todo docs */
     private function validateAttribute(ObjectEntity $objectEntity, Attribute $attribute, $value) {
+
+
 
         $attributeType = $attribute->getType();
 
@@ -174,6 +198,10 @@ class ValidationService
 
 
     function createPromise (ObjectEntity $objectEntity, array $post){
+
+        // We willen de post wel opschonnen, met andere woorden alleen die dingen posten die niet als in een atrubte zijn gevangen
+
+
 
         // Async aanroepen van de promise methode in cg bundel
         $promise = $client->requestAsync('GET', 'http://httpbin.org/get', $post);
