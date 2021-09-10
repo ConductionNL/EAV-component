@@ -47,6 +47,12 @@ class ValidationService
             /* @todo handling the setting to null of exisiting variables */
 
             /* @todo dit is de plek waarop we weten of er een appi call moet worden gemaakt */
+
+            /*
+            if(!$objectEntity->hasErrors() && VASTTELLEN OF DIE EXERN MOET){
+                // $objectEntity->addPromise($this->createPromise($objectEntity, $post));
+            }
+            */
         }
 
         return $objectEntity;
@@ -164,5 +170,25 @@ class ValidationService
         }
 
         return $objectEntity;
+    }
+
+
+    function createPromise (ObjectEntity $objectEntity, array $post){
+
+        // Async aanroepen van de promise methode in cg bundel
+        $promise = $client->requestAsync('GET', 'http://httpbin.org/get', $post);
+
+        // Creating a promise
+        $promise->then(
+            function (ResponseInterface $response, ObjectEntity $objectEntity) {
+                $object = json_decode($response->getBody()->getContents(), true);
+                $objectEntity->setUri($object['@id']);
+            },
+            function (RequestException $e, ObjectEntity $objectEntity) {
+                $objectEntity->addError($objectEntity->name,$e->getMessage());
+            }
+        );
+
+        return $promise;
     }
 }
