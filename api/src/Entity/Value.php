@@ -64,7 +64,7 @@ class Value
      *
      * @Assert\Url
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $uri;
 
@@ -163,7 +163,7 @@ class Value
         return $this->uri;
     }
 
-    public function setUri(string $uri): self
+    public function setUri(?string $uri): self
     {
         $this->uri = $uri;
 
@@ -302,35 +302,34 @@ class Value
     public function setValue($value)
     {
         if ($this->getAttribute()) {
+            if ($this->getAttribute()->getMultiple() && $this->getAttribute()->getType() != 'object') {
+                return $this->setArrayValue($value);
+                //TODO something about array of datetime's, see how we do it with type object
+            }
             switch ($this->getAttribute()->getType()) {
                 case 'string':
-                    $this->setStringValue($value);
-                    break;
+                    return $this->setStringValue($value);
                 case 'integer':
-                    $this->setIntegerValue($value);
-                    break;
+                    return $this->setIntegerValue($value);
                 case 'boolean':
-                    $this->setBooleanValue($value);
-                    break;
+                    return $this->setBooleanValue($value);
                 case 'number':
-                    $this->setNumberValue($value);
-                    break;
-                case 'array':
-                    $this->setArrayValue($value);
-                    break;
+                    return $this->setNumberValue($value);
                 case 'datetime':
-                    $this->setDateTimeValue(new DateTime($value));
-                    break;
+                    return $this->setDateTimeValue(new DateTime($value));
                 case 'object':
-//                    Or: if (get_class($value) != ObjectEntity::class) instead of:
-                    if (is_array($value)) {
+                    if ($value == null) {
+                        return $this;
+                    }
+                    // if multiple is true value should be an array
+                    if ($this->getAttribute()->getMultiple()) {
                         foreach ($value as $object) {
                             $this->addObject($object);
                         }
-                        break;
+                        return $this;
                     }
-                    $this->addObject($value);
-                    break;
+                    // else $value = ObjectEntity::class
+                    return $this->addObject($value);
             }
         } else {
             //TODO: correct error handling
@@ -341,6 +340,10 @@ class Value
     public function getValue()
     {
         if ($this->getAttribute()) {
+            if ($this->getAttribute()->getMultiple() && $this->getAttribute()->getType() != 'object') {
+                return $this->getArrayValue();
+                //TODO something about array of datetime's, see how we do it with type object
+            }
             switch ($this->getAttribute()->getType()) {
                 case 'string':
                     return $this->getStringValue();
@@ -350,15 +353,16 @@ class Value
                     return $this->getBooleanValue();
                 case 'number':
                     return $this->getNumberValue();
-                case 'array':
-                    return $this->getArrayValue();
                 case 'datetime':
                     $datetime = $this->getDateTimeValue();
                     return $datetime->format('Y-m-d\TH:i:sP');;
                 case 'object':
                     $objects = $this->getObjects();
-                    if (count($objects) == 1) {
+                    if (!$this->getAttribute()->getMultiple()) {
                         return $objects[0];
+                    }
+                    if (count($objects) == 0) {
+                        return null;
                     }
                     return $objects;
             }

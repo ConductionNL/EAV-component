@@ -109,7 +109,7 @@ class ObjectEntity
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="objectEntity", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="objectEntity", cascade={"persist", "remove"})
      * @MaxDepth(1)
      */
     private $objectValues;
@@ -120,7 +120,7 @@ class ObjectEntity
      * @ORM\JoinColumn(nullable=true)
      * @MaxDepth(1)
      */
-    private ?Value $subresourceOf;
+    private ?Value $subresourceOf = null;
 
     /**
      * @Groups({"read", "write"})
@@ -233,8 +233,8 @@ class ObjectEntity
         $this->hasErrors = $hasErrors;
 
         // Do the same for resources above this one if set to true
-        if ($hasErrors == true && $this->subresourceOf) {
-            $this->subresourceOf->getObjectEntity()->setHasErrors($hasErrors);
+        if ($hasErrors == true && $this->getSubresourceOf()) {
+            $this->getSubresourceOf()->getObjectEntity()->setHasErrors($hasErrors);
         }
         // Do the same for resources under this one if set to false
         elseif ($hasErrors == false) {
@@ -266,14 +266,14 @@ class ObjectEntity
         return $this;
     }
 
-    public function addError(?string $error): array
+    public function addError(string $attributeName, string $error): array
     {
         if (!$this->hasErrors) {
             $this->setHasErrors(true);
         }
 
         //TODO: check if error is already in array?
-        $this->errors[] = $error;
+        $this->errors[$attributeName] = $error;
 
         return $this->errors;
     }

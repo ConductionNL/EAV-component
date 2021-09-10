@@ -35,7 +35,7 @@ class SaveService
     function saveEntity (Entity $entity, array $postValues) : ObjectEntity
     {
 
-        // Does the entity already exist?
+        // Does the objectEntity already exist?
         if (isset($postValues['@self'])) {
             // Get existing object with @self
             $object = $this->em->getRepository("App\Entity\ObjectEntity")->findOneBy(['uri' => $postValues['@self']]);
@@ -89,7 +89,7 @@ class SaveService
             // Check for nested objects
             if($attribute->getType() == 'object') {
                 // check if subobject(s) already exists and if not create a new ObjectEntity
-                if (!$this->isAssoc($postValues[$attribute->getName()])) {
+                if ($attribute->getMultiple()) {
                     $subObjects = [];
                     foreach ($postValues[$attribute->getName()] as $subObject) {
                         $subObjects[] = $this->saveEntity($attribute->getObject(), $subObject);
@@ -115,18 +115,6 @@ class SaveService
         }
 
         return $object;
-    }
-
-    /**
-     * Check if array is associative
-     *
-     * @param array $arr
-     * @return bool
-     */
-    function isAssoc(array $arr)
-    {
-        if (array() === $arr) return false;
-        return array_keys($arr) !== range(0, count($arr) - 1);
     }
 
     //TODO: change this to work better? (known to cause problems) used it to generate the @id / @eav for eav objects (intern and extern objects).
@@ -172,7 +160,7 @@ class SaveService
         foreach ($result->getObjectValues() as $value) {
             $attribute = $value->getAttribute();
             if ($attribute->getType() == 'object') {
-                if (get_class($value->getValue()) == ObjectEntity::class) {
+                if (!$attribute->getMultiple()) {
                     $response[$attribute->getName()] = $this->renderResult($value->getValue());
                     continue;
                 }
