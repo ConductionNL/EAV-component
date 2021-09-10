@@ -354,7 +354,11 @@ class Value
                     $datetime = $this->getDateTimeValue();
                     return $datetime->format('Y-m-d\TH:i:sP');;
                 case 'object':
-                    return $this->getObjects();
+                    $objects = $this->getObjects();
+                    if (count($objects) == 1) {
+                        return $objects[0];
+                    }
+                    return $objects;
             }
         } else {
             //TODO: correct error handling

@@ -32,7 +32,8 @@ class SaveService
     }
 
     /*@todo docs */
-    function saveEntity (Entity $entity, array $postValues){
+    function saveEntity (Entity $entity, array $postValues) : ObjectEntity
+    {
 
         // Does the entity already exist?
         if (isset($postValues['@self'])) {
@@ -171,11 +172,11 @@ class SaveService
         foreach ($result->getObjectValues() as $value) {
             $attribute = $value->getAttribute();
             if ($attribute->getType() == 'object') {
-                $objects = $value->getValue();
-                if (count($objects) == 1) {
-                    $response[$attribute->getName()] = $this->renderResult($objects[0]);
+                if (get_class($value->getValue()) == ObjectEntity::class) {
+                    $response[$attribute->getName()] = $this->renderResult($value->getValue());
                     continue;
                 }
+                $objects = $value->getValue();
                 $objectsArray = [];
                 foreach ($objects as $object) {
                     $objectsArray[] = $this->renderResult($object);

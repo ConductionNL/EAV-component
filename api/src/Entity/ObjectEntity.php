@@ -228,9 +228,15 @@ class ObjectEntity
 
     public function getSubresources()
     {
-        // Check if value with this attribute exists for this ObjectEntity
-        $value = $this->getObjectValues()->filter(function (Value $value) use ($attribute) {
-            return $value->getAttribute() === $attribute;
+        // Get all values of this ObjectEntity with attribute type object
+        $values = $this->getObjectValues()->filter(function (Value $value) {
+            return $value->getAttribute()->getType() === 'object';
         });
+        $subresources = new ArrayCollection();
+        foreach ($values as $value) {
+            $subresource = $value->getValue();
+            $subresources->add($subresource);
+        }
+        return $subresources;
     }
 }
