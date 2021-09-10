@@ -12,6 +12,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -296,7 +297,7 @@ class Value
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function setValue($value)
     {
@@ -321,6 +322,7 @@ class Value
                     $this->setDateTimeValue(new DateTime($value));
                     break;
                 case 'object':
+//                    Or: if (get_class($value) != ObjectEntity::class) instead of:
                     if (is_array($value)) {
                         foreach ($value as $object) {
                             $this->addObject($object);

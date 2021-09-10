@@ -77,35 +77,44 @@ class ValidationService
 
         $attributeType = $attribute->getType();
 
-        $result = '';
-
         // Do validation for attribute depending on its type
         switch ($attributeType) {
             case 'object':
                 // lets see if we already have an sub object
                 $valueObject = $objectEntity->getValueByAttribute($attribute);
 
-                // Lets see if the object already exisit
-                if(!$valueObject->getObject()){
-                    $subObject = New ObjectEntity();
-                    $subObject->setEntity($attribute->getObject());
-                    $valueObject->setObject($subObject);
-                }
-
-                // TODO: more validation for type object?
-                $subObject = $this->validateEntity($valueObject->getObject(), $value);
-
-                // Push it into our object
-                $objectEntity->getValueByAttribute($attribute)->setObject($subObject);
+                // TODO: use attribute bool for isManyToOne instead see issue BISC-405
                 if (!$this->isAssoc($value)) {
-                    $result = [];
-                    //TODO: make sure all error messages are returned for each subresource, now only the errors for the last one are returned
+                    // TODO
                     foreach ($value as $key => $manyToOneSubresource) {
-                        $result = array_merge($result, $this->validateEntity($attribute->getObject(), $manyToOneSubresource));
+//                        // Lets see if the object already exists
+//                        if(!$valueObject->getValue()){
+//                            $subObject = New ObjectEntity();
+//                            $subObject->setEntity($attribute->getObject());
+//                            $valueObject->setValue($subObject);
+//                        }
+//
+//                        $subObject = $this->validateEntity($valueObject->getValue(), $value);
+//
+//                        // Push it into our object
+//                        $objectEntity->getValueByAttribute($attribute)->setValue($subObject);
+                        var_dump('Detected list of subresources ['.$key.']');
                     }
                     break;
                 }
-                $result = $this->validateEntity($attribute->getObject(), $value);
+
+                // Lets see if the object already exists
+                if(!$valueObject->getValue()){
+                    $subObject = New ObjectEntity();
+                    $subObject->setEntity($attribute->getObject());
+                    $valueObject->setValue($subObject);
+                }
+
+                // TODO: more validation for type object?
+                $subObject = $this->validateEntity($valueObject->getValue(), $value);
+
+                // Push it into our object
+                $objectEntity->getValueByAttribute($attribute)->setValue($subObject);
                 break;
             case 'string':
                 if (!is_string($value)) {
@@ -185,7 +194,7 @@ class ValidationService
         }
 
         // if not we can set the value
-        if(!$objectEntity->hasErrors()){
+        if(!$objectEntity->getHasErrors()){
             $objectEntity->getValueByAttribute($attribute)->setValue($value);
         }
 
