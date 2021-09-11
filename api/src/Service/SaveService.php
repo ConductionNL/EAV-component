@@ -32,9 +32,10 @@ class SaveService
     }
 
     /*@todo docs */
-    function saveEntity (Entity $entity, array $postValues){
+    function saveEntity (Entity $entity, array $postValues) : ObjectEntity
+    {
 
-        // Does the entity already exist?
+        // Does the objectEntity already exist?
         if (isset($postValues['@self'])) {
             // Get existing object with @self
             $object = $this->em->getRepository("App\Entity\ObjectEntity")->findOneBy(['uri' => $postValues['@self']]);
@@ -56,13 +57,16 @@ class SaveService
         else{
             $object = New ObjectEntity();
             $object->setEntity($entity);
-            $object->setUri($this->createUri($entity->getType(), $object->getId())); //TODO: used for setting @eav... getId does not seem to work like this
         }
 
         $object = $this->prepareEntity($entity,  $object, $postValues);
 
         // Save the object
         $this->em->persist($object);
+
+        // Set the uri
+        $object->setUri($this->createUri($entity->getType(), $object->getId()));
+
         // Last but nog least we flush the doctrine commands
         $this->em->flush();
 
@@ -84,7 +88,16 @@ class SaveService
 
             // Check for nested objects
             if($attribute->getType() == 'object') {
-                // check if subobject already exists and if not create a new ObjectEntity
+                // check if subobject(s) already exists and if not create a new ObjectEntity
+                if ($attribute->getMultiple()) {
+                    $subObjects = [];
+                    foreach ($postValues[$attribute->getName()] as $subObject) {
+                        $subObjects[] = $this->saveEntity($attribute->getObject(), $subObject);
+                    }
+                    $value->setValue($subObjects);
+                    $this->em->persist($value);
+                    continue;
+                }
                 $subObject = $this->saveEntity($attribute->getObject(), $postValues[$attribute->getName()]);
                 $value->setValue($subObject);
                 $this->em->persist($value);
@@ -147,7 +160,16 @@ class SaveService
         foreach ($result->getObjectValues() as $value) {
             $attribute = $value->getAttribute();
             if ($attribute->getType() == 'object') {
-                $response[$attribute->getName()] = $this->renderResult($value->getValue());
+                if (!$attribute->getMultiple()) {
+                    $response[$attribute->getName()] = $this->renderResult($value->getValue());
+                    continue;
+                }
+                $objects = $value->getValue();
+                $objectsArray = [];
+                foreach ($objects as $object) {
+                    $objectsArray[] = $this->renderResult($object);
+                }
+                $response[$attribute->getName()] = $objectsArray;
                 continue;
             }
             $response[$attribute->getName()] = $value->getValue();

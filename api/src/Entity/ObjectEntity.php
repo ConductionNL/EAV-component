@@ -109,18 +109,36 @@ class ObjectEntity
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="objectEntity", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=Value::class, mappedBy="objectEntity", cascade={"persist", "remove"})
      * @MaxDepth(1)
      */
     private $objectValues;
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\OneToOne(targetEntity=Value::class, fetch="EAGER", inversedBy="object")
+     * @ORM\ManyToOne(targetEntity=Value::class, fetch="EAGER", inversedBy="objects")
      * @ORM\JoinColumn(nullable=true)
      * @MaxDepth(1)
      */
-    private ?Value $subresourceOf;
+    private ?Value $subresourceOf = null;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="boolean")
+     */
+    private bool $hasErrors = false;
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private ?array $errors = [];
+
+    /**
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private ?array $promises = [];
 
     public function __construct()
     {
@@ -205,6 +223,120 @@ class ObjectEntity
         return $this;
     }
 
+    public function getHasErrors(): bool
+    {
+        return $this->hasErrors;
+    }
+
+    public function setHasErrors(bool $hasErrors): self
+    {
+        $this->hasErrors = $hasErrors;
+
+        // Do the same for resources above this one if set to true
+        if ($hasErrors == true && $this->getSubresourceOf()) {
+            $this->getSubresourceOf()->getObjectEntity()->setHasErrors($hasErrors);
+        }
+        // Do the same for resources under this one if set to false
+        elseif ($hasErrors == false) {
+            $subResources = $this->getSubresources();
+            foreach ($subResources as $subResource) {
+                if (get_class($subResource) == ObjectEntity::class) {
+                    $subResource->setHasErrors($hasErrors);
+                    continue;
+                }
+                // If a subresource is a list of subresources (example cc/person->cc/emails)
+                foreach ($subResource as $listSubResource) {
+                    $listSubResource->setHasErrors($hasErrors);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    public function getErrors(): ?array
+    {
+        return $this->errors;
+    }
+
+    public function setErrors(?array $errors): self
+    {
+        $this->errors = $errors;
+
+        return $this;
+    }
+
+    public function addError(string $attributeName, string $error): array
+    {
+        if (!$this->hasErrors) {
+            $this->setHasErrors(true);
+        }
+
+        //TODO: check if error is already in array?
+        $this->errors[$attributeName] = $error;
+
+        return $this->errors;
+    }
+
+    public function getAllErrors(): ?array
+    {
+        $allErrors = [];
+        $subResources = $this->getSubresources();
+        foreach ($subResources as $subresource) {
+            if (!$subresource) continue; // can be null because of subresource/object fields being set to null
+            if (get_class($subresource) == ObjectEntity::class) {
+                if ($subresource->hasErrors) {
+                    $allErrors = $subresource->getAllErrors();
+                }
+                continue;
+            }
+            // If a subresource is a list of subresources (example cc/person->cc/emails)
+            foreach ($subresource as $listSubresource) {
+                if ($listSubresource->hasErrors) {
+                    $allErrors = array_merge($allErrors, $listSubresource->getAllErrors());
+                }
+            }
+        }
+        return array_merge($allErrors, $this->getErrors());
+    }
+
+    public function getPromises(): ?array
+    {
+        return $this->promises;
+    }
+
+    public function setPromises(?array $promises): self
+    {
+        $this->promises = $promises;
+
+        return $this;
+    }
+
+    public function addPromise(?string $promise): array
+    {
+        //TODO: check if promise is already in array?
+        $this->promises[] = $promise;
+
+        return $this->promises;
+    }
+
+    public function getAllPromises(): ?array
+    {
+        $allPromises = [];
+        $subResources = $this->getSubresources();
+        foreach ($subResources as $subResource) {
+            if (get_class($subResource) == ObjectEntity::class) {
+                $allPromises = $subResource->getAllPromises();
+                continue;
+            }
+            // If a subresource is a list of subresources (example cc/person->cc/emails)
+            foreach ($subResource as $listSubResource) {
+                $allPromises = array_merge($allPromises, $listSubResource->getAllPromises());
+            }
+        }
+        return array_merge($allPromises, $this->errors);
+    }
+
     public function getValueByAttribute(Attribute $attribute): Value
     {
         // Check if value with this attribute exists for this ObjectEntity
@@ -224,5 +356,19 @@ class ObjectEntity
         }
 
         return $value;
+    }
+
+    public function getSubresources()
+    {
+        // Get all values of this ObjectEntity with attribute type object
+        $values = $this->getObjectValues()->filter(function (Value $value) {
+            return $value->getAttribute()->getType() === 'object';
+        });
+        $subresources = new ArrayCollection();
+        foreach ($values as $value) {
+            $subresource = $value->getValue();
+            $subresources->add($subresource);
+        }
+        return $subresources;
     }
 }

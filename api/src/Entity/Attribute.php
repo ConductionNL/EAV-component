@@ -83,7 +83,7 @@ class Attribute
      *
      * @Assert\NotBlank
      * @Assert\Length(max = 255)
-     * @Assert\Choice({"string", "integer", "boolean", "number", "array", "datetime", "object"})
+     * @Assert\Choice({"string", "integer", "boolean", "number", "datetime", "object"})
      * @Groups({"read", "write"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
@@ -100,6 +100,17 @@ class Attribute
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $format;
+
+    /**
+     * @var bool True if this attribute expects an array of the given type.
+     *
+     * @example true
+     *
+     * @Assert\Type("bool")
+     * @Groups({"read", "write"})
+     * @ORM\Column(type="boolean")
+     */
+    private bool $multiple = false;
 
     /**
      * @Groups({"write"})
@@ -437,6 +448,18 @@ class Attribute
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getMultiple(): ?bool
+    {
+        return $this->multiple;
+    }
+
+    public function setMultiple(?bool $multiple): self
+    {
+        $this->multiple = $multiple;
 
         return $this;
     }

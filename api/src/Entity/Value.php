@@ -12,6 +12,7 @@ use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Exception;
 use Gedmo\Mapping\Annotation as Gedmo;
 use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
@@ -63,7 +64,7 @@ class Value
      *
      * @Assert\Url
      * @Groups({"read", "write"})
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $uri;
 
@@ -118,11 +119,11 @@ class Value
 
     /**
      * @Groups({"read", "write"})
-     * @ORM\OneToOne(targetEntity=ObjectEntity::class, fetch="EAGER", mappedBy="subresourceOf")
+     * @ORM\OneToMany(targetEntity=ObjectEntity::class, fetch="EAGER", mappedBy="subresourceOf", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=true)
      * @MaxDepth(1)
      */
-    private $object;
+    private ?Collection $objects;
 
     /**
      * @Groups({"read","write"})
@@ -139,6 +140,11 @@ class Value
      * @MaxDepth(1)
      */
     private $objectEntity;
+
+    public function __construct()
+    {
+        $this->objects = new ArrayCollection();
+    }
 
     public function getId(): Uuid
     {
@@ -157,7 +163,7 @@ class Value
         return $this->uri;
     }
 
-    public function setUri(string $uri): self
+    public function setUri(?string $uri): self
     {
         $this->uri = $uri;
 
@@ -236,14 +242,32 @@ class Value
         return $this;
     }
 
-    public function getObject(): ?ObjectEntity
+    /**
+     * @return Collection|Value[]
+     */
+    public function getObjects(): ?Collection
     {
-        return $this->object;
+        return $this->objects;
     }
 
-    public function setObject(?ObjectEntity $object): self
+    public function addObject(ObjectEntity $object): self
     {
-        $this->object = $object;
+        if (!$this->objects->contains($object)) {
+            $this->objects[] = $object;
+            $object->setSubresourceOf($this);
+        }
+
+        return $this;
+    }
+
+    public function removeObject(ObjectEntity $object): self
+    {
+        if ($this->objects->removeElement($object)) {
+            // set the owning side to null (unless already changed)
+            if ($object->getSubresourceOf() === $this) {
+                $object->setSubresourceOf(null);
+            }
+        }
 
         return $this;
     }
@@ -273,33 +297,39 @@ class Value
     }
 
     /**
-     * @throws \Exception
+     * @throws Exception
      */
     public function setValue($value)
     {
         if ($this->getAttribute()) {
+            if ($this->getAttribute()->getMultiple() && $this->getAttribute()->getType() != 'object') {
+                return $this->setArrayValue($value);
+                //TODO something about array of datetime's, see how we do it with type object
+            }
             switch ($this->getAttribute()->getType()) {
                 case 'string':
-                    $this->setStringValue($value);
-                    break;
+                    return $this->setStringValue($value);
                 case 'integer':
-                    $this->setIntegerValue($value);
-                    break;
+                    return $this->setIntegerValue($value);
                 case 'boolean':
-                    $this->setBooleanValue($value);
-                    break;
+                    return $this->setBooleanValue($value);
                 case 'number':
-                    $this->setNumberValue($value);
-                    break;
-                case 'array':
-                    $this->setArrayValue($value);
-                    break;
+                    return $this->setNumberValue($value);
                 case 'datetime':
-                    $this->setDateTimeValue(new DateTime($value));
-                    break;
+                    return $this->setDateTimeValue(new DateTime($value));
                 case 'object':
-                    $this->setObject($value);
-                    break;
+                    if ($value == null) {
+                        return $this;
+                    }
+                    // if multiple is true value should be an array
+                    if ($this->getAttribute()->getMultiple()) {
+                        foreach ($value as $object) {
+                            $this->addObject($object);
+                        }
+                        return $this;
+                    }
+                    // else $value = ObjectEntity::class
+                    return $this->addObject($value);
             }
         } else {
             //TODO: correct error handling
@@ -310,6 +340,10 @@ class Value
     public function getValue()
     {
         if ($this->getAttribute()) {
+            if ($this->getAttribute()->getMultiple() && $this->getAttribute()->getType() != 'object') {
+                return $this->getArrayValue();
+                //TODO something about array of datetime's, see how we do it with type object
+            }
             switch ($this->getAttribute()->getType()) {
                 case 'string':
                     return $this->getStringValue();
@@ -319,13 +353,18 @@ class Value
                     return $this->getBooleanValue();
                 case 'number':
                     return $this->getNumberValue();
-                case 'array':
-                    return $this->getArrayValue();
                 case 'datetime':
                     $datetime = $this->getDateTimeValue();
                     return $datetime->format('Y-m-d\TH:i:sP');;
                 case 'object':
-                    return $this->getObject();
+                    $objects = $this->getObjects();
+                    if (!$this->getAttribute()->getMultiple()) {
+                        return $objects[0];
+                    }
+                    if (count($objects) == 0) {
+                        return null;
+                    }
+                    return $objects;
             }
         } else {
             //TODO: correct error handling
