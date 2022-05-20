@@ -33,6 +33,8 @@ class TaalhuizenFixtures extends Fixture
 //             return false;
 //         }
 
+        return;
+
         // EAV learningNeedEntity
         $description = new Attribute();
         $description->setName('description');
