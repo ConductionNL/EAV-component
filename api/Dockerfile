@@ -6,14 +6,14 @@
 # The base stage for all our stages
 
 FROM conduction/pc-php:prod AS api_platform_php
-
+RUN rm -rf vendor/
 
 # https://getcomposer.org/doc/03-cli.md#composer-allow-superuser
 ENV COMPOSER_ALLOW_SUPERUSER=1
 
 # install Symfony Flex globally to speed up download of Composer packages (parallelized prefetching)
 RUN set -eux; \
-	composer global require "symfony/flex" --prefer-dist --no-progress --no-suggest --classmap-authoritative; \
+	composer global require "symfony/flex:^1.18" --prefer-dist --no-progress --no-suggest --classmap-authoritative; \
 	composer clear-cache
 ENV PATH="${PATH}:/root/.composer/vendor/bin"
 
