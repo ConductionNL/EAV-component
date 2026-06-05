@@ -34,7 +34,7 @@
         "symfony/validator": "^5.1",
         "symfony/yaml": "^5.1",
         "tbbc/money-bundle": "^4.0",
-        "webonyx/graphql-php": "^0.13.8"
+        "webonyx/graphql-php": "^15.32.3"
     },
     "require-dev" : {
         "api-platform/schema-generator": "^2.1",
